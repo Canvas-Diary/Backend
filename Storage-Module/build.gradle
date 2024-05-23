@@ -1,0 +1,6 @@
+dependencies {
+	implementation(project(":Domain-Module"))
+
+	// mysql connector
+	runtimeOnly 'com.mysql:mysql-connector-j'
+}

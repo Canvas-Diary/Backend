@@ -1,3 +1,5 @@
 key:
   openai:
-    api-key:
+    api-key: ${DALLE_REST_API_KEY}
+  gemini:
+    api-key: ${GEMINI_REST_API_KEY}
