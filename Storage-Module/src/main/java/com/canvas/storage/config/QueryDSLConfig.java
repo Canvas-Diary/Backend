@@ -1,4 +1,4 @@
-package com.canvas.domain.config;
+package com.canvas.storage.config;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;

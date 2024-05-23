@@ -1,4 +1,4 @@
-package com.canvas.domain.diary.repository;
+package com.canvas.storage.diary.repository;
 
 import com.canvas.domain.diary.model.Diary;
 import com.canvas.domain.diary.model.Emotion;
