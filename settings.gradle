@@ -3,3 +3,4 @@ rootProject.name = 'backend'
 include ":Api-Module"
 include ":Domain-Module"
 include ":Client-Module"
+include ":Common-Module"

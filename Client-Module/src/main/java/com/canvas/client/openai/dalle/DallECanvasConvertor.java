@@ -5,9 +5,6 @@ import com.canvas.domain.diary.service.CanvasConvertor;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.*;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Primary;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -21,28 +18,26 @@ public class DallECanvasConvertor implements CanvasConvertor {
 
     private static final String HEIGHT = "1024";
     private static final String WIDTH = "1024";
-
+    private static final String RESPONSE_TYPE = "url";
     private final WebClient webClient = WebClient.create("https://api.openai.com/v1/images/generations");
 
     private final OpenApiProperties openApiProperties;
 
     @Override
     public List<String> convertDiaryToCanvas(CanvasConvertProcessingData data) {
-        List<DallEImageResponse> response = Objects.requireNonNull(webClient.post()
+        return Objects.requireNonNull(webClient.post()
                 .contentType(MediaType.APPLICATION_JSON)
                 .header("Authorization", "Bearer " + openApiProperties.getApiKey())
                 .bodyValue(new DallERequest(
                         "dall-e-3",
                         String.format(DallEPromptConsts.DALLE_IMAGE_GENERATE_PROMPT, data.style(), data.emotion(), data.diaryDescription()),
                         1,
-                        HEIGHT + "x" + WIDTH
+                        HEIGHT + "x" + WIDTH,
+                        RESPONSE_TYPE
                 )).retrieve()
                 .bodyToMono(DallEResponse.class)
-                .block()).data;
-
-        return response.stream()
-                .map(r -> r.url)
-                .toList();
+                .block())
+                .extractImageUrls();
     }
 
 
@@ -55,6 +50,7 @@ public class DallECanvasConvertor implements CanvasConvertor {
         private String prompt;
         private int n;
         private String size;
+        private String responseFormat;
     }
 
     @Getter
@@ -63,6 +59,12 @@ public class DallECanvasConvertor implements CanvasConvertor {
     private static class DallEResponse {
         private String created;
         private List<DallEImageResponse> data;
+
+        public List<String> extractImageUrls() {
+            return this.data.stream()
+                    .map(imageResponse -> imageResponse.url)
+                    .toList();
+        }
     }
 
 
