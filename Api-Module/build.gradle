@@ -1,4 +1,5 @@
 dependencies {
     implementation(project(":Domain-Module"))
     implementation(project(":Client-Module"))
+    implementation(project(":Common-Module"))
 }

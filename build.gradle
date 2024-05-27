@@ -11,7 +11,10 @@ allprojects {
     apply plugin: 'org.springframework.boot'
 
     group = 'com.canvas'
-    version = '0.0.1-SNAPSHOT'
+    version = ''
+
+    bootJar.enabled=false
+    jar.enabled=true
 
     java {
         sourceCompatibility = '17'
@@ -51,4 +54,8 @@ allprojects {
     tasks.named('test') {
         useJUnitPlatform()
     }
+}
+
+project(":Api-Module"){
+    bootJar.enabled = true
 }
