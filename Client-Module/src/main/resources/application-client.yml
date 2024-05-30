@@ -7,11 +7,11 @@ key:
 cloud:
   aws:
     s3:
-      bucket: canvasdiary
+      bucket: ${S3_BUCKET_NAME}
     stack:
       auto: false
     region:
-      static: us-east-1
+      static: ap-northeast-2
     credentials:
       access-key: ${S3_ACCESS_KEY}
       secret-key: ${S3_SECRET_KEY}
