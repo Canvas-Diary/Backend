@@ -19,6 +19,8 @@ public class Diary {
 
     @Column(length = 1000)
     private String content;
+
+    @Enumerated(EnumType.STRING)
     private Emotion emotion;
     private String imageUrl;
     private LocalDate date;

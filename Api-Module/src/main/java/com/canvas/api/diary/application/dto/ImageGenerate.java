@@ -10,7 +10,8 @@ public class ImageGenerate {
     public record Request(
             String description,
             Emotion emotion,
-            CanvasConvertor.Style style
+            CanvasConvertor.Style style,
+            CanvasConvertor.Format format
     ) {
     }
 

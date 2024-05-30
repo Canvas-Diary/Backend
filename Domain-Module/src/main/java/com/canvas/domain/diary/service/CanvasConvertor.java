@@ -19,14 +19,28 @@ public interface CanvasConvertor {
     enum Style {
         PHOTO("실제 사진처럼 보이는 이미지"),
         OILPAINTING("기름물감 그림 스타일의 이미지"),
-        WATERCOLORPAINTING("수채화 스타일의 이미지"),
-        ILLUSTRATION("일반적인 그림 또는 일러스트 스타일"),
-        CARTOON("만화 스타일"),
-        DRAWING("손그림 스타일"),
-        VECTOR("벡터 그래픽 스타일"),
-        RENDER("3D 렌더링 스타일");
+        WATERCOLOR("수채화 스타일의 이미지"),
+        ACRYLICPAINTING("아크릴 스타일 이미지"),
+        PENANDINK("펜과 잉크를 사용한 이미지"),
+        PENCILDRAWING("연필을 사용한 이미지"),
+        CHARCOALDRAWING("숯을 이용한 스타일의 이미지"),
+        DIGITALART("다지털 아트"),
+        COMICSTYLE("만화 스타일"),
+        ANIMATIONSTYLE("애니메이션 스타일"),
+        COLLAGE("콜라주");
 
         private final String name;
+    }
+
+    @RequiredArgsConstructor
+    enum Format {
+        ILLUSTRATION("일러스트 형식"),
+        FOURPANELCOMIC("4컷 만화 형식"),
+        POSTER("포스터 형식"),
+        STORYBOARD("스토리 형식");
+
+        private final String name;
+
     }
 
 }
