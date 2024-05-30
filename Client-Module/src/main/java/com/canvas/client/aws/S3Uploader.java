@@ -1,10 +1,12 @@
 package com.canvas.client.aws;
 
 import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.model.ObjectMetadata;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
 
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
@@ -23,22 +25,22 @@ public class S3Uploader {
 
 
     public String uploadImage(String imageUrl) {
-        throw new RuntimeException("test");
-//        String saveImageName = DIRECTORY + createImageName() + "." + EXTENSION;
-//
-//        ByteArrayOutputStream byteArrayOutputStream = urlToByteArray(imageUrl);
-//        int size = byteArrayOutputStream.size();
-//        ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(byteArrayOutputStream.toByteArray());
-//
-//        ObjectMetadata objectMetadata = new ObjectMetadata();
-//        objectMetadata.setContentLength(size);
-//        objectMetadata.setContentType(CONTENT_TYPE);
-//
-//        s3Client.putObject(s3Properties.getS3().getBucket(), saveImageName, byteArrayInputStream, objectMetadata);
-//
-//
-//
-//        return s3Client.getUrl(s3Properties.getS3().getBucket(), saveImageName).toString();
+//        throw new RuntimeException("test");
+        String saveImageName = DIRECTORY + createImageName() + "." + EXTENSION;
+
+        ByteArrayOutputStream byteArrayOutputStream = urlToByteArray(imageUrl);
+        int size = byteArrayOutputStream.size();
+        ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(byteArrayOutputStream.toByteArray());
+
+        ObjectMetadata objectMetadata = new ObjectMetadata();
+        objectMetadata.setContentLength(size);
+        objectMetadata.setContentType(CONTENT_TYPE);
+
+        s3Client.putObject(s3Properties.getS3().getBucket(), saveImageName, byteArrayInputStream, objectMetadata);
+
+
+
+        return s3Client.getUrl(s3Properties.getS3().getBucket(), saveImageName).toString();
 
     }
 
