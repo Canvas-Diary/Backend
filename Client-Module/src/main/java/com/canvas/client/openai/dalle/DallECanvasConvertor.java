@@ -30,7 +30,7 @@ public class DallECanvasConvertor implements CanvasConvertor {
                 .header("Authorization", "Bearer " + openApiProperties.getApiKey())
                 .bodyValue(new DallERequest(
                         "dall-e-3",
-                        String.format(DallEPromptConsts.DALLE_IMAGE_GENERATE_PROMPT, data.style(), data.emotion(), data.diaryDescription()),
+                        String.format(DallEPromptConsts.DALLE_IMAGE_GENERATE_PROMPT, data.style(), data.emotion().name(), data.diaryDescription()),
                         1,
                         HEIGHT + "x" + WIDTH,
                         RESPONSE_TYPE

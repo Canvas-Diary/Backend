@@ -22,6 +22,7 @@ public class DiaryService {
     private final DiaryRemover diaryRemover;
     private final DiaryReader diaryReader;
     private final ImageStorageHandler imageStorageHandler;
+    private final DiaryCreator diaryCreator;
 
 
 
@@ -32,14 +33,16 @@ public class DiaryService {
         var emotion = emotionExtractor.extractEmotionAsync(new EmotionExtractor.EmotionExtractProcessingData(translatedDescription));
         List<String> canvasImages =
                 canvasConvertor.convertDiaryToCanvas(new CanvasConvertor.CanvasConvertProcessingData(translatedDescription, request.emotion(), request.style()));
-
+        //TODO 일기 형식 처리
         return ImageGenerate.convertToGeneratedImageToResponse(canvasImages);
     }
 
     public void saveDiary(DiaryCreate.Request request) {
         String storedImageUrl = imageStorageHandler.storeImage(request.imageUrl());
         Diary diary = Diary.of(request.content(), request.emotion(), storedImageUrl);
+        diaryCreator.diarySave(diary);
     }
+
 
     public DiarySearch.Response readDiaries(DiarySearch.Request request) {
         List<Diary> diaries = diaryReader.readByDateRangeAndContentAndEmotion(
