@@ -1,0 +1,6 @@
+subprojects {
+    dependencies {
+        implementation(project(":Application-Module"))
+        implementation(project(":Domain-Module"))
+    }
+}

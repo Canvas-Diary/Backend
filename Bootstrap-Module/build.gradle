@@ -1,4 +1,7 @@
 dependencies {
     implementation(project(":Application-Module"))
+    implementation(project(":Domain-Module"))
+    implementation(project(":Infrastructure-Module:Persistence"))
+
     implementation 'org.springframework.boot:spring-boot-starter-web'
 }
