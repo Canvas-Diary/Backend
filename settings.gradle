@@ -3,4 +3,4 @@ include 'Domain-Module'
 include 'Bootstrap-Module'
 include 'Application-Module'
 include 'Infrastructure-Module'
-
+include 'Infrastructure-Module:Persistence'
