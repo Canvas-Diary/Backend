@@ -11,11 +11,11 @@ public class Image {
     private final Boolean isMain;
     private final String s3Uri;
 
-    public Image withoutId(Long diaryId, Boolean isMain, String s3Uri) {
+    public static Image withoutId(Long diaryId, Boolean isMain, String s3Uri) {
         return new Image(null, diaryId, isMain, s3Uri);
     }
 
-    public Image withId(Long id, Long diaryId, Boolean isMain, String s3Uri) {
+    public static Image withId(Long id, Long diaryId, Boolean isMain, String s3Uri) {
         return new Image(id, diaryId, isMain, s3Uri);
     }
 }
