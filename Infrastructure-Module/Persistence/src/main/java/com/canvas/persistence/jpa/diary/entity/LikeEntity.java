@@ -1,6 +1,5 @@
 package com.canvas.persistence.jpa.diary.entity;
 
-import com.canvas.persistence.jpa.user.entity.UserEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -18,9 +17,9 @@ public class LikeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    private UserEntity user;
-    @ManyToOne(fetch = FetchType.LAZY)
-    private DiaryEntity diary;
+    @Column(name = "user_id", nullable = false)
+    private Long userId;
+    @Column(name = "diary_id", nullable = false)
+    private Long diaryId;
 
 }
