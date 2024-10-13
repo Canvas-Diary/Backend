@@ -20,7 +20,11 @@ public class ImageEntity {
     private Boolean isMain;
     private String s3Uri;
 
+    @Column(name = "diary_id", nullable = false)
+    private Long diaryId;
+
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "diary_id", insertable = false, updatable = false)
     private DiaryEntity diary;
 
 }

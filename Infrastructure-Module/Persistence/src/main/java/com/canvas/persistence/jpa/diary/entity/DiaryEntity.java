@@ -23,7 +23,11 @@ public class DiaryEntity extends BaseEntity {
     private String emotion;
     private Boolean isPublic;
 
+    @Column(name = "writer_id", nullable = false)
+    private Long writerId;
+
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "writer_id", insertable = false, updatable = false)
     private UserEntity writer;
 
 }
