@@ -2,14 +2,12 @@ package com.canvas.persistence.jpa.diary.entity;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "image")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor
 @Getter
 public class ImageEntity {
 
@@ -27,4 +25,10 @@ public class ImageEntity {
     @JoinColumn(name = "diary_id", insertable = false, updatable = false)
     private DiaryEntity diary;
 
+    public ImageEntity(Long id, Boolean isMain, String s3Uri, Long diaryId) {
+        this.id = id;
+        this.isMain = isMain;
+        this.s3Uri = s3Uri;
+        this.diaryId = diaryId;
+    }
 }
