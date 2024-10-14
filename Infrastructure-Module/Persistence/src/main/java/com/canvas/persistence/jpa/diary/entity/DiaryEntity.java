@@ -11,7 +11,6 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name = "diary")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor
 @Getter
 public class DiaryEntity extends BaseEntity {
 
@@ -30,4 +29,11 @@ public class DiaryEntity extends BaseEntity {
     @JoinColumn(name = "writer_id", insertable = false, updatable = false)
     private UserEntity writer;
 
+    public DiaryEntity(Long id, String content, String emotion, Boolean isPublic, Long writerId) {
+        this.id = id;
+        this.content = content;
+        this.emotion = emotion;
+        this.isPublic = isPublic;
+        this.writerId = writerId;
+    }
 }
