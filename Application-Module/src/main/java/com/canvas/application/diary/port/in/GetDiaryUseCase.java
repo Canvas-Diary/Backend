@@ -6,8 +6,8 @@ import java.time.LocalDate;
 import java.util.List;
 
 public interface GetDiaryUseCase {
-    Response.ByDiaryId getDiaryById(Command.ByDiaryId command);
-    Response.ByUserIdAndDate getDiariesByUserIdAndDate(Command.ByUserIdAndDate command);
+    Response.ByDiaryId getById(Command.ByDiaryId command);
+    Response.ByUserIdAndDate getByUserIdAndDate(Command.ByUserIdAndDate command);
 
     sealed interface Command
             permits Command.ByDiaryId, Command.ByUserIdAndDate {
