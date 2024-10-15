@@ -6,17 +6,18 @@ import java.time.LocalDate;
 import java.util.List;
 
 public interface GetDiaryUseCase {
-    Response.ByDiaryId getById(Command.ByDiaryId command);
-    Response.ByUserIdAndDate getByUserIdAndDate(Command.ByUserIdAndDate command);
+    Response.ById getById(Command.ById command);
+    Response.ByDate getByUserIdAndDate(Command.ByDate command);
 
     sealed interface Command
-            permits Command.ByDiaryId, Command.ByUserIdAndDate {
-        record ByDiaryId(
+            permits Command.ById, Command.ByDate {
+        record ById(
+                String userId,
                 String diaryId
         ) implements Command {
         }
 
-        record ByUserIdAndDate(
+        record ByDate(
                 Long userId,
                 LocalDate date
         ) implements Command {
@@ -24,8 +25,8 @@ public interface GetDiaryUseCase {
     }
 
     sealed interface Response
-            permits Response.ByDiaryId, Response.ByUserIdAndDate {
-        record ByDiaryId(
+            permits Response.ById, Response.ByDate {
+        record ById(
                 String diaryId,
                 String content,
                 Emotion emotion,
@@ -40,7 +41,7 @@ public interface GetDiaryUseCase {
             }
         }
 
-        record ByUserIdAndDate(List<Diary> diaries) implements Response {
+        record ByDate(List<Diary> diaries) implements Response {
             public record Diary(
                     Long diaryId,
                     LocalDate date,

@@ -1,6 +1,6 @@
 package com.canvas.application.diary.port.in;
 
-import com.canvas.application.diary.enums.Style;
+import com.canvas.application.common.enums.Style;
 
 import java.time.LocalDateTime;
 
