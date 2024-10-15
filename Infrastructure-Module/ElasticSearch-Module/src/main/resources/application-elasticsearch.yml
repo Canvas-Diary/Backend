@@ -1,0 +1,9 @@
+spring:
+  elasticsearch:
+      uris: https://localhost:9200
+      username: elastic
+      password: ${ELASTIC_PASSWORD}
+  data:
+    elasticsearch:
+      repositories:
+        enabled: true
