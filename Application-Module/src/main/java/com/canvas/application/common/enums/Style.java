@@ -1,4 +1,4 @@
-package com.canvas.application.diary.enums;
+package com.canvas.application.common.enums;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
