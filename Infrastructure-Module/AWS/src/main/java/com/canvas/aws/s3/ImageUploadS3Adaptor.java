@@ -5,7 +5,6 @@ import io.awspring.cloud.s3.ObjectMetadata;
 import io.awspring.cloud.s3.S3Resource;
 import io.awspring.cloud.s3.S3Template;
 import org.springframework.core.io.buffer.DataBuffer;
-import org.springframework.core.io.buffer.DataBufferUtils;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
@@ -28,7 +27,7 @@ public class ImageUploadS3Adaptor implements ImageUploadPort {
     //TODO 예외 처리, test 코드 작성
     public String upload(String imageUrl) {
 
-        ByteArrayOutputStream byteArrayOutputStream = urlToByteArray(imageUrl);
+        ByteArrayOutputStream byteArrayOutputStream = imageUrlToByteStream(imageUrl);
         ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(byteArrayOutputStream.toByteArray());
 
         String storageUrl = createImageName() + EXTENSION;
@@ -49,7 +48,7 @@ public class ImageUploadS3Adaptor implements ImageUploadPort {
         }
     }
 
-    private ByteArrayOutputStream urlToByteArray(String imageUrl) {
+    private ByteArrayOutputStream imageUrlToByteStream(String imageUrl) {
 
         Flux<DataBuffer> dataBufferFlux = webClient.get()
                 .uri(imageUrl)
