@@ -4,9 +4,11 @@ import com.canvas.persistence.jpa.common.BaseEntity;
 import com.canvas.persistence.jpa.user.entity.UserEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "diary")
@@ -29,6 +31,11 @@ public class DiaryEntity extends BaseEntity {
     @JoinColumn(name = "writer_id", insertable = false, updatable = false)
     private UserEntity writer;
 
+    @OneToMany(mappedBy = "diary", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ImageEntity> imageEntities = new ArrayList<>();
+    @OneToMany(mappedBy = "diary", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<LikeEntity> likeEntities = new ArrayList<>();
+
     public DiaryEntity(Long id, String content, String emotion, Boolean isPublic, Long writerId) {
         this.id = id;
         this.content = content;
@@ -36,4 +43,5 @@ public class DiaryEntity extends BaseEntity {
         this.isPublic = isPublic;
         this.writerId = writerId;
     }
+
 }
