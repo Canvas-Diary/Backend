@@ -31,4 +31,5 @@ public class ImageEntity {
         this.s3Uri = s3Uri;
         this.diaryId = diaryId;
     }
+
 }
