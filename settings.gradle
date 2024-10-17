@@ -7,5 +7,6 @@ include 'Application-Module'
 include 'Infrastructure-Module'
 include 'Infrastructure-Module:Persistence'
 include 'Infrastructure-Module:ImageGenerator'
-include 'Infrastructure-Module:ElasticSearch-Module'
+include 'Infrastructure-Module:AWS'
+include 'Infrastructure-Module:ElasticSearch'
 
