@@ -3,6 +3,7 @@ dependencies {
     implementation(project(":Domain-Module"))
     implementation(project(":Infrastructure-Module:Persistence"))
     implementation(project(":Infrastructure-Module:ImageGenerator"))
+    implementation(project(":Infrastructure-Module:Google"))
 
     implementation 'org.springframework.boot:spring-boot-starter-web'
 }
