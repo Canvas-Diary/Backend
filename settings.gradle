@@ -9,4 +9,4 @@ include 'Infrastructure-Module:Persistence'
 include 'Infrastructure-Module:ImageGenerator'
 include 'Infrastructure-Module:AWS'
 include 'Infrastructure-Module:ElasticSearch'
-
+include 'Infrastructure-Module:Google'
