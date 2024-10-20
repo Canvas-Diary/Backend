@@ -1,6 +1,7 @@
 package com.canvas.persistence.jpa.diary.adapter;
 
 import com.canvas.application.diary.port.out.DiaryManagementPort;
+import com.canvas.domain.common.DomainId;
 import com.canvas.domain.diary.entity.Diary;
 import com.canvas.persistence.jpa.diary.DiaryMapper;
 import com.canvas.persistence.jpa.diary.entity.DiaryEntity;
@@ -27,25 +28,25 @@ public class DiaryManagementJpaAdapter implements DiaryManagementPort {
     }
 
     @Override
-    public Diary getById(Long diaryId) {
-        DiaryEntity diaryEntity = diaryJpaRepository.findById(diaryId)
+    public Diary getById(DomainId diaryId) {
+        DiaryEntity diaryEntity = diaryJpaRepository.findById(diaryId.value())
                 .orElseThrow(() -> new IllegalArgumentException("유효하지 않은 일기"));
         return DiaryMapper.toDomain(diaryEntity);
     }
 
     @Override
-    public List<Diary> getByUserIdAndMonth(Long userId, LocalDate date) {
+    public List<Diary> getByUserIdAndMonth(DomainId userId, LocalDate date) {
         LocalDateTime start = date.with(TemporalAdjusters.firstDayOfMonth()).atStartOfDay();
         LocalDateTime end = date.with(TemporalAdjusters.lastDayOfMonth()).atTime(LocalTime.MAX);
 
-        return diaryJpaRepository.findByWriterIdAndCreatedAtBetween(userId, start, end).stream()
+        return diaryJpaRepository.findByWriterIdAndCreatedAtBetween(userId.value(), start, end).stream()
                 .map(DiaryMapper::toDomain)
                 .toList();
     }
 
     @Override
     public void delete(Diary diary) {
-        diaryJpaRepository.deleteById(diary.getId());
+        diaryJpaRepository.deleteById(diary.getId().value());
     }
 
 }

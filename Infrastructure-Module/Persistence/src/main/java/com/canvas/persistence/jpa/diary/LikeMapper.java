@@ -1,5 +1,6 @@
 package com.canvas.persistence.jpa.diary;
 
+import com.canvas.domain.common.DomainId;
 import com.canvas.domain.diary.entity.Diary;
 import com.canvas.domain.diary.entity.Like;
 import com.canvas.persistence.jpa.diary.entity.LikeEntity;
@@ -9,9 +10,9 @@ import java.util.List;
 public class LikeMapper {
     public static LikeEntity toEntity(Like like) {
         return new LikeEntity(
-                like.getId(),
-                like.getUserId(),
-                like.getDiaryId()
+                like.getId().value(),
+                like.getUserId().value(),
+                like.getDiaryId().value()
         );
     }
 
@@ -23,9 +24,9 @@ public class LikeMapper {
 
     public static Like toDomain(LikeEntity likeEntity) {
         return Like.withId(
-                likeEntity.getId(),
-                likeEntity.getUserId(),
-                likeEntity.getDiaryId()
+                new DomainId(likeEntity.getId()),
+                new DomainId(likeEntity.getUserId()),
+                new DomainId(likeEntity.getDiaryId())
         );
     }
 }
