@@ -6,8 +6,8 @@ public interface AddImageUseCase {
     void add(Command command);
 
     record Command(
-            Long userId,
-            Long diaryId,
+            String userId,
+            String diaryId,
             String content,
             Style style
     ) {

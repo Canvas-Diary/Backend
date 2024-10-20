@@ -8,7 +8,7 @@ public interface AddDiaryUseCase {
     Response add(Command command);
 
     record Command(
-            Long userId,
+            String userId,
             LocalDateTime dateTime,
             String content,
             Style style,
@@ -17,7 +17,7 @@ public interface AddDiaryUseCase {
     }
 
     record Response(
-            Long diaryId
+            String diaryId
     ) {
     }
 }

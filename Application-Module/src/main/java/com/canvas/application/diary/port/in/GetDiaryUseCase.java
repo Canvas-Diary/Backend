@@ -18,7 +18,7 @@ public interface GetDiaryUseCase {
         }
 
         record ByDate(
-                Long userId,
+                String userId,
                 LocalDate date
         ) implements Command {
         }
@@ -35,7 +35,7 @@ public interface GetDiaryUseCase {
                 List<Image> images
         ) implements Response {
             public record Image(
-                    Long imageId,
+                    String imageId,
                     String imageUrl
             ) {
             }
@@ -43,7 +43,7 @@ public interface GetDiaryUseCase {
 
         record ByDate(List<Diary> diaries) implements Response {
             public record Diary(
-                    Long diaryId,
+                    String diaryId,
                     LocalDate date,
                     Emotion emotion) {
             }
