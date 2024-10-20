@@ -4,7 +4,9 @@ import com.canvas.application.image.port.out.ImageUploadPort;
 import io.awspring.cloud.s3.ObjectMetadata;
 import io.awspring.cloud.s3.S3Resource;
 import io.awspring.cloud.s3.S3Template;
+import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.buffer.DataBuffer;
+import org.springframework.core.io.buffer.DataBufferUtils;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
@@ -15,12 +17,13 @@ import java.io.IOException;
 import java.util.UUID;
 
 @Component
+@RequiredArgsConstructor
 public class ImageUploadS3Adaptor implements ImageUploadPort {
 
-    private S3Template s3Template;
+    private final S3Template s3Template;
     private static final String BUCKET_NAME = "canvas-diary";
-    private static final String CONTENT_TYPE = "image/webp";
-    private static final String EXTENSION = ".webp";
+    private static final String CONTENT_TYPE = "image/jpg";
+    private static final String EXTENSION = ".jpg";
     private final WebClient webClient = WebClient.builder().build();
 
     @Override
@@ -48,7 +51,7 @@ public class ImageUploadS3Adaptor implements ImageUploadPort {
         }
     }
 
-    private ByteArrayOutputStream imageUrlToByteStream(String imageUrl) {
+    public ByteArrayOutputStream imageUrlToByteStream(String imageUrl) {
 
         Flux<DataBuffer> dataBufferFlux = webClient.get()
                 .uri(imageUrl)
@@ -56,15 +59,12 @@ public class ImageUploadS3Adaptor implements ImageUploadPort {
                 .bodyToFlux(DataBuffer.class);
 
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        dataBufferFlux
-            .doOnNext(dataBuffer -> {
-                try {
-                    byteArrayOutputStream.write(dataBuffer.asByteBuffer().array());
-                } catch (IOException e) {
-                    throw new RuntimeException("ByteArrayOutputStream 작성 중 오류 발생", e);
-                }
-            })
-            .blockLast();
+
+        DataBufferUtils.write(dataBufferFlux, byteArrayOutputStream)
+                .doOnError((e) -> {
+                    throw new RuntimeException("해당 url에서 이미지를 읽어오는 도중 오류가 생겼습니다.");
+                })
+                .blockLast();
 
         return byteArrayOutputStream;
     }
