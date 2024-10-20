@@ -4,8 +4,8 @@ public interface RemoveDiaryUseCase {
     void remove(Command command);
 
     record Command(
-            Long diaryId,
-            Long userId
+            String diaryId,
+            String userId
     ) {
     }
 }

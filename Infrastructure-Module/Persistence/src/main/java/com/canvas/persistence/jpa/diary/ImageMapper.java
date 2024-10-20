@@ -1,5 +1,6 @@
 package com.canvas.persistence.jpa.diary;
 
+import com.canvas.domain.common.DomainId;
 import com.canvas.domain.diary.entity.Diary;
 import com.canvas.domain.diary.entity.Image;
 import com.canvas.persistence.jpa.diary.entity.ImageEntity;
@@ -9,10 +10,10 @@ import java.util.List;
 public class ImageMapper {
     public static ImageEntity toEntity(Image image) {
         return new ImageEntity(
-                image.getId(),
+                image.getId().value(),
                 image.getIsMain(),
                 image.getS3Uri(),
-                image.getDiaryId()
+                image.getDiaryId().value()
         );
     }
 
@@ -24,8 +25,8 @@ public class ImageMapper {
 
     public static Image toDomain(ImageEntity imageEntity) {
         return Image.withId(
-                imageEntity.getId(),
-                imageEntity.getDiaryId(),
+                new DomainId(imageEntity.getId()),
+                new DomainId(imageEntity.getDiaryId()),
                 imageEntity.getIsMain(),
                 imageEntity.getS3Uri()
         );

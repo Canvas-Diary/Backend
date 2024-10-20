@@ -22,7 +22,7 @@ public class ImageManagementJpaAdapter implements ImageManagementPort {
 
     @Override
     public void delete(Image image) {
-        imageJpaRepository.deleteById(image.getId());
+        imageJpaRepository.deleteById(image.getId().value());
     }
 
 }

@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Entity
 @Table(name = "diary")
@@ -17,26 +18,25 @@ import java.util.List;
 public class DiaryEntity extends BaseEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private UUID id;
 
     private String content;
     private String emotion;
     private Boolean isPublic;
 
     @Column(name = "writer_id", nullable = false)
-    private Long writerId;
+    private UUID writerId;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "writer_id", insertable = false, updatable = false)
     private UserEntity writer;
 
-    @OneToMany(mappedBy = "diary", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "diaryEntity", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ImageEntity> imageEntities = new ArrayList<>();
-    @OneToMany(mappedBy = "diary", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "diaryEntity", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<LikeEntity> likeEntities = new ArrayList<>();
 
-    public DiaryEntity(Long id, String content, String emotion, Boolean isPublic, Long writerId) {
+    public DiaryEntity(UUID id, String content, String emotion, Boolean isPublic, UUID writerId) {
         this.id = id;
         this.content = content;
         this.emotion = emotion;

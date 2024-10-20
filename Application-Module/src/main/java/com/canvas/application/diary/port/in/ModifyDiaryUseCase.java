@@ -4,7 +4,7 @@ public interface ModifyDiaryUseCase {
     void modify(Command command);
 
     record Command(
-            Long diaryId,
+            String diaryId,
             String content,
             Boolean isPublic
     ) {

@@ -1,9 +1,12 @@
 package com.canvas.persistence.jpa.diary.entity;
 
+import com.canvas.persistence.jpa.user.entity.UserEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.util.UUID;
 
 @Entity
 @Table(name = "likes")
@@ -12,19 +15,22 @@ import lombok.NoArgsConstructor;
 public class LikeEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private UUID id;
 
     @Column(name = "user_id", nullable = false)
-    private Long userId;
+    private UUID userId;
     @Column(name = "diary_id", nullable = false)
-    private Long diaryId;
+    private UUID diaryId;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", insertable = false, updatable = false)
+    private UserEntity userEntity;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "diary_id", insertable = false, updatable = false)
-    private DiaryEntity diary;
+    private DiaryEntity diaryEntity;
 
-    public LikeEntity(Long id, Long userId, Long diaryId) {
+    public LikeEntity(UUID id, UUID userId, UUID diaryId) {
         this.id = id;
         this.userId = userId;
         this.diaryId = diaryId;

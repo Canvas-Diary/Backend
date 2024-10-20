@@ -1,6 +1,7 @@
 package com.canvas.persistence.jpa.user.adapter;
 
 import com.canvas.application.user.port.out.UserManagementPort;
+import com.canvas.domain.common.DomainId;
 import com.canvas.domain.user.entity.User;
 import com.canvas.persistence.jpa.user.UserMapper;
 import com.canvas.persistence.jpa.user.entity.UserEntity;
@@ -21,15 +22,15 @@ public class UserManagementJpaAdapter implements UserManagementPort {
     }
 
     @Override
-    public User get(Long userId) {
-        UserEntity userEntity = userJpaRepository.findById(userId)
+    public User getById(DomainId userId) {
+        UserEntity userEntity = userJpaRepository.findById(userId.value())
                 .orElseThrow(() -> new IllegalArgumentException("유효하지 않은 사용자"));
         return UserMapper.toDomain(userEntity);
     }
 
     @Override
     public void delete(User user) {
-        userJpaRepository.deleteById(user.getId());
+        userJpaRepository.deleteById(user.getDomainId().value());
     }
 
 }
