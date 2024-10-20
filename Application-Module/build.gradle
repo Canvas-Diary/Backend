@@ -1,5 +1,6 @@
 dependencies {
     implementation(project(":Domain-Module"))
+    implementation(project(":Common-Module"))
 
     implementation "org.springframework:spring-tx"
 }

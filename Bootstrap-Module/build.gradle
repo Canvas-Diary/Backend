@@ -1,6 +1,7 @@
 dependencies {
     implementation(project(":Application-Module"))
     implementation(project(":Domain-Module"))
+    implementation(project(":Common-Module"))
     implementation(project(":Infrastructure-Module:Persistence"))
     implementation(project(":Infrastructure-Module:ImageGenerator"))
     implementation(project(":Infrastructure-Module:Google"))
