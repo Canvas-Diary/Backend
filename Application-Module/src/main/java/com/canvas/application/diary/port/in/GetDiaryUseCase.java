@@ -6,47 +6,46 @@ import java.time.LocalDate;
 import java.util.List;
 
 public interface GetDiaryUseCase {
-    Response.ById getById(Command.ById command);
-    Response.ByDate getByUserIdAndDate(Command.ByDate command);
+    Response.Diary getMyDiary(Command.Diary command);
+    Response.Diary getOtherDiary(Command.Diary command);
+    Response.HomeCalendar getHomeCalendar(Command.HomeCalendar command);
 
-    sealed interface Command
-            permits Command.ById, Command.ByDate {
-        record ById(
+    class Command {
+        public record Diary(
                 String userId,
                 String diaryId
-        ) implements Command {
-        }
+        ) {}
 
-        record ByDate(
+        public record HomeCalendar(
                 String userId,
                 LocalDate date
-        ) implements Command {
-        }
+        ) {}
     }
 
-    sealed interface Response
-            permits Response.ById, Response.ByDate {
-        record ById(
+    class Response {
+        public record Diary(
                 String diaryId,
                 String content,
                 Emotion emotion,
                 Integer likeCount,
                 Boolean isLiked,
                 List<Image> images
-        ) implements Response {
+        ) {
             public record Image(
                     String imageId,
+                    Boolean isMain,
                     String imageUrl
-            ) {
-            }
+            ) {}
         }
 
-        record ByDate(List<Diary> diaries) implements Response {
+        public record HomeCalendar(
+                List<Diary> diaries
+        ) {
             public record Diary(
                     String diaryId,
                     LocalDate date,
-                    Emotion emotion) {
-            }
+                    Emotion emotion
+            ) {}
         }
     }
 }

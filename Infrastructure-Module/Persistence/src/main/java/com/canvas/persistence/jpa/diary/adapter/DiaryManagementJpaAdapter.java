@@ -29,9 +29,16 @@ public class DiaryManagementJpaAdapter implements DiaryManagementPort {
     }
 
     @Override
+    public Diary getPublicById(DomainId diaryId) {
+        DiaryEntity diaryEntity = diaryJpaRepository.findPublicById(diaryId.value())
+                .orElseThrow(DiaryException.DiaryNotFoundException::new);
+        return DiaryMapper.toDomain(diaryEntity);
+    }
+
+    @Override
     public Diary getByIdAndWriterId(DomainId diaryId, DomainId writerId) {
         DiaryEntity diaryEntity = diaryJpaRepository.findByIdAndWriterId(diaryId.value(), writerId.value())
-                .orElseThrow(DiaryException.DiaryForbiddenException::new);
+                .orElseThrow(DiaryException.DiaryNotFoundException::new);
         return DiaryMapper.toDomain(diaryEntity);
     }
 
