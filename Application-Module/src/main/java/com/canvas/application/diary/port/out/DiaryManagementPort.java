@@ -8,6 +8,7 @@ import java.util.List;
 
 public interface DiaryManagementPort {
     Diary save(Diary diary);
+    Diary getPublicById(DomainId diaryId);
     Diary getByIdAndWriterId(DomainId diaryId, DomainId writerId);
     boolean existsByIdAndWriterId(DomainId diaryId, DomainId writerId);
     List<Diary> getByUserIdAndMonth(DomainId userId, LocalDate date);
