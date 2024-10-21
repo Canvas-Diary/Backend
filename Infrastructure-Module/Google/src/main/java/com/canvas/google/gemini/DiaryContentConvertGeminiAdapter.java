@@ -1,7 +1,7 @@
 package com.canvas.google.gemini;
 
 import com.canvas.application.diary.port.out.DiaryEmotionExtractPort;
-import com.canvas.application.diary.port.out.DiaryImagePromptGeneratePort;
+import com.canvas.application.image.port.out.ImagePromptGeneratePort;
 import com.canvas.domain.diary.enums.Emotion;
 import com.canvas.google.gemini.service.GeminiPromptConsts;
 import com.canvas.google.gemini.service.GeminiService;
@@ -10,8 +10,8 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class DiaryConvertGeminiAdapter
-        implements DiaryEmotionExtractPort, DiaryImagePromptGeneratePort {
+public class DiaryContentConvertGeminiAdapter
+        implements DiaryEmotionExtractPort, ImagePromptGeneratePort {
 
     private final GeminiService geminiService;
 
@@ -22,7 +22,7 @@ public class DiaryConvertGeminiAdapter
     }
 
     @Override
-    public String generateImagePrompt(String content) {
-        return geminiService.generate(GeminiPromptConsts.IMAGE_GENERATOR);
+    public String generatePrompt(String content) {
+        return geminiService.generate(GeminiPromptConsts.IMAGE_GENERATOR + content);
     }
 }

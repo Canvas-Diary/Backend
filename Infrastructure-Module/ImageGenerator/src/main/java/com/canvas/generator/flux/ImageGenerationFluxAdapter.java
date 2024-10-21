@@ -11,8 +11,8 @@ public class ImageGenerationFluxAdapter implements ImageGenerationPort {
     private final FluxClient fluxClient;
 
     @Override
-    public String generate(String content, Style style) {
-        String id = fluxClient.generateImage(style.getValue() + ", " + content);
+    public String generate(String prompt, Style style) {
+        String id = fluxClient.generateImage(style.getValue() + ", " + prompt);
         return fluxClient.getResult(id);
     }
 }

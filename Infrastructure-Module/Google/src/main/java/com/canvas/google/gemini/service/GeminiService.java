@@ -23,7 +23,6 @@ public class GeminiService {
     public String generate(String prompt) {
         return Objects.requireNonNull(webClient.post()
                         .uri("/gemini-1.5-flash-latest:generateContent")
-                        .attribute("key", API_KEY)
                         .headers(httpHeaders -> {
                             httpHeaders.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
                             httpHeaders.add("x-goog-api-key", API_KEY);
