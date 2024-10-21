@@ -23,6 +23,6 @@ public class DiaryContentConvertGeminiAdapter
 
     @Override
     public String generatePrompt(String content) {
-        return geminiService.generate(GeminiPromptConsts.IMAGE_GENERATOR);
+        return geminiService.generate(GeminiPromptConsts.IMAGE_GENERATOR + content);
     }
 }

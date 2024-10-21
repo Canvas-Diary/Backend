@@ -14,9 +14,9 @@ public interface DiaryJpaRepository extends JpaRepository<DiaryEntity, UUID> {
         select d
         from DiaryEntity d
         left join fetch d.likeEntities
-        where d.id = :diaryId
+        where d.id = :diaryId and d.writerId = :writerId
     """)
-    Optional<DiaryEntity> findById(UUID diaryId);
+    Optional<DiaryEntity> findByIdAndWriterId(UUID diaryId, UUID writerId);
 
     @Query("""
         select d
@@ -25,4 +25,6 @@ public interface DiaryJpaRepository extends JpaRepository<DiaryEntity, UUID> {
         where d.writerId = :writerId and d.createdAt between :start and :end
     """)
     List<DiaryEntity> findByWriterIdAndCreatedAtBetween(UUID writerId, LocalDateTime start, LocalDateTime end);
+
+    boolean existsByIdAndWriterId(UUID diaryId, UUID writerId);
 }
