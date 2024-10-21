@@ -23,21 +23,21 @@ public class DiaryMapper {
     }
 
     public static Diary toDomain(DiaryEntity diaryEntity) {
-        return Diary.withId(
+        return new Diary(
                 new DomainId(diaryEntity.getId()),
                 new DomainId(diaryEntity.getWriterId()),
                 new DiaryContent(
                         diaryEntity.getContent(),
+                        Emotion.parse(diaryEntity.getEmotion()),
                         diaryEntity.getImageEntities().stream()
                                 .map(ImageMapper::toDomain)
-                                .toList(),
-                        Emotion.parse(diaryEntity.getEmotion())
+                                .toList()
                 ),
                 diaryEntity.getCreatedAt(),
+                diaryEntity.getIsPublic(),
                 diaryEntity.getLikeEntities().stream()
                         .map(LikeMapper::toDomain)
-                        .toList(),
-                diaryEntity.getIsPublic()
+                        .toList()
         );
     }
 }

@@ -16,7 +16,7 @@ public class UserMapper {
     }
 
     public static User toDomain(UserEntity userEntity) {
-        return User.withId(
+        return new User(
                 new DomainId(userEntity.getId()),
                 userEntity.getEmail(),
                 userEntity.getUsername(),
