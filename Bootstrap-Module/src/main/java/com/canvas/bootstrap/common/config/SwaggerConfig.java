@@ -1,5 +1,6 @@
 package com.canvas.bootstrap.common.config;
 
+import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.security.SecurityRequirement;
 import io.swagger.v3.oas.models.security.SecurityScheme;
@@ -18,10 +19,11 @@ public class SwaggerConfig {
                 .in(SecurityScheme.In.HEADER)
                 .name(HttpHeaders.AUTHORIZATION);
 
-        SecurityRequirement addSecurityItem = new SecurityRequirement();
-        addSecurityItem.addList("Authorization");
+        SecurityRequirement securityRequirement = new SecurityRequirement();
+        securityRequirement.addList("Authorization");
 
         return new OpenAPI()
-                .addSecurityItem(addSecurityItem);
+                .addSecurityItem(securityRequirement)
+                .components(new Components().addSecuritySchemes("Authorization", bearerAuth));
     }
 }
