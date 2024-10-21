@@ -1,5 +1,6 @@
 package com.canvas.persistence.jpa.diary.adapter;
 
+import com.canvas.application.diary.exception.DiaryException;
 import com.canvas.application.diary.port.out.DiaryManagementPort;
 import com.canvas.domain.common.DomainId;
 import com.canvas.domain.diary.entity.Diary;
@@ -28,10 +29,15 @@ public class DiaryManagementJpaAdapter implements DiaryManagementPort {
     }
 
     @Override
-    public Diary getById(DomainId diaryId) {
-        DiaryEntity diaryEntity = diaryJpaRepository.findById(diaryId.value())
-                .orElseThrow(() -> new IllegalArgumentException("유효하지 않은 일기"));
+    public Diary getByIdAndWriterId(DomainId diaryId, DomainId writerId) {
+        DiaryEntity diaryEntity = diaryJpaRepository.findByIdAndWriterId(diaryId.value(), writerId.value())
+                .orElseThrow(DiaryException.DiaryForbiddenException::new);
         return DiaryMapper.toDomain(diaryEntity);
+    }
+
+    @Override
+    public boolean existsByIdAndWriterId(DomainId diaryId, DomainId writerId) {
+        return diaryJpaRepository.existsByIdAndWriterId(diaryId.value(), writerId.value());
     }
 
     @Override
@@ -45,8 +51,8 @@ public class DiaryManagementJpaAdapter implements DiaryManagementPort {
     }
 
     @Override
-    public void delete(Diary diary) {
-        diaryJpaRepository.deleteById(diary.getId().value());
+    public void deleteById(DomainId diaryId) {
+        diaryJpaRepository.deleteById(diaryId.value());
     }
 
 }
