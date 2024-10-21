@@ -16,28 +16,28 @@ public class DiaryMapper {
                 diary.getWriterId().value()
         );
 
-        diaryEntity.getImageEntities().addAll(ImageMapper.toEntities(diary));
-        diaryEntity.getLikeEntities().addAll(LikeMapper.toEntities(diary));
+        ImageMapper.toEntities(diary).forEach(diaryEntity::addImageEntity);
+        LikeMapper.toEntities(diary).forEach(diaryEntity::addLikeEntity);
 
         return diaryEntity;
     }
 
     public static Diary toDomain(DiaryEntity diaryEntity) {
-        return Diary.withId(
+        return new Diary(
                 new DomainId(diaryEntity.getId()),
                 new DomainId(diaryEntity.getWriterId()),
                 new DiaryContent(
                         diaryEntity.getContent(),
+                        Emotion.parse(diaryEntity.getEmotion()),
                         diaryEntity.getImageEntities().stream()
                                 .map(ImageMapper::toDomain)
-                                .toList(),
-                        Emotion.parse(diaryEntity.getEmotion())
+                                .toList()
                 ),
                 diaryEntity.getCreatedAt(),
+                diaryEntity.getIsPublic(),
                 diaryEntity.getLikeEntities().stream()
                         .map(LikeMapper::toDomain)
-                        .toList(),
-                diaryEntity.getIsPublic()
+                        .toList()
         );
     }
 }

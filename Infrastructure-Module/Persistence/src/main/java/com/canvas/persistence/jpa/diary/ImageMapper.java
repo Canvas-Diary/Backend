@@ -24,7 +24,7 @@ public class ImageMapper {
     }
 
     public static Image toDomain(ImageEntity imageEntity) {
-        return Image.withId(
+        return new Image(
                 new DomainId(imageEntity.getId()),
                 new DomainId(imageEntity.getDiaryId()),
                 imageEntity.getIsMain(),

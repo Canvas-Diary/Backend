@@ -44,4 +44,12 @@ public class DiaryEntity extends BaseEntity {
         this.writerId = writerId;
     }
 
+    public void addImageEntity(ImageEntity imageEntity) {
+        imageEntities.add(imageEntity);
+    }
+
+    public void addLikeEntity(LikeEntity likeEntity) {
+        likeEntities.add(likeEntity);
+    }
+
 }
