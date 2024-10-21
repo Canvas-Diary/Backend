@@ -20,7 +20,7 @@ import java.time.LocalDate;
 public interface DiaryApi {
 
     @Operation(summary = "일기 생성")
-    @PostMapping
+    @PostMapping()
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "200",

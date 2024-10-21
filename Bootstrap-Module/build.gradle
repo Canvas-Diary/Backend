@@ -5,6 +5,9 @@ dependencies {
     implementation(project(":Infrastructure-Module:Persistence"))
     implementation(project(":Infrastructure-Module:ImageGenerator"))
     implementation(project(":Infrastructure-Module:Google"))
+    implementation(project(":Infrastructure-Module:AWS"))
+    implementation(project(":Infrastructure-Module:ElasticSearch"))
+
 
     implementation "org.springframework.boot:spring-boot-starter-web"
     implementation "org.springdoc:springdoc-openapi-starter-webmvc-ui:2.6.0"
