@@ -19,7 +19,7 @@ public class DiaryContent {
         this.images.addAll(images);
     }
 
-    private void addImage(Image image) {
+    public void addImage(Image image) {
         this.images.add(image);
     }
 }
