@@ -16,8 +16,8 @@ public class DiaryMapper {
                 diary.getWriterId().value()
         );
 
-        diaryEntity.getImageEntities().addAll(ImageMapper.toEntities(diary));
-        diaryEntity.getLikeEntities().addAll(LikeMapper.toEntities(diary));
+        ImageMapper.toEntities(diary).forEach(diaryEntity::addImageEntity);
+        LikeMapper.toEntities(diary).forEach(diaryEntity::addLikeEntity);
 
         return diaryEntity;
     }
