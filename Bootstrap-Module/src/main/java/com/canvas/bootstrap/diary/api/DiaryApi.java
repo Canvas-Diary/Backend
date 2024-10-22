@@ -1,9 +1,6 @@
-package com.canvas.diary.api;
+package com.canvas.bootstrap.diary.api;
 
-import com.canvas.diary.dto.CreateDiaryRequest;
-import com.canvas.diary.dto.CreateDiaryResponse;
-import com.canvas.diary.dto.ReadDiaryCalenderResponse;
-import com.canvas.diary.dto.ReadDiaryResponse;
+import com.canvas.bootstrap.diary.dto.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -78,7 +75,7 @@ public interface DiaryApi {
                     description = "일기 내용 수정 성공"
             )
     })
-    void updateDiary(@PathVariable String diaryId);
+    void updateDiary(@PathVariable String diaryId, @RequestBody UpdateDiaryRequest updateDiaryRequest);
 
     @Operation(summary = "일기 삭제")
     @DeleteMapping("/{diaryId}")
