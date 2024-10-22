@@ -11,4 +11,8 @@ public class Image {
     private DomainId diaryId;
     private Boolean isMain;
     private String s3Uri;
+
+    public void updateMain(Boolean isMain) {
+        this.isMain = isMain;
+    }
 }
