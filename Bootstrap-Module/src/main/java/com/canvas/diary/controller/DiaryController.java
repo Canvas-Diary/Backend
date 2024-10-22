@@ -1,9 +1,5 @@
 package com.canvas.diary.controller;
 
-import com.canvas.application.diary.port.in.AddDiaryUseCase;
-import com.canvas.application.diary.port.in.GetDiaryUseCase;
-import com.canvas.application.diary.port.in.ModifyDiaryUseCase;
-import com.canvas.application.diary.port.in.RemoveDiaryUseCase;
 import com.canvas.diary.api.DiaryApi;
 import com.canvas.diary.dto.CreateDiaryRequest;
 import com.canvas.diary.dto.CreateDiaryResponse;
@@ -54,7 +50,7 @@ public class DiaryController implements DiaryApi {
     }
 
     @Override
-    @PatchMapping("/{diaryId}")
+    @DeleteMapping("/{diaryId}")
     public void deleteDiary(@PathVariable String diaryId) {
 
     }
