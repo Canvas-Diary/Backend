@@ -26,5 +26,5 @@ public interface ImageJpaRepository extends JpaRepository<ImageEntity, UUID> {
             where i_sub.id = :imageId
         ) and d.writerId = :userId
     """)
-    List<ImageEntity> findAllInDiaryByIdAndWriterId(UUID imageId, UUID writerId);
+    List<ImageEntity> findAllInDiaryByIdAndWriterId(UUID imageId, UUID userId);
 }
