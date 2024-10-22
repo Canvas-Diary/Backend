@@ -5,7 +5,6 @@ public interface SetMainImageUseCase {
 
     record Command(
             String userId,
-            String diaryId,
             String imageId
     ) {
     }
