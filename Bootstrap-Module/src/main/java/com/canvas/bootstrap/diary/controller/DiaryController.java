@@ -1,10 +1,7 @@
-package com.canvas.diary.controller;
+package com.canvas.bootstrap.diary.controller;
 
-import com.canvas.diary.api.DiaryApi;
-import com.canvas.diary.dto.CreateDiaryRequest;
-import com.canvas.diary.dto.CreateDiaryResponse;
-import com.canvas.diary.dto.ReadDiaryCalenderResponse;
-import com.canvas.diary.dto.ReadDiaryResponse;
+import com.canvas.bootstrap.diary.api.DiaryApi;
+import com.canvas.bootstrap.diary.dto.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
@@ -45,7 +42,7 @@ public class DiaryController implements DiaryApi {
 
     @Override
     @PatchMapping("/{diaryId}")
-    public void updateDiary(@PathVariable String diaryId) {
+    public void updateDiary(@PathVariable String diaryId, @RequestBody UpdateDiaryRequest request) {
 
     }
 
