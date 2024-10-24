@@ -2,8 +2,12 @@ package com.canvas.persistence.jpa.diary.adapter;
 
 import com.canvas.application.diary.exception.DiaryException;
 import com.canvas.application.diary.port.out.DiaryManagementPort;
+import com.canvas.common.page.PageRequest;
+import com.canvas.common.page.Slice;
 import com.canvas.domain.common.DomainId;
 import com.canvas.domain.diary.entity.Diary;
+import com.canvas.domain.diary.enums.Emotion;
+import com.canvas.persistence.jpa.common.PageMapper;
 import com.canvas.persistence.jpa.diary.DiaryMapper;
 import com.canvas.persistence.jpa.diary.entity.DiaryEntity;
 import com.canvas.persistence.jpa.diary.repository.DiaryJpaRepository;
@@ -55,6 +59,38 @@ public class DiaryManagementJpaAdapter implements DiaryManagementPort {
         return diaryJpaRepository.findByWriterIdAndCreatedAtBetween(userId.value(), start, end).stream()
                 .map(DiaryMapper::toDomain)
                 .toList();
+    }
+
+    @Override
+    public Slice<Diary> getAlbum(PageRequest pageRequest, DomainId userId) {
+        var diaryEntities = diaryJpaRepository.findByWriterId(
+                PageMapper.toJpaPageRequest(pageRequest),
+                userId.value()
+        );
+
+        return PageMapper.toDomainSlice(diaryEntities, DiaryMapper::toDomain);
+    }
+
+    @Override
+    public Slice<Diary> getAlbumByContent(PageRequest pageRequest, DomainId userId, String content) {
+        var diaryEntities = diaryJpaRepository.findByWriterIdAndContentContains(
+                PageMapper.toJpaPageRequest(pageRequest),
+                userId.value(),
+                content
+        );
+
+        return PageMapper.toDomainSlice(diaryEntities, DiaryMapper::toDomain);
+    }
+
+    @Override
+    public Slice<Diary> getAlbumByEmotion(PageRequest pageRequest, DomainId userId, Emotion emotion) {
+        var diaryEntities = diaryJpaRepository.findByWriterIdAndEmotion(
+                PageMapper.toJpaPageRequest(pageRequest),
+                userId.value(),
+                emotion.name()
+        );
+
+        return PageMapper.toDomainSlice(diaryEntities, DiaryMapper::toDomain);
     }
 
     @Override
