@@ -18,32 +18,32 @@ public class DiaryQueryService implements GetDiaryUseCase {
     private final DiaryManagementPort diaryManagementPort;
 
     @Override
-    public Response.Diary getMyDiary(Command.Diary command) {
+    public GetDiaryUseCase.Response.Diary getMyDiary(GetDiaryUseCase.Query.Diary query) {
         Diary diary = diaryManagementPort.getByIdAndWriterId(
-                DomainId.from(command.diaryId()),
-                DomainId.from(command.userId())
+                DomainId.from(query.diaryId()),
+                DomainId.from(query.userId())
         );
 
-        return toResponseDiary(command.userId(), diary);
+        return toResponseDiary(query.userId(), diary);
     }
 
     @Override
-    public Response.Diary getOtherDiary(Command.Diary command) {
-        Diary diary = diaryManagementPort.getPublicById(DomainId.from(command.diaryId()));
+    public GetDiaryUseCase.Response.Diary getOtherDiary(GetDiaryUseCase.Query.Diary query) {
+        Diary diary = diaryManagementPort.getPublicById(DomainId.from(query.diaryId()));
 
-        return toResponseDiary(command.userId(), diary);
+        return toResponseDiary(query.userId(), diary);
     }
 
     @Override
-    public Response.HomeCalendar getHomeCalendar(Command.HomeCalendar command) {
+    public GetDiaryUseCase.Response.HomeCalendar getHomeCalendar(GetDiaryUseCase.Query.HomeCalendar query) {
         List<Diary> diaries = diaryManagementPort.getByUserIdAndMonth(
-                DomainId.from(command.userId()),
-                command.date()
+                DomainId.from(query.userId()),
+                query.date()
         );
 
-        return new Response.HomeCalendar(
+        return new GetDiaryUseCase.Response.HomeCalendar(
                 diaries.stream()
-                        .map(diary -> new Response.HomeCalendar.Diary(
+                        .map(diary -> new GetDiaryUseCase.Response.HomeCalendar.Diary(
                                 diary.getId().toString(),
                                 diary.getDateTime().toLocalDate(),
                                 diary.getDiaryContent().getEmotion()
@@ -51,8 +51,8 @@ public class DiaryQueryService implements GetDiaryUseCase {
         );
     }
 
-    private static Response.Diary toResponseDiary(String userId, Diary diary) {
-        return new Response.Diary(
+    private static GetDiaryUseCase.Response.Diary toResponseDiary(String userId, Diary diary) {
+        return new GetDiaryUseCase.Response.Diary(
                 diary.getId().toString(),
                 diary.getDiaryContent().getContent(),
                 diary.getDiaryContent().getEmotion(),
@@ -60,7 +60,7 @@ public class DiaryQueryService implements GetDiaryUseCase {
                 diary.getLikes().stream()
                         .anyMatch(like -> like.getUserId().equals(DomainId.from(userId))),
                 diary.getDiaryContent().getImages().stream()
-                        .map(image -> new Response.Diary.Image(
+                        .map(image -> new GetDiaryUseCase.Response.Diary.Image(
                                 image.getId().toString(),
                                 image.getIsMain(),
                                 image.getS3Uri()

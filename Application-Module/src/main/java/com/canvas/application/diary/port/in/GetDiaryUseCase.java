@@ -6,11 +6,11 @@ import java.time.LocalDate;
 import java.util.List;
 
 public interface GetDiaryUseCase {
-    Response.Diary getMyDiary(Command.Diary command);
-    Response.Diary getOtherDiary(Command.Diary command);
-    Response.HomeCalendar getHomeCalendar(Command.HomeCalendar command);
+    Response.Diary getMyDiary(Query.Diary query);
+    Response.Diary getOtherDiary(Query.Diary query);
+    Response.HomeCalendar getHomeCalendar(Query.HomeCalendar query);
 
-    class Command {
+    class Query {
         public record Diary(
                 String userId,
                 String diaryId
