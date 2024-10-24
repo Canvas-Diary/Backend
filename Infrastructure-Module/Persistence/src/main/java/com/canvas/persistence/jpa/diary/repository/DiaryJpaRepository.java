@@ -1,6 +1,8 @@
 package com.canvas.persistence.jpa.diary.repository;
 
 import com.canvas.persistence.jpa.diary.entity.DiaryEntity;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -33,6 +35,30 @@ public interface DiaryJpaRepository extends JpaRepository<DiaryEntity, UUID> {
         where d.writerId = :writerId and d.createdAt between :start and :end
     """)
     List<DiaryEntity> findByWriterIdAndCreatedAtBetween(UUID writerId, LocalDateTime start, LocalDateTime end);
+
+    @Query("""
+        select d
+        from DiaryEntity d
+        left join fetch d.likeEntities
+        where d.writerId = :writerId
+    """)
+    Slice<DiaryEntity> findByWriterId(Pageable pageable, UUID writerId);
+
+    @Query("""
+        select d
+        from DiaryEntity d
+        left join fetch d.likeEntities
+        where d.writerId = :writerId and d.content like %:content%
+    """)
+    Slice<DiaryEntity> findByWriterIdAndContentContains(Pageable pageable, UUID writerId, String content);
+
+    @Query("""
+        select d
+        from DiaryEntity d
+        left join fetch d.likeEntities
+        where d.writerId = :writerId and d.emotion = :emotion
+    """)
+    Slice<DiaryEntity> findByWriterIdAndEmotion(Pageable pageable, UUID writerId, String emotion);
 
     boolean existsByIdAndWriterId(UUID diaryId, UUID writerId);
 }
