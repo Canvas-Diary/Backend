@@ -36,28 +36,8 @@ public interface DiaryJpaRepository extends JpaRepository<DiaryEntity, UUID> {
     """)
     List<DiaryEntity> findByWriterIdAndCreatedAtBetween(UUID writerId, LocalDateTime start, LocalDateTime end);
 
-    @Query("""
-        select d
-        from DiaryEntity d
-        left join fetch d.likeEntities
-        where d.writerId = :writerId
-    """)
     Slice<DiaryEntity> findByWriterId(Pageable pageable, UUID writerId);
-
-    @Query("""
-        select d
-        from DiaryEntity d
-        left join fetch d.likeEntities
-        where d.writerId = :writerId and d.content like %:content%
-    """)
     Slice<DiaryEntity> findByWriterIdAndContentContains(Pageable pageable, UUID writerId, String content);
-
-    @Query("""
-        select d
-        from DiaryEntity d
-        left join fetch d.likeEntities
-        where d.writerId = :writerId and d.emotion = :emotion
-    """)
     Slice<DiaryEntity> findByWriterIdAndEmotion(Pageable pageable, UUID writerId, String emotion);
 
     boolean existsByIdAndWriterId(UUID diaryId, UUID writerId);
