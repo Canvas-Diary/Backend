@@ -29,4 +29,7 @@ public class DiaryException extends BusinessException {
         }
     }
 
+    public static class DiaryBadRequestException extends DiaryException {
+        public DiaryBadRequestException() {super(3, HttpStatus.BAD_REQUEST, "유효하지 않은 일기 요청입니다.");}
+    }
 }
