@@ -7,10 +7,6 @@ import com.canvas.application.diary.port.in.RemoveDiaryUseCase;
 import com.canvas.bootstrap.diary.api.DiaryApi;
 import com.canvas.bootstrap.diary.dto.*;
 import lombok.RequiredArgsConstructor;
-import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDate;
@@ -39,17 +35,17 @@ public class DiaryController implements DiaryApi {
     }
 
     @Override
-    public ReadDiaryCalenderResponse readDiaryCalender(@RequestParam @DateTimeFormat(pattern = "yyyy-MM") LocalDate date) {
+    public ReadDiaryCalenderResponse readDiaryCalender(LocalDate date) {
         return null;
     }
 
     @Override
-    public void updateDiary(@PathVariable String diaryId, @RequestBody UpdateDiaryRequest request) {
+    public void updateDiary(String diaryId, UpdateDiaryRequest request) {
 
     }
 
     @Override
-    public void deleteDiary(@PathVariable String diaryId) {
+    public void deleteDiary(String diaryId) {
 
     }
 }
