@@ -1,11 +1,14 @@
 package com.canvas.bootstrap.diary.controller;
 
+import com.canvas.application.common.enums.Style;
 import com.canvas.application.diary.port.in.AddDiaryUseCase;
 import com.canvas.application.diary.port.in.GetDiaryUseCase;
 import com.canvas.application.diary.port.in.ModifyDiaryUseCase;
 import com.canvas.application.diary.port.in.RemoveDiaryUseCase;
 import com.canvas.bootstrap.diary.api.DiaryApi;
 import com.canvas.bootstrap.diary.dto.*;
+import com.canvas.bootstrap.diary.enums.ExploreOrder;
+import com.canvas.bootstrap.diary.enums.SearchType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -47,5 +50,15 @@ public class DiaryController implements DiaryApi {
     @Override
     public void deleteDiary(String diaryId) {
 
+    }
+
+    @Override
+    public DiarySearchResponse searchDiary(SearchType type, Style value) {
+        return null;
+    }
+
+    @Override
+    public DiaryExploreResponse exploreDiary(ExploreOrder order) {
+        return null;
     }
 }

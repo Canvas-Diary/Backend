@@ -1,6 +1,9 @@
 package com.canvas.bootstrap.diary.api;
 
+import com.canvas.application.common.enums.Style;
 import com.canvas.bootstrap.diary.dto.*;
+import com.canvas.bootstrap.diary.enums.ExploreOrder;
+import com.canvas.bootstrap.diary.enums.SearchType;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -87,4 +90,43 @@ public interface DiaryApi {
     })
     void deleteDiary(@PathVariable String diaryId);
 
+    @Operation(summary = "일기 검색")
+    @GetMapping("/search")
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "일기 검색 성공",
+                    content = {
+                            @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = DiarySearchResponse.class)
+                            )
+                    }
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "쿼리 스트링 오류"
+            )
+    })
+    DiarySearchResponse searchDiary(@RequestParam SearchType type, @RequestParam Style value);
+
+    @Operation(summary = "상대방 일기 탐색")
+    @GetMapping("/explore")
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "일기 탐색 성공",
+                    content = {
+                            @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = DiaryExploreResponse.class)
+                            )
+                    }
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "쿼리 스트링 오류"
+            )
+    })
+    DiaryExploreResponse exploreDiary(@RequestParam ExploreOrder order);
 }
