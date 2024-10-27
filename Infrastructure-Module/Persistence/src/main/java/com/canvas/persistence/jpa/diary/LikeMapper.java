@@ -23,7 +23,7 @@ public class LikeMapper {
     }
 
     public static Like toDomain(LikeEntity likeEntity) {
-        return new Like(
+        return Like.create(
                 new DomainId(likeEntity.getId()),
                 new DomainId(likeEntity.getUserId()),
                 new DomainId(likeEntity.getDiaryId())

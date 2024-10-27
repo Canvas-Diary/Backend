@@ -12,7 +12,7 @@ public class ImageMapper {
         return new ImageEntity(
                 image.getId().value(),
                 image.getIsMain(),
-                image.getS3Uri(),
+                image.getImageUrl(),
                 image.getDiaryId().value()
         );
     }
@@ -24,11 +24,11 @@ public class ImageMapper {
     }
 
     public static Image toDomain(ImageEntity imageEntity) {
-        return new Image(
+        return Image.create(
                 new DomainId(imageEntity.getId()),
                 new DomainId(imageEntity.getDiaryId()),
                 imageEntity.getIsMain(),
-                imageEntity.getS3Uri()
+                imageEntity.getImageUrl()
         );
     }
 

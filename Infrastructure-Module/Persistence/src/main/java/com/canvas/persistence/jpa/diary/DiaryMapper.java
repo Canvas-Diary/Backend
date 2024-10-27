@@ -23,10 +23,10 @@ public class DiaryMapper {
     }
 
     public static Diary toDomain(DiaryEntity diaryEntity) {
-        return new Diary(
-                new DomainId(diaryEntity.getId()),
-                new DomainId(diaryEntity.getWriterId()),
-                new DiaryContent(
+        return Diary.create(
+                DomainId.from(diaryEntity.getId()),
+                DomainId.from(diaryEntity.getWriterId()),
+                DiaryContent.create(
                         diaryEntity.getContent(),
                         Emotion.parse(diaryEntity.getEmotion()),
                         diaryEntity.getImageEntities().stream()

@@ -6,10 +6,8 @@ import com.canvas.application.diary.port.in.AddDiaryUseCase;
 import com.canvas.application.diary.port.in.ModifyDiaryUseCase;
 import com.canvas.application.diary.port.in.RemoveDiaryUseCase;
 import com.canvas.application.diary.port.out.DiaryEmotionExtractPort;
-import com.canvas.application.image.port.out.ImageGenerationPort;
-import com.canvas.application.image.port.out.ImagePromptGeneratePort;
 import com.canvas.application.diary.port.out.DiaryManagementPort;
-import com.canvas.application.image.port.out.ImageUploadPort;
+import com.canvas.application.image.port.in.AddImageUseCase;
 import com.canvas.domain.common.DomainId;
 import com.canvas.domain.diary.entity.Diary;
 import com.canvas.domain.diary.entity.Image;
@@ -19,6 +17,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -29,16 +28,14 @@ public class DiaryCommandService
 
     private final DiaryManagementPort diaryManagementPort;
     private final DiaryEmotionExtractPort diaryEmotionExtractPort;
-    private final ImagePromptGeneratePort imagePromptGeneratePort;
-    private final ImageGenerationPort imageGenerationPort;
-    private final ImageUploadPort imageUploadPort;
+    private final AddImageUseCase addImageUseCase;
 
     @Override
     public Response add(AddDiaryUseCase.Command command) {
         DomainId diaryId = DomainId.generate();
 
         diaryManagementPort.save(
-                new Diary(
+                Diary.create(
                         diaryId,
                         DomainId.from(command.userId()),
                         createDiaryContent(diaryId, command.content(), command.style()),
@@ -65,6 +62,20 @@ public class DiaryCommandService
         diaryManagementPort.save(diary);
     }
 
+    private DiaryContent createDiaryContent(DomainId diaryId, String content, Style style) {
+        AddImageUseCase.Response ImageInform = addImageUseCase.add(new AddImageUseCase.Command(diaryId.toString(), content, style));
+        Image image = Image.create(
+                DomainId.from(ImageInform.imageId()),
+                diaryId,
+                ImageInform.isMain(),
+                ImageInform.imageUrl()
+        );
+
+        Emotion emotion = diaryEmotionExtractPort.emotionExtract(content);
+
+        return DiaryContent.create(content, emotion, new ArrayList<>(List.of(image)));
+    }
+
     @Override
     public void remove(RemoveDiaryUseCase.Command command) {
         if (!diaryManagementPort.existsByIdAndWriterId(
@@ -75,17 +86,6 @@ public class DiaryCommandService
         }
 
         diaryManagementPort.deleteById(DomainId.from(command.diaryId()));
-    }
-
-    private DiaryContent createDiaryContent(DomainId diaryId, String content, Style style) {
-        String prompt = imagePromptGeneratePort.generatePrompt(content);
-        String imageUrl = imageGenerationPort.generate(prompt, style);
-        String s3Url = imageUploadPort.upload(imageUrl);
-
-        Emotion emotion = diaryEmotionExtractPort.emotionExtract(content);
-        Image image = new Image(DomainId.generate(), diaryId, true, s3Url);
-
-        return new DiaryContent(content, emotion, List.of(image));
     }
 
 }

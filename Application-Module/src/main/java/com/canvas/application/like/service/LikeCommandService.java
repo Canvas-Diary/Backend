@@ -19,7 +19,7 @@ public class LikeCommandService implements AddLikeUseCase, CancelLikeUseCase {
     @Override
     public void add(AddLikeUseCase.Command command) {
         likeManagementPort.add(
-                new Like(
+                Like.create(
                         DomainId.generate(),
                         DomainId.from(command.userId()),
                         DomainId.from(command.diaryId())
