@@ -17,7 +17,7 @@ public class ImageEntity {
     private UUID id;
 
     private Boolean isMain;
-    private String s3Uri;
+    private String imageUrl;
 
     @Column(name = "diary_id", nullable = false)
     private UUID diaryId;
@@ -26,10 +26,10 @@ public class ImageEntity {
     @JoinColumn(name = "diary_id", insertable = false, updatable = false)
     private DiaryEntity diaryEntity;
 
-    public ImageEntity(UUID id, Boolean isMain, String s3Uri, UUID diaryId) {
+    public ImageEntity(UUID id, Boolean isMain, String imageUrl, UUID diaryId) {
         this.id = id;
         this.isMain = isMain;
-        this.s3Uri = s3Uri;
+        this.imageUrl = imageUrl;
         this.diaryId = diaryId;
     }
 

@@ -2,12 +2,15 @@ package com.canvas.domain.diary.entity;
 
 import com.canvas.domain.common.DomainId;
 import com.canvas.domain.diary.vo.DiaryContent;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Getter
 public class Diary {
     private DomainId id;
@@ -15,23 +18,14 @@ public class Diary {
     private DiaryContent diaryContent;
     private LocalDateTime dateTime;
     private Boolean isPublic;
-    private List<Like> likes = new ArrayList<>();
+    private List<Like> likes;
 
-    public Diary(DomainId id, DomainId writerId, DiaryContent diaryContent, LocalDateTime dateTime, Boolean isPublic, List<Like> likes) {
-        this.id = id;
-        this.writerId = writerId;
-        this.diaryContent = diaryContent;
-        this.dateTime = dateTime;
-        this.isPublic = isPublic;
-        this.likes.addAll(likes);
+    public static Diary create(DomainId id, DomainId writerId, DiaryContent diaryContent, LocalDateTime dateTime, Boolean isPublic, List<Like> likes) {
+        return new Diary(id, writerId, diaryContent, dateTime, isPublic, likes);
     }
 
-    public Diary(DomainId id, DomainId writerId, DiaryContent diaryContent, LocalDateTime dateTime, Boolean isPublic) {
-        this.id = id;
-        this.writerId = writerId;
-        this.diaryContent = diaryContent;
-        this.dateTime = dateTime;
-        this.isPublic = isPublic;
+    public static Diary create(DomainId id, DomainId writerId, DiaryContent diaryContent, LocalDateTime dateTime, Boolean isPublic) {
+        return new Diary(id, writerId, diaryContent, dateTime, isPublic, new ArrayList<>());
     }
 
     public void addLike(Like like) {
@@ -44,5 +38,9 @@ public class Diary {
 
     public void updatePublic(Boolean isPublic) {
         this.isPublic = isPublic;
+    }
+
+    public String getMainImageOrDefault() {
+        return this.diaryContent.getMainImageOrDefault();
     }
 }

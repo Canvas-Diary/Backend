@@ -1,14 +1,13 @@
 package com.canvas.application.diary.service;
 
-import com.canvas.application.diary.port.in.GetDiaryUseCase;
 import com.canvas.application.diary.port.in.GetAlbumDiaryUseCase;
+import com.canvas.application.diary.port.in.GetDiaryUseCase;
 import com.canvas.application.diary.port.out.DiaryManagementPort;
 import com.canvas.common.page.PageRequest;
 import com.canvas.common.page.Slice;
 import com.canvas.common.page.Sort;
 import com.canvas.domain.common.DomainId;
 import com.canvas.domain.diary.entity.Diary;
-import com.canvas.domain.diary.entity.Image;
 import com.canvas.domain.diary.enums.Emotion;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -20,8 +19,6 @@ import java.util.List;
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class DiaryQueryService implements GetDiaryUseCase, GetAlbumDiaryUseCase {
-
-    private static final String DEFAULT_IMAGE_URL = "https://canvas-diary.s3.ap-northeast-2.amazonaws.com/sample.jpg";
 
     private final DiaryManagementPort diaryManagementPort;
 
@@ -71,7 +68,7 @@ public class DiaryQueryService implements GetDiaryUseCase, GetAlbumDiaryUseCase 
                         .map(image -> new GetDiaryUseCase.Response.Diary.Image(
                                 image.getId().toString(),
                                 image.getIsMain(),
-                                image.getS3Uri()
+                                image.getImageUrl()
                         )).toList()
         );
     }
@@ -113,11 +110,7 @@ public class DiaryQueryService implements GetDiaryUseCase, GetAlbumDiaryUseCase 
                 slice.content().stream()
                         .map(diary -> new GetAlbumDiaryUseCase.Response.DiaryInfo(
                                 diary.getId().toString(),
-                                diary.getDiaryContent().getImages().stream()
-                                        .filter(Image::getIsMain)
-                                        .map(Image::getS3Uri)
-                                        .findFirst()
-                                        .orElse(DEFAULT_IMAGE_URL)))
+                                diary.getMainImageOrDefault()))
                         .toList(),
                 slice.size(),
                 slice.number(),

@@ -28,14 +28,16 @@ public class ImageCommandService
     private final ImageUploadPort imageUploadPort;
 
     @Override
-    public void add(AddImageUseCase.Command command) {
+    public Response add(AddImageUseCase.Command command) {
         String prompt = imagePromptGeneratePort.generatePrompt(command.content());
-        String imageUrl = imageGenerationPort.generate(prompt, command.style());
-        String s3Url = imageUploadPort.upload(imageUrl);
+        String generatedImageUrl = imageGenerationPort.generate(prompt, command.style());
+        String uploadedImageUrl = imageUploadPort.upload(generatedImageUrl);
 
-        Image image = new Image(DomainId.generate(), DomainId.from(command.diaryId()), true, s3Url);
+        Image image = Image.create(DomainId.generate(), DomainId.from(command.diaryId()), true, uploadedImageUrl);
 
         imageManagementPort.save(image);
+
+        return new Response(image.getId().toString(), image.getIsMain(), image.getImageUrl());
     }
 
     @Override
