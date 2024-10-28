@@ -17,6 +17,6 @@ public class AccessUserArgumentResolver implements HandlerMethodArgumentResolver
                                   ModelAndViewContainer mavContainer,
                                   NativeWebRequest webRequest,
                                   WebDataBinderFactory binderFactory) throws Exception {
-        return "0192c9ce-6703-75e9-bd6c-4d3fea6537ed";
+        return "01JB8ZBQ43RSYXQ08GGH13WXZG";
     }
 }
