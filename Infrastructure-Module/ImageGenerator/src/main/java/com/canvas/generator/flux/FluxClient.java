@@ -6,7 +6,10 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.publisher.Mono;
+import reactor.util.retry.Retry;
 
+import java.time.Duration;
 import java.util.Objects;
 
 @Component
@@ -38,18 +41,28 @@ public class FluxClient {
                 ).retrieve()
                 .bodyToMono(GenerateResponse.class)
                 .block())
-                .id;
+                .getId();
     }
 
     public String getResult(String id) {
         return Objects.requireNonNull(webClient.get()
-                .uri("/get_result")
-                .attribute("id", id)
+                .uri(uriBuilder -> uriBuilder.path("/get_result")
+                        .queryParam("id", id)
+                        .build())
                 .retrieve()
                 .bodyToMono(GetResponse.class)
+                .flatMap(response -> {
+                    if (response.status.equals("Pending")) {
+                        return Mono.error(new RuntimeException("status is pending"));
+                    }
+                    return Mono.just(response);
+                })
+                .retryWhen(
+                        Retry.fixedDelay(3, Duration.ofSeconds(1))
+                                .filter(throwable -> throwable instanceof RuntimeException))
+                .doOnError(error -> System.err.println("최대 재시도에 도달했습니다: " + error.getMessage()))
                 .block())
-                .result
-                .sample;
+                .getSample();
     }
 
     public record GenerateRequest(
@@ -63,6 +76,9 @@ public class FluxClient {
     public record GenerateResponse(
             String id
     ) {
+        public String getId() {
+            return id;
+        }
     }
 
     public record GetResponse(
@@ -70,6 +86,10 @@ public class FluxClient {
             String status,
             Result result
     ) {
+        public String getSample() {
+            return result.sample;
+        }
+
         public record Result(
                 String sample,
                 String prompt
