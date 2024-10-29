@@ -75,7 +75,7 @@ class DiaryJpaRepositoryTest {
 
     @Test
     @DisplayName("ID, 작성자 ID 조회 성공")
-    void findByIdAndWriterIdAccessTest() {
+    void findByIdAndWriterIdSuccessTest() {
         // given
         DiaryEntity publicMyDiary = PUBLIC_MY_DIARY.getDiaryEntity();
 
