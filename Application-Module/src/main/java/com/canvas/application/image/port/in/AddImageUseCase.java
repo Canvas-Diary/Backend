@@ -3,17 +3,26 @@ package com.canvas.application.image.port.in;
 import com.canvas.application.common.enums.Style;
 
 public interface AddImageUseCase {
-    Response add(Command command);
+    Response.add add(Command command);
+    Response.create create(Command command);
 
     record Command(
             String diaryId,
             String content,
             Style style
-    ) {}
+    ) {
+    }
 
-    record Response(
-            String imageId,
-            Boolean isMain,
-            String imageUrl
-    ) {}
+    class Response {
+        public record add(
+                String imageId,
+                Boolean isMain,
+                String imageUrl
+        ) {
+        }
+
+        public record create(
+                String imageUrl
+        ) {}
+    }
 }
