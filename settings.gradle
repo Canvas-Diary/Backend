@@ -11,3 +11,6 @@ include 'Infrastructure-Module:ImageGenerator'
 include 'Infrastructure-Module:AWS'
 include 'Infrastructure-Module:ElasticSearch'
 include 'Infrastructure-Module:Google'
+include 'Infrastructure-Module:Client'
+include 'Infrastructure-Module:Secret'
+
