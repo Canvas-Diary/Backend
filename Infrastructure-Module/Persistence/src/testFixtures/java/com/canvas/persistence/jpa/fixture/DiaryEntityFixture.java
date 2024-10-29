@@ -8,9 +8,9 @@ import lombok.Getter;
 import java.util.Arrays;
 import java.util.UUID;
 
-import static com.canvas.persistence.jpa.fixture.UserFixture.*;
+import static com.canvas.persistence.jpa.fixture.UserEntityFixture.*;
 
-public enum DiaryFixture {
+public enum DiaryEntityFixture {
     PUBLIC_MY_DIARY(
             "내용1",
             "감정1",
@@ -37,14 +37,14 @@ public enum DiaryFixture {
     private final String content;
     private final String emotion;
     private final Boolean isPublic;
-    private final UserFixture userFixture;
+    private final UserEntityFixture userEntityFixture;
 
-    DiaryFixture(String content, String emotion, Boolean isPublic, UserFixture userFixture) {
+    DiaryEntityFixture(String content, String emotion, Boolean isPublic, UserEntityFixture userEntityFixture) {
         this.id = DomainId.generate().value();
         this.content = content;
         this.emotion = emotion;
         this.isPublic = isPublic;
-        this.userFixture = userFixture;
+        this.userEntityFixture = userEntityFixture;
     }
 
     public DiaryEntity getDiaryEntity() {
@@ -53,17 +53,17 @@ public enum DiaryFixture {
                 .content(content)
                 .emotion(emotion)
                 .isPublic(isPublic)
-                .writerId(userFixture.getId())
-                .writer(userFixture.getUserEntity())
+                .writerId(userEntityFixture.getId())
+                .writer(userEntityFixture.getUserEntity())
                 .imageEntities(
-                        Arrays.stream(ImageFixture.values())
-                                .filter(imageFixture -> imageFixture.getDiaryFixture().equals(this))
-                                .map(ImageFixture::getImageEntity)
+                        Arrays.stream(ImageEntityFixture.values())
+                                .filter(imageEntityFixture -> imageEntityFixture.getDiaryEntityFixture().equals(this))
+                                .map(ImageEntityFixture::getImageEntity)
                                 .toList())
                 .likeEntities(
-                        Arrays.stream(LikeFixture.values())
-                                .filter(likeFixture -> likeFixture.getDiaryFixture().equals(this))
-                                .map(LikeFixture::getLikeEntity)
+                        Arrays.stream(LikeEntityFixture.values())
+                                .filter(likeEntityFixture -> likeEntityFixture.getDiaryEntityFixture().equals(this))
+                                .map(LikeEntityFixture::getLikeEntity)
                                 .toList())
                 .build();
 

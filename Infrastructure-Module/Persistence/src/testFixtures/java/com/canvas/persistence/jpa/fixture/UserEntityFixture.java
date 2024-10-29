@@ -7,7 +7,7 @@ import lombok.Getter;
 
 import java.util.UUID;
 
-public enum UserFixture {
+public enum UserEntityFixture {
 
     MYSELF("myEmail", "myUsername", "KAKAO"),
     OTHER1("email1", "username1", "KAKAO"),
@@ -19,7 +19,7 @@ public enum UserFixture {
     private final String username;
     private final String socialLoginProvider;
 
-    UserFixture(String email, String username, String socialLoginProvider) {
+    UserEntityFixture(String email, String username, String socialLoginProvider) {
         this.id = DomainId.generate().value();
         this.email = email;
         this.username = username;

@@ -1,8 +1,8 @@
 package com.canvas.persistence.jpa.diary.repository;
 
 import com.canvas.persistence.jpa.diary.entity.DiaryEntity;
-import com.canvas.persistence.jpa.fixture.DiaryFixture;
-import com.canvas.persistence.jpa.fixture.UserFixture;
+import com.canvas.persistence.jpa.fixture.DiaryEntityFixture;
+import com.canvas.persistence.jpa.fixture.UserEntityFixture;
 import com.canvas.persistence.jpa.user.entity.UserEntity;
 import com.canvas.persistence.jpa.user.repository.UserJpaRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -19,7 +19,7 @@ import java.time.LocalTime;
 import java.util.Arrays;
 import java.util.List;
 
-import static com.canvas.persistence.jpa.fixture.DiaryFixture.*;
+import static com.canvas.persistence.jpa.fixture.DiaryEntityFixture.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @Slf4j
@@ -34,12 +34,12 @@ class DiaryJpaRepositoryTest {
 
     @BeforeAll
     void setUp() {
-        List<UserEntity> users = Arrays.stream(UserFixture.values())
-                .map(UserFixture::getUserEntity)
+        List<UserEntity> users = Arrays.stream(UserEntityFixture.values())
+                .map(UserEntityFixture::getUserEntity)
                 .toList();
 
         List<DiaryEntity> diaries = Arrays.stream(values())
-                .map(DiaryFixture::getDiaryEntity)
+                .map(DiaryEntityFixture::getDiaryEntity)
                 .toList();
 
         userJpaRepository.saveAll(users);

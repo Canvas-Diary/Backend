@@ -7,9 +7,9 @@ import lombok.Getter;
 
 import java.util.UUID;
 
-import static com.canvas.persistence.jpa.fixture.DiaryFixture.*;
+import static com.canvas.persistence.jpa.fixture.DiaryEntityFixture.*;
 
-public enum ImageFixture {
+public enum ImageEntityFixture {
     PUBLIC_MY_DIARY_IMAGE1(true, "url1", PUBLIC_MY_DIARY),
     PUBLIC_MY_DIARY_IMAGE2(false, "url2", PUBLIC_MY_DIARY),
     PUBLIC_MY_DIARY_IMAGE3(false, "url3", PUBLIC_MY_DIARY),
@@ -21,13 +21,13 @@ public enum ImageFixture {
     private final Boolean isMain;
     private final String imageUrl;
     @Getter
-    private final DiaryFixture diaryFixture;
+    private final DiaryEntityFixture diaryEntityFixture;
 
-    ImageFixture(Boolean isMain, String imageUrl, DiaryFixture diaryFixture) {
+    ImageEntityFixture(Boolean isMain, String imageUrl, DiaryEntityFixture diaryEntityFixture) {
         this.id = DomainId.generate().value();
         this.isMain = isMain;
         this.imageUrl = imageUrl;
-        this.diaryFixture = diaryFixture;
+        this.diaryEntityFixture = diaryEntityFixture;
     }
 
     public ImageEntity getImageEntity() {
@@ -35,7 +35,7 @@ public enum ImageFixture {
                 .id(id)
                 .isMain(isMain)
                 .imageUrl(imageUrl)
-                .diaryId(diaryFixture.getId())
+                .diaryId(diaryEntityFixture.getId())
                 .build();
     }
 

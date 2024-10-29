@@ -7,31 +7,31 @@ import lombok.Getter;
 
 import java.util.UUID;
 
-import static com.canvas.persistence.jpa.fixture.DiaryFixture.*;
-import static com.canvas.persistence.jpa.fixture.UserFixture.*;
+import static com.canvas.persistence.jpa.fixture.DiaryEntityFixture.*;
+import static com.canvas.persistence.jpa.fixture.UserEntityFixture.*;
 
-public enum LikeFixture {
+public enum LikeEntityFixture {
 
     PUBLIC_MY_DIARY_LIKE1(MYSELF, PUBLIC_MY_DIARY),
     PUBLIC_MY_DIARY_LIKE2(OTHER1, PUBLIC_MY_DIARY),
     PUBLIC_MY_DIARY_LIKE3(OTHER2, PUBLIC_MY_DIARY);
 
     private final UUID id;
-    private final UserFixture userFixture;
+    private final UserEntityFixture userEntityFixture;
     @Getter
-    private final DiaryFixture diaryFixture;
+    private final DiaryEntityFixture diaryEntityFixture;
 
-    LikeFixture(UserFixture userFixture, DiaryFixture diaryFixture) {
+    LikeEntityFixture(UserEntityFixture userEntityFixture, DiaryEntityFixture diaryEntityFixture) {
         this.id = DomainId.generate().value();
-        this.userFixture = userFixture;
-        this.diaryFixture = diaryFixture;
+        this.userEntityFixture = userEntityFixture;
+        this.diaryEntityFixture = diaryEntityFixture;
     }
 
     public LikeEntity getLikeEntity() {
         return new LikeEntityBuilder()
                 .id(id)
-                .userId(userFixture.getId())
-                .diaryId(diaryFixture.getId())
+                .userId(userEntityFixture.getId())
+                .diaryId(diaryEntityFixture.getId())
                 .build();
     }
 
