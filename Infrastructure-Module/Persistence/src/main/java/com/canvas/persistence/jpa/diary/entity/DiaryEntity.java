@@ -20,6 +20,7 @@ public class DiaryEntity extends BaseEntity {
     @Id
     private UUID id;
 
+    @Column(length = 1_500)
     private String content;
     private String emotion;
     private Boolean isPublic;

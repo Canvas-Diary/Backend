@@ -5,10 +5,13 @@ import io.awspring.cloud.s3.ObjectMetadata;
 import io.awspring.cloud.s3.S3Resource;
 import io.awspring.cloud.s3.S3Template;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.buffer.DataBuffer;
 import org.springframework.core.io.buffer.DataBufferUtils;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.util.UriComponents;
+import org.springframework.web.util.UriComponentsBuilder;
 import reactor.core.publisher.Flux;
 
 import java.io.ByteArrayInputStream;
@@ -16,6 +19,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.UUID;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class ImageUploadS3Adaptor implements ImageUploadPort {
@@ -52,9 +56,10 @@ public class ImageUploadS3Adaptor implements ImageUploadPort {
     }
 
     public ByteArrayOutputStream imageUrlToByteStream(String imageUrl) {
+        UriComponents uriComponents = UriComponentsBuilder.fromUriString(imageUrl).build(true);
 
         Flux<DataBuffer> dataBufferFlux = webClient.get()
-                .uri(imageUrl)
+                .uri(uriComponents.toUri())
                 .retrieve()
                 .bodyToFlux(DataBuffer.class);
 
@@ -62,6 +67,7 @@ public class ImageUploadS3Adaptor implements ImageUploadPort {
 
         DataBufferUtils.write(dataBufferFlux, byteArrayOutputStream)
                 .doOnError((e) -> {
+                    log.error(e.toString());
                     throw new RuntimeException("해당 url에서 이미지를 읽어오는 도중 오류가 생겼습니다.");
                 })
                 .blockLast();
