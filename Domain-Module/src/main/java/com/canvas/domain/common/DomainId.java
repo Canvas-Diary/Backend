@@ -1,6 +1,5 @@
 package com.canvas.domain.common;
 
-import com.github.f4b6a3.ulid.Ulid;
 import com.github.f4b6a3.ulid.UlidCreator;
 
 import java.util.Objects;
@@ -14,7 +13,7 @@ public record DomainId(
     }
 
     public static DomainId from(String id) {
-        return new DomainId(Ulid.from(id).toUuid());
+        return new DomainId(UUID.fromString(id));
     }
 
     public static DomainId from(UUID uuid) {
