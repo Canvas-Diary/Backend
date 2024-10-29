@@ -1,6 +1,7 @@
 package com.canvas.bootstrap.diary.api;
 
 import com.canvas.application.common.enums.Style;
+import com.canvas.bootstrap.common.annotation.AccessUser;
 import com.canvas.bootstrap.diary.dto.*;
 import com.canvas.bootstrap.diary.enums.ExploreOrder;
 import com.canvas.bootstrap.diary.enums.SearchType;
@@ -33,7 +34,7 @@ public interface DiaryApi {
                     }
             )
     })
-    CreateDiaryResponse createDiary(@RequestBody CreateDiaryRequest createDiaryRequest);
+    CreateDiaryResponse createDiary(@AccessUser String userId, @RequestBody CreateDiaryRequest createDiaryRequest);
 
 
     @Operation(summary = "일기 단건 조회")
