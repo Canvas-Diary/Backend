@@ -24,11 +24,17 @@ public class DiaryController implements DiaryApi {
     private final RemoveDiaryUseCase removeDiaryUseCase;
 
     @Override
-    public CreateDiaryResponse createDiary(CreateDiaryRequest request) {
-
-//        AddDiaryUseCase.Response response = addDiaryUseCase.add(AddDiaryUseCase.Command());
-//        return new CreateDiaryResponse(response.diaryId());
-        return null;
+    public CreateDiaryResponse createDiary(String userId, CreateDiaryRequest request) {
+        AddDiaryUseCase.Response response = addDiaryUseCase.add(
+                new AddDiaryUseCase.Command(
+                        userId,
+                        request.date(),
+                        request.content(),
+                        request.style(),
+                        request.isPublic()
+                )
+        );
+        return new CreateDiaryResponse(response.diaryId());
     }
 
     @Override

@@ -63,17 +63,15 @@ public class DiaryCommandService
     }
 
     private DiaryContent createDiaryContent(DomainId diaryId, String content, Style style) {
-        AddImageUseCase.Response ImageInform = addImageUseCase.add(new AddImageUseCase.Command(diaryId.toString(), content, style));
-        Image image = Image.create(
-                DomainId.from(ImageInform.imageId()),
-                diaryId,
-                ImageInform.isMain(),
-                ImageInform.imageUrl()
-        );
+        String imageUrl = addImageUseCase.create(new AddImageUseCase.Command(diaryId.toString(), content, style)).imageUrl();
 
         Emotion emotion = diaryEmotionExtractPort.emotionExtract(content);
 
-        return DiaryContent.create(content, emotion, new ArrayList<>(List.of(image)));
+        return DiaryContent.create(
+                content,
+                emotion,
+                new ArrayList<>(List.of(Image.create(DomainId.generate(), diaryId, true, imageUrl)))
+        );
     }
 
     @Override
