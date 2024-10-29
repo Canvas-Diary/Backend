@@ -1,9 +1,14 @@
 subprojects {
     dependencies {
-        implementation(project(":Application-Module"))
-        implementation(project(":Domain-Module"))
-        implementation(project(":Common-Module"))
+        implementation project(':Application-Module')
+        testFixturesImplementation(project(':Application-Module'))
 
-        implementation "org.springframework.boot:spring-boot-starter-webflux"
+        implementation project(':Domain-Module')
+        testFixturesImplementation(project(':Domain-Module'))
+
+        implementation project(':Common-Module')
+        testFixturesImplementation(project(':Common-Module'))
+
+        implementation 'org.springframework.boot:spring-boot-starter-webflux'
     }
 }
