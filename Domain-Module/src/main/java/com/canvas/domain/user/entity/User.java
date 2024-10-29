@@ -11,5 +11,6 @@ public class User {
     private final DomainId domainId;
     private final String email;
     private final String username;
+    private final String socialId;
     private final SocialLoginProvider socialLoginProvider;
 }
