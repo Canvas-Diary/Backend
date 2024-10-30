@@ -16,16 +16,17 @@ public class Diary {
     private DomainId id;
     private DomainId writerId;
     private DiaryContent diaryContent;
-    private LocalDateTime dateTime;
+    private LocalDateTime dateTime;     // 일기 날짜
+    private LocalDateTime createdAt;    // 일기가 생성된 실제 시각
     private Boolean isPublic;
     private List<Like> likes;
 
-    public static Diary create(DomainId id, DomainId writerId, DiaryContent diaryContent, LocalDateTime dateTime, Boolean isPublic, List<Like> likes) {
-        return new Diary(id, writerId, diaryContent, dateTime, isPublic, likes);
+    public static Diary create(DomainId id, DomainId writerId, DiaryContent diaryContent, LocalDateTime dateTime, LocalDateTime createdAt, Boolean isPublic, List<Like> likes) {
+        return new Diary(id, writerId, diaryContent, dateTime, createdAt, isPublic, likes);
     }
 
     public static Diary create(DomainId id, DomainId writerId, DiaryContent diaryContent, LocalDateTime dateTime, Boolean isPublic) {
-        return new Diary(id, writerId, diaryContent, dateTime, isPublic, new ArrayList<>());
+        return new Diary(id, writerId, diaryContent, dateTime, null, isPublic, new ArrayList<>());
     }
 
     public void addLike(Like like) {
