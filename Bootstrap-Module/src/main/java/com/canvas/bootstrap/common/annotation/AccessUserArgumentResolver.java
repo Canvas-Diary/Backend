@@ -1,5 +1,6 @@
 package com.canvas.bootstrap.common.annotation;
 
+import com.canvas.common.security.UserContextHolder;
 import org.springframework.core.MethodParameter;
 import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
@@ -17,6 +18,6 @@ public class AccessUserArgumentResolver implements HandlerMethodArgumentResolver
                                   ModelAndViewContainer mavContainer,
                                   NativeWebRequest webRequest,
                                   WebDataBinderFactory binderFactory) throws Exception {
-        return "0192c9ce-6703-75e9-bd6c-4d3fea6537ed";
+        return UserContextHolder.getContext();
     }
 }
