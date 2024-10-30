@@ -33,6 +33,6 @@ public class AuthController implements AuthApi {
 
         ReissueTokenUseCase.Response response = reissueTokenUseCase.reissue(command);
 
-        return new ReissueResponse(response.accessToken(), response.refreshToken());
+        return new ReissueResponse(response.accessToken());
     }
 }

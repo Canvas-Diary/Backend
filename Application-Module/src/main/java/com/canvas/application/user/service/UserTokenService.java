@@ -3,6 +3,7 @@ package com.canvas.application.user.service;
 import com.canvas.application.user.port.in.LoginUserUseCase;
 import com.canvas.application.user.port.in.LogoutUserCase;
 import com.canvas.application.user.port.in.ReissueTokenUseCase;
+import com.canvas.application.user.port.in.TokenResolveUserCase;
 import com.canvas.application.user.port.out.AuthInfoRetrievePort;
 import com.canvas.application.user.port.out.UserManagementPort;
 import com.canvas.application.user.port.out.UserTokenConvertPort;
@@ -20,7 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class UserTokenService implements LoginUserUseCase, ReissueTokenUseCase, LogoutUserCase {
+public class UserTokenService implements LoginUserUseCase, ReissueTokenUseCase, LogoutUserCase, TokenResolveUserCase {
 
     private final UserTokenManagementPort userTokenManagementPort;
     private final UserTokenConvertPort userTokenConvertPort;
@@ -32,46 +33,48 @@ public class UserTokenService implements LoginUserUseCase, ReissueTokenUseCase, 
         String oauthAccessToken = authInfoRetrievePort.getAccessToken(command.provider(), command.code());
         OauthUserInfo userInfo = authInfoRetrievePort.getUserInfo(command.provider(), oauthAccessToken);
 
-
-        //회원가입 여부 확인
-        User user;
-        if(userManagementPort.existsBySocialIdAndProviderId(userInfo.socialId(), SocialLoginProvider.valueOf(command.provider()))) {
-            user = userManagementPort.getById(DomainId.generate());
-        } else {
-            //존재하면 유저정보 가져오기
-            user = userManagementPort.getBySocialIdAndProvider(userInfo.socialId(), SocialLoginProvider.valueOf(command.provider()));
-        }
+        User user = getUserOrRegister(userInfo, command.provider());
 
         String userId = user.getDomainId().toString();
 
-        // 가져온 유저정보 넣기
         String accessToken = userTokenConvertPort.createAccessToken(userId);
         String refreshToken = userTokenConvertPort.createRefreshToken(userId);
 
-        // refreshToken 저장
         userTokenManagementPort.save(new UserToken(DomainId.generate(), refreshToken, DomainId.from(userId)));
 
         return new LoginUserUseCase.Response(accessToken, refreshToken);
     }
 
+    //TODO: 로직 수정 필요
     @Override
     public ReissueTokenUseCase.Response reissue(ReissueTokenUseCase.Command command) {
         UserClaim userClaim = userTokenConvertPort.resolveRefreshToken(command.refreshToken());
-
-        userTokenManagementPort.deleteByTokenAndUserId(command.refreshToken(), DomainId.from(userClaim.userId()));
+        // 유효하면 엑세스 토큰 재생성
+        // 유효하지 않으면 에러 처리
 
         String accessToken = userTokenConvertPort.createAccessToken(userClaim.userId());
-        String refreshToken = userTokenConvertPort.createRefreshToken(userClaim.userId());
 
-        userTokenManagementPort.save(new UserToken(DomainId.generate(), refreshToken, DomainId.from(userClaim.userId())));
-
-
-        return new ReissueTokenUseCase.Response(accessToken, refreshToken);
+        return new ReissueTokenUseCase.Response(accessToken);
 
     }
 
     @Override
     public void logout(LogoutUserCase.Command command) {
         userTokenManagementPort.deleteByTokenAndUserId(command.refreshToken(), DomainId.from(command.userId()));
+    }
+
+
+    private User getUserOrRegister(OauthUserInfo userInfo, String provider) {
+        if(userManagementPort.existsBySocialIdAndProviderId(userInfo.socialId(), SocialLoginProvider.valueOf(provider))) {
+            return userManagementPort.getBySocialIdAndProvider(userInfo.socialId(), SocialLoginProvider.valueOf(provider));
+        } else {
+            return userManagementPort.save(new User(DomainId.generate(), "", userInfo.username(),   // email 정보를 받을 수 없음
+                    userInfo.socialId(), SocialLoginProvider.valueOf(provider)));
+        }
+    }
+
+    @Override
+    public UserClaim resolveToken(String accessToken) {
+        return userTokenConvertPort.resolveAccessToken(accessToken);
     }
 }
