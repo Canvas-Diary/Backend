@@ -51,6 +51,7 @@ public class ImageUploadS3Adaptor implements ImageUploadPort {
             return resource.getURL().toString();
 
         } catch (IOException e) {
+            log.error(e.toString());
             throw new RuntimeException(e);
         }
     }
