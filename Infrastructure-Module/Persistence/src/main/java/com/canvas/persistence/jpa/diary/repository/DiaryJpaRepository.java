@@ -33,6 +33,7 @@ public interface DiaryJpaRepository extends JpaRepository<DiaryEntity, UUID> {
         from DiaryEntity d
         left join fetch d.likeEntities
         where d.writerId = :writerId and d.createdAt between :start and :end
+        order by d.dateTime asc
     """)
     List<DiaryEntity> findByWriterIdAndCreatedAtBetween(UUID writerId, LocalDateTime start, LocalDateTime end);
 
