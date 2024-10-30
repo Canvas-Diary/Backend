@@ -39,9 +39,10 @@ public class ImageCommandService
 
     @Override
     public Response.create create(AddImageUseCase.Command command) {
-        String prompt = imagePromptGeneratePort.generatePrompt(command.content());
-        String generatedImageUrl = imageGenerationPort.generate(prompt, command.style());
-        String uploadedImageUrl = imageUploadPort.upload(generatedImageUrl);
+//        String prompt = imagePromptGeneratePort.generatePrompt(command.content());
+//        String generatedImageUrl = imageGenerationPort.generate(prompt, command.style());
+//        String uploadedImageUrl = imageUploadPort.upload(generatedImageUrl);
+        String uploadedImageUrl = imageUploadPort.upload("https://canvas-diary.s3.ap-northeast-2.amazonaws.com/9f7b3157-85b6-46d0-8198-b05739597522.jpg");
 
         return new Response.create(uploadedImageUrl);
     }
