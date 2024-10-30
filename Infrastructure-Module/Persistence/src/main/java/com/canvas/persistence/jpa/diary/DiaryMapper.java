@@ -13,6 +13,7 @@ public class DiaryMapper {
                 diary.getDiaryContent().getContent(),
                 diary.getDiaryContent().getEmotion().name(),
                 diary.getIsPublic(),
+                diary.getDateTime(),
                 diary.getWriterId().value()
         );
 
@@ -31,8 +32,8 @@ public class DiaryMapper {
                         Emotion.parse(diaryEntity.getEmotion()),
                         diaryEntity.getImageEntities().stream()
                                 .map(ImageMapper::toDomain)
-                                .toList()
-                ),
+                                .toList()),
+                diaryEntity.getDateTime(),
                 diaryEntity.getCreatedAt(),
                 diaryEntity.getIsPublic(),
                 diaryEntity.getLikeEntities().stream()
