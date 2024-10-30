@@ -45,7 +45,6 @@ public class UserTokenService implements LoginUserUseCase, ReissueTokenUseCase, 
         return new LoginUserUseCase.Response(accessToken, refreshToken);
     }
 
-    //TODO: 로직 수정 필요
     @Override
     public ReissueTokenUseCase.Response reissue(ReissueTokenUseCase.Command command) {
         UserClaim userClaim = userTokenConvertPort.resolveRefreshToken(command.refreshToken());
