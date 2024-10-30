@@ -37,12 +37,12 @@ public interface DiaryApi {
     CreateDiaryResponse createDiary(@AccessUser String userId, @RequestBody CreateDiaryRequest createDiaryRequest);
 
 
-    @Operation(summary = "일기 단건 조회")
-    @GetMapping("/{diaryId}")
+    @Operation(summary = "내 일기 단건 조회")
+    @GetMapping("/{diaryId}/my")
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "200",
-                    description = "일기 단건 조회 성공",
+                    description = "내 일기 단건 조회 성공",
                     content = {
                             @Content(
                                     mediaType = "application/json",
@@ -51,7 +51,23 @@ public interface DiaryApi {
                     }
             )
     })
-    ReadDiaryResponse readDiary(@PathVariable String diaryId);
+    ReadDiaryResponse readMyDiary(@AccessUser String userId, @PathVariable String diaryId);
+
+    @Operation(summary = "타인 일기 단건 조회")
+    @GetMapping("/{diaryId}")
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "타인 일기 단건 조회 성공",
+                    content = {
+                            @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = ReadDiaryResponse.class)
+                            )
+                    }
+            )
+    })
+    ReadDiaryResponse readOtherDiary(@AccessUser String userId, @PathVariable String diaryId);
 
 
     @Operation(summary = "일기 달력 조회")
@@ -68,7 +84,7 @@ public interface DiaryApi {
                     }
             )
     })
-    ReadDiaryCalenderResponse readDiaryCalender(@RequestParam @DateTimeFormat(pattern = "yyyy-MM") LocalDate date);
+    ReadDiaryCalenderResponse readDiaryCalender(@AccessUser String userId, @RequestParam @DateTimeFormat(pattern = "yyyy-MM") LocalDate date);
 
 
     @Operation(summary = "일기 내용 수정")
