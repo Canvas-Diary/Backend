@@ -1,24 +1,25 @@
 package com.canvas.oauth;
 
-import com.canvas.application.user.port.out.AuthInfoRetrievePort;
 import com.canvas.application.user.vo.OauthUserInfo;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 
-public class KakaoOAuthRetrieveHandler implements OAuthRetrieveHandler, AuthInfoRetrievePort {
+@Component
+public class KakaoOAuthRetrieveHandler implements OAuthRetrieveHandler{
 
     private static final String CONTENT_TYPE = "application/x-www-form-urlencoded;charset=utf-8";
     private static final String grant_type = "authorization_code";
     @Value("${KAKAO_REST_API_KEY}")
     private String clientId;
-    @Value("${KAKAO_CLIENT_SECERT}")
+    @Value("${KAKAO_CLIENT_SECRET}")
     private String clientSecret;
     private String redirectUri = "http://localhost:8080/api/v1/auth/kakao/callback";
 
     @Override
     public String getAccessToken(String code) {
-        OAuthAccessTokenResponse oAuthAccessTokenResponse = WebClient.builder()
+        return WebClient.builder()
                 .baseUrl("https://kauth.kakao.com")
                 .build()
                 .post()
@@ -31,14 +32,13 @@ public class KakaoOAuthRetrieveHandler implements OAuthRetrieveHandler, AuthInfo
                 .retrieve()
                 .bodyToMono(KakaoAccessTokenResponse.class)
                 .map(response -> new OAuthAccessTokenResponse(response.accessToken()))
-                .block();
-        return oAuthAccessTokenResponse.accessToken();
+                .block().accessToken();
     }
 
 
     @Override
-    public OauthUserInfo getUserInfo(String provider, String accessToken) {
-        OAuthUserInfoResponse kakaoUserInfo = WebClient.builder()
+    public OauthUserInfo getUserInfo(String accessToken) {
+         return WebClient.builder()
                 .baseUrl("https://kauth.kakao.com")
                 .build()
                 .get()
@@ -46,13 +46,11 @@ public class KakaoOAuthRetrieveHandler implements OAuthRetrieveHandler, AuthInfo
                 .header("Authorization", "Bearer " + accessToken)
                 .retrieve()
                 .bodyToMono(KakaoUserInfo.class)
-                .map(userInfo -> new OAuthUserInfoResponse(
-                        userInfo.properties().nickname(),
+                .map(userInfo -> new OauthUserInfo(
                         userInfo.id(),
-                        userInfo.kakaoAccount().email()))
+                        userInfo.properties().nickname()
+                        ))
                 .block();
-
-        return new OauthUserInfo(kakaoUserInfo.username(), kakaoUserInfo.socialId(), kakaoUserInfo.email());
     }
 
 
@@ -66,19 +64,11 @@ public class KakaoOAuthRetrieveHandler implements OAuthRetrieveHandler, AuthInfo
 
     record KakaoUserInfo(
         String id,
-        Properties properties,
-        KakaoAccount kakaoAccount
-    ) {
-
-    }
+        Properties properties
+    ) {}
 
     record Properties(
         String nickname
-    ) { }
+    ) {}
 
-    record KakaoAccount(
-        String email
-    ) {
-
-    }
 }

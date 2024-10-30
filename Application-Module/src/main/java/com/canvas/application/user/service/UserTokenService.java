@@ -29,7 +29,7 @@ public class UserTokenService implements LoginUserUseCase, ReissueTokenUseCase, 
 
     @Override
     public LoginUserUseCase.Response login(LoginUserUseCase.Command command) {
-        String oauthAccessToken = authInfoRetrievePort.getAccessToken(command.code());
+        String oauthAccessToken = authInfoRetrievePort.getAccessToken(command.provider(), command.code());
         OauthUserInfo userInfo = authInfoRetrievePort.getUserInfo(command.provider(), oauthAccessToken);
 
 

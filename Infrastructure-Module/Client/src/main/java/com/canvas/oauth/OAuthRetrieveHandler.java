@@ -6,15 +6,14 @@ public interface OAuthRetrieveHandler {
 
     String getAccessToken(String code);
 
-    OauthUserInfo getUserInfo(String provider, String accessToken);
+    OauthUserInfo getUserInfo(String accessToken);
 
     record OAuthAccessTokenResponse(
             String accessToken
     ){}
 
     record OAuthUserInfoResponse(
-            String username,
             String socialId,
-            String email
+            String username
     ) {}
 }
