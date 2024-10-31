@@ -31,6 +31,7 @@ public interface GetDiaryUseCase {
                 Integer likeCount,
                 Boolean isLiked,
                 LocalDateTime date,
+                Boolean isPublic,
                 List<ImageInfo> images
         ) {
             public record ImageInfo(

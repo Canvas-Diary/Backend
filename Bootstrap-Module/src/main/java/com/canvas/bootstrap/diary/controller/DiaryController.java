@@ -39,27 +39,28 @@ public class DiaryController implements DiaryApi {
     }
 
     @Override
-    public ReadDiaryResponse readMyDiary(String userId, String diaryId) {
+    public ReadMyDiaryResponse readMyDiary(String userId, String diaryId) {
         GetDiaryUseCase.Response.DiaryInfo response = getDiaryUseCase.getMyDiary(new GetDiaryUseCase.Query.Diary(userId, diaryId));
 
-        return new ReadDiaryResponse(
+        return new ReadMyDiaryResponse(
                 response.diaryId(),
                 response.content(),
                 response.emotion(),
                 response.likeCount(),
                 response.isLiked(),
                 response.date(),
+                response.isPublic(),
                 response.images().stream()
-                        .map(image -> new ReadDiaryResponse.ImageInfo(image.imageId(), image.isMain(), image.imageUrl()))
+                        .map(image -> new ReadMyDiaryResponse.ImageInfo(image.imageId(), image.isMain(), image.imageUrl()))
                         .toList()
         );
     }
 
     @Override
-    public ReadDiaryResponse readOtherDiary(String userId, String diaryId) {
+    public ReadOtherDiaryResponse readOtherDiary(String userId, String diaryId) {
         GetDiaryUseCase.Response.DiaryInfo response = getDiaryUseCase.getOtherDiary(new GetDiaryUseCase.Query.Diary(userId, diaryId));
 
-        return new ReadDiaryResponse(
+        return new ReadOtherDiaryResponse(
                 response.diaryId(),
                 response.content(),
                 response.emotion(),
@@ -67,7 +68,7 @@ public class DiaryController implements DiaryApi {
                 response.isLiked(),
                 response.date(),
                 response.images().stream()
-                        .map(image -> new ReadDiaryResponse.ImageInfo(image.imageId(), image.isMain(), image.imageUrl()))
+                        .map(image -> new ReadOtherDiaryResponse.ImageInfo(image.imageId(), image.isMain(), image.imageUrl()))
                         .toList()
         );
     }
