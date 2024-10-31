@@ -46,12 +46,12 @@ public interface DiaryApi {
                     content = {
                             @Content(
                                     mediaType = "application/json",
-                                    schema = @Schema(implementation = ReadDiaryResponse.class)
+                                    schema = @Schema(implementation = ReadMyDiaryResponse.class)
                             )
                     }
             )
     })
-    ReadDiaryResponse readMyDiary(@AccessUser String userId, @PathVariable String diaryId);
+    ReadMyDiaryResponse readMyDiary(@AccessUser String userId, @PathVariable String diaryId);
 
     @Operation(summary = "타인 일기 단건 조회")
     @GetMapping("/{diaryId}")
@@ -62,12 +62,12 @@ public interface DiaryApi {
                     content = {
                             @Content(
                                     mediaType = "application/json",
-                                    schema = @Schema(implementation = ReadDiaryResponse.class)
+                                    schema = @Schema(implementation = ReadOtherDiaryResponse.class)
                             )
                     }
             )
     })
-    ReadDiaryResponse readOtherDiary(@AccessUser String userId, @PathVariable String diaryId);
+    ReadOtherDiaryResponse readOtherDiary(@AccessUser String userId, @PathVariable String diaryId);
 
 
     @Operation(summary = "일기 달력 조회")
