@@ -48,8 +48,6 @@ public class UserTokenService implements LoginUserUseCase, ReissueTokenUseCase, 
     @Override
     public ReissueTokenUseCase.Response reissue(ReissueTokenUseCase.Command command) {
         UserClaim userClaim = userTokenConvertPort.resolveRefreshToken(command.refreshToken());
-        // 유효하면 엑세스 토큰 재생성
-        // 유효하지 않으면 에러 처리
 
         String accessToken = userTokenConvertPort.createAccessToken(userClaim.userId());
 
@@ -67,7 +65,7 @@ public class UserTokenService implements LoginUserUseCase, ReissueTokenUseCase, 
         if(userManagementPort.existsBySocialIdAndProviderId(userInfo.socialId(), SocialLoginProvider.valueOf(provider))) {
             return userManagementPort.getBySocialIdAndProvider(userInfo.socialId(), SocialLoginProvider.valueOf(provider));
         } else {
-            return userManagementPort.save(new User(DomainId.generate(), "", userInfo.username(),   // email 정보를 받을 수 없음
+            return userManagementPort.save(new User(DomainId.generate(), userInfo.username(),   // email 정보를 받을 수 없음
                     userInfo.socialId(), SocialLoginProvider.valueOf(provider)));
         }
     }

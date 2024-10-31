@@ -22,8 +22,6 @@ public class UserEntity {
     private UUID id;
 
     @Column(nullable = false)
-    private String email;
-    @Column(nullable = false)
     private String username;
     private String socialId;
     private String socialLoginProvider;

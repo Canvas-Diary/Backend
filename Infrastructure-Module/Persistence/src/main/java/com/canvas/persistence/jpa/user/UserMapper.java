@@ -11,7 +11,6 @@ public class UserMapper {
     public static UserEntity toEntity(User user) {
         return new UserEntity(
                 user.getDomainId().value(),
-                user.getEmail(),
                 user.getUsername(),
                 user.getSocialId(),
                 user.getSocialLoginProvider().name()
@@ -29,7 +28,6 @@ public class UserMapper {
     public static User toDomain(UserEntity userEntity) {
         return new User(
                 new DomainId(userEntity.getId()),
-                userEntity.getEmail(),
                 userEntity.getUsername(),
                 userEntity.getSocialId(),
                 SocialLoginProvider.parse(userEntity.getSocialLoginProvider())
