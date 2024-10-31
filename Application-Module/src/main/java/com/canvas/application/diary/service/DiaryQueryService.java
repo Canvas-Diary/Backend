@@ -23,7 +23,7 @@ public class DiaryQueryService implements GetDiaryUseCase, GetAlbumDiaryUseCase 
     private final DiaryManagementPort diaryManagementPort;
 
     @Override
-    public GetDiaryUseCase.Response.Diary getMyDiary(GetDiaryUseCase.Query.Diary query) {
+    public GetDiaryUseCase.Response.DiaryInfo getMyDiary(GetDiaryUseCase.Query.Diary query) {
         Diary diary = diaryManagementPort.getByIdAndWriterId(
                 DomainId.from(query.diaryId()),
                 DomainId.from(query.userId())
@@ -33,7 +33,7 @@ public class DiaryQueryService implements GetDiaryUseCase, GetAlbumDiaryUseCase 
     }
 
     @Override
-    public GetDiaryUseCase.Response.Diary getOtherDiary(GetDiaryUseCase.Query.Diary query) {
+    public GetDiaryUseCase.Response.DiaryInfo getOtherDiary(GetDiaryUseCase.Query.Diary query) {
         Diary diary = diaryManagementPort.getPublicById(DomainId.from(query.diaryId()));
 
         return toResponseDiary(query.userId(), diary);
@@ -48,7 +48,7 @@ public class DiaryQueryService implements GetDiaryUseCase, GetAlbumDiaryUseCase 
 
         return new GetDiaryUseCase.Response.HomeCalendar(
                 diaries.stream()
-                        .map(diary -> new GetDiaryUseCase.Response.HomeCalendar.Diary(
+                        .map(diary -> new GetDiaryUseCase.Response.HomeCalendar.DiaryInfo(
                                 diary.getId().toString(),
                                 diary.getDateTime().toLocalDate(),
                                 diary.getDiaryContent().getEmotion()
@@ -56,16 +56,17 @@ public class DiaryQueryService implements GetDiaryUseCase, GetAlbumDiaryUseCase 
         );
     }
 
-    private static GetDiaryUseCase.Response.Diary toResponseDiary(String userId, Diary diary) {
-        return new GetDiaryUseCase.Response.Diary(
+    private static GetDiaryUseCase.Response.DiaryInfo toResponseDiary(String userId, Diary diary) {
+        return new GetDiaryUseCase.Response.DiaryInfo(
                 diary.getId().toString(),
                 diary.getDiaryContent().getContent(),
                 diary.getDiaryContent().getEmotion(),
                 diary.getLikes().size(),
                 diary.getLikes().stream()
                         .anyMatch(like -> like.getUserId().equals(DomainId.from(userId))),
+                diary.getDateTime(),
                 diary.getDiaryContent().getImages().stream()
-                        .map(image -> new GetDiaryUseCase.Response.Diary.Image(
+                        .map(image -> new GetDiaryUseCase.Response.DiaryInfo.ImageInfo(
                                 image.getId().toString(),
                                 image.getIsMain(),
                                 image.getImageUrl()

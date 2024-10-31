@@ -15,20 +15,21 @@ public record ReadDiaryResponse(
         @Schema(description = "일기의 감정")
         Emotion emotion,
         @Schema(description = "일기 좋아요 수")
-        Long likedCount,
+        Integer likedCount,
         @Schema(description = "일기 좋아요 선택 여부")
         boolean isLiked,
-        @Schema(description = "일기 공개 여부")
-        boolean isPublic,
         @Schema(description = "일기 생성 날짜")
         LocalDateTime date,
         @Schema(description = "일기의 이미지 정보 리스트")
         List<ImageInfo> images) {
-
-        @Schema(description = "일기의 이미지 정보")
-        public record ImageInfo(
-                @Schema(description = "이미지 ID")
-                String imageId,
-                @Schema(description = "저장된 일기 이미지 url")
-                String imageUrl) { }
+    @Schema(description = "일기의 이미지 정보")
+    public record ImageInfo(
+            @Schema(description = "이미지 ID")
+            String imageId,
+            @Schema(description = "대표 이미지 여부")
+            Boolean isMain,
+            @Schema(description = "저장된 일기 이미지 url")
+            String imageUrl
+    ) {
+    }
 }

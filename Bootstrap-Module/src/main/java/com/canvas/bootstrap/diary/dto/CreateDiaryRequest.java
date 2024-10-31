@@ -14,6 +14,6 @@ public record CreateDiaryRequest(
         @Schema(description = "일기 화풍")
         Style style,
         @Schema(description = "일기 공개 여부")
-        boolean isPublic) {
-
+        boolean isPublic
+) {
 }

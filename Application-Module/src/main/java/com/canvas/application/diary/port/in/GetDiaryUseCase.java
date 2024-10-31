@@ -3,11 +3,12 @@ package com.canvas.application.diary.port.in;
 import com.canvas.domain.diary.enums.Emotion;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 public interface GetDiaryUseCase {
-    Response.Diary getMyDiary(Query.Diary query);
-    Response.Diary getOtherDiary(Query.Diary query);
+    Response.DiaryInfo getMyDiary(Query.Diary query);
+    Response.DiaryInfo getOtherDiary(Query.Diary query);
     Response.HomeCalendar getHomeCalendar(Query.HomeCalendar query);
 
     class Query {
@@ -23,15 +24,16 @@ public interface GetDiaryUseCase {
     }
 
     class Response {
-        public record Diary(
+        public record DiaryInfo(
                 String diaryId,
                 String content,
                 Emotion emotion,
                 Integer likeCount,
                 Boolean isLiked,
-                List<Image> images
+                LocalDateTime date,
+                List<ImageInfo> images
         ) {
-            public record Image(
+            public record ImageInfo(
                     String imageId,
                     Boolean isMain,
                     String imageUrl
@@ -39,9 +41,9 @@ public interface GetDiaryUseCase {
         }
 
         public record HomeCalendar(
-                List<Diary> diaries
+                List<DiaryInfo> diaries
         ) {
-            public record Diary(
+            public record DiaryInfo(
                     String diaryId,
                     LocalDate date,
                     Emotion emotion

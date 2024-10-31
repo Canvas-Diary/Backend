@@ -34,18 +34,56 @@ public class DiaryController implements DiaryApi {
                         request.isPublic()
                 )
         );
+
         return new CreateDiaryResponse(response.diaryId());
     }
 
     @Override
-    public ReadDiaryResponse readDiary(String diaryId) {
+    public ReadDiaryResponse readMyDiary(String userId, String diaryId) {
+        GetDiaryUseCase.Response.DiaryInfo response = getDiaryUseCase.getMyDiary(new GetDiaryUseCase.Query.Diary(userId, diaryId));
 
-        return null;
+        return new ReadDiaryResponse(
+                response.diaryId(),
+                response.content(),
+                response.emotion(),
+                response.likeCount(),
+                response.isLiked(),
+                response.date(),
+                response.images().stream()
+                        .map(image -> new ReadDiaryResponse.ImageInfo(image.imageId(), image.isMain(), image.imageUrl()))
+                        .toList()
+        );
     }
 
     @Override
-    public ReadDiaryCalenderResponse readDiaryCalender(LocalDate date) {
-        return null;
+    public ReadDiaryResponse readOtherDiary(String userId, String diaryId) {
+        GetDiaryUseCase.Response.DiaryInfo response = getDiaryUseCase.getOtherDiary(new GetDiaryUseCase.Query.Diary(userId, diaryId));
+
+        return new ReadDiaryResponse(
+                response.diaryId(),
+                response.content(),
+                response.emotion(),
+                response.likeCount(),
+                response.isLiked(),
+                response.date(),
+                response.images().stream()
+                        .map(image -> new ReadDiaryResponse.ImageInfo(image.imageId(), image.isMain(), image.imageUrl()))
+                        .toList()
+        );
+    }
+
+    @Override
+    public ReadDiaryCalenderResponse readDiaryCalender(String userId, LocalDate date) {
+        GetDiaryUseCase.Response.HomeCalendar response =
+                getDiaryUseCase.getHomeCalendar(new GetDiaryUseCase.Query.HomeCalendar(userId, date));
+
+        return new ReadDiaryCalenderResponse(
+                response.diaries().stream()
+                        .map(diaryInfo -> new ReadDiaryCalenderResponse.CalenderInfo(
+                                diaryInfo.diaryId(),
+                                diaryInfo.date(),
+                                diaryInfo.emotion()))
+                        .toList());
     }
 
     @Override

@@ -7,5 +7,6 @@ public record UpdateDiaryRequest(
         @Schema(description = "일기 내용")
         String content,
         @Schema(description = "일기 공개 여부")
-        boolean isPublic) {
+        boolean isPublic
+) {
 }
