@@ -5,6 +5,7 @@ import com.canvas.persistence.jpa.builder.DiaryEntityBuilder;
 import com.canvas.persistence.jpa.diary.entity.DiaryEntity;
 import lombok.Getter;
 
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.UUID;
 
@@ -53,6 +54,7 @@ public enum DiaryEntityFixture {
                 .content(content)
                 .emotion(emotion)
                 .isPublic(isPublic)
+                .dateTime(LocalDateTime.now())
                 .writerId(userEntityFixture.getId())
                 .writer(userEntityFixture.getUserEntity())
                 .imageEntities(
