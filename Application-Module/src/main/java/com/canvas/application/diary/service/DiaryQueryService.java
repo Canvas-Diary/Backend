@@ -65,6 +65,7 @@ public class DiaryQueryService implements GetDiaryUseCase, GetAlbumDiaryUseCase 
                 diary.getLikes().stream()
                         .anyMatch(like -> like.getUserId().equals(DomainId.from(userId))),
                 diary.getDateTime(),
+                diary.getIsPublic(),
                 diary.getDiaryContent().getImages().stream()
                         .map(image -> new GetDiaryUseCase.Response.DiaryInfo.ImageInfo(
                                 image.getId().toString(),
