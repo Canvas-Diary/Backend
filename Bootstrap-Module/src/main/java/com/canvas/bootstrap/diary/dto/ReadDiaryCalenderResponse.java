@@ -1,6 +1,5 @@
 package com.canvas.bootstrap.diary.dto;
 
-import com.canvas.domain.diary.enums.Emotion;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 import java.time.LocalDate;
@@ -18,7 +17,7 @@ public record ReadDiaryCalenderResponse(
             @Schema(description = "일기 날짜")
             LocalDate date,
             @Schema(description = "일기의 감정")
-            Emotion emotion
+            String emotion
     ) {
     }
 }

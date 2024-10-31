@@ -1,7 +1,5 @@
 package com.canvas.application.diary.port.in;
 
-import com.canvas.domain.diary.enums.Emotion;
-
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -27,7 +25,7 @@ public interface GetDiaryUseCase {
         public record DiaryInfo(
                 String diaryId,
                 String content,
-                Emotion emotion,
+                String emotion,
                 Integer likeCount,
                 Boolean isLiked,
                 LocalDateTime date,
@@ -47,7 +45,7 @@ public interface GetDiaryUseCase {
             public record DiaryInfo(
                     String diaryId,
                     LocalDate date,
-                    Emotion emotion
+                    String emotion
             ) {}
         }
     }

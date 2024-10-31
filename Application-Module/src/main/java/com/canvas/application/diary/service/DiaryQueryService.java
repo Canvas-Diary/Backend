@@ -51,7 +51,7 @@ public class DiaryQueryService implements GetDiaryUseCase, GetAlbumDiaryUseCase 
                         .map(diary -> new GetDiaryUseCase.Response.HomeCalendar.DiaryInfo(
                                 diary.getId().toString(),
                                 diary.getDateTime().toLocalDate(),
-                                diary.getDiaryContent().getEmotion()
+                                diary.getDiaryContent().getEmotion().getValue()
                         )).toList()
         );
     }
@@ -60,7 +60,7 @@ public class DiaryQueryService implements GetDiaryUseCase, GetAlbumDiaryUseCase 
         return new GetDiaryUseCase.Response.DiaryInfo(
                 diary.getId().toString(),
                 diary.getDiaryContent().getContent(),
-                diary.getDiaryContent().getEmotion(),
+                diary.getDiaryContent().getEmotion().getValue(),
                 diary.getLikes().size(),
                 diary.getLikes().stream()
                         .anyMatch(like -> like.getUserId().equals(DomainId.from(userId))),

@@ -1,6 +1,5 @@
 package com.canvas.bootstrap.diary.dto;
 
-import com.canvas.domain.diary.enums.Emotion;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 import java.time.LocalDateTime;
@@ -13,7 +12,7 @@ public record ReadOtherDiaryResponse(
         @Schema(description = "일기 내용")
         String content,
         @Schema(description = "일기의 감정")
-        Emotion emotion,
+        String emotion,
         @Schema(description = "일기 좋아요 수")
         Integer likedCount,
         @Schema(description = "일기 좋아요 선택 여부")
