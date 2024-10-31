@@ -18,5 +18,7 @@ public interface DiaryManagementPort {
     Slice<Diary> getAlbum(PageRequest pageRequest, DomainId userId);
     Slice<Diary> getAlbumByContent(PageRequest pageRequest, DomainId userId, String content);
     Slice<Diary> getAlbumByEmotion(PageRequest pageRequest, DomainId userId, Emotion emotion);
+    Slice<Diary> getExploreByLatest(PageRequest pageRequest);
+    Slice<Diary> getExploreByLike(PageRequest pageRequest);
     void deleteById(DomainId diaryId);
 }

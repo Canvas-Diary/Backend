@@ -17,6 +17,7 @@ public class DiaryController implements DiaryApi {
     private final AddDiaryUseCase addDiaryUseCase;
     private final GetDiaryUseCase getDiaryUseCase;
     private final GetAlbumDiaryUseCase getAlbumDiaryUseCase;
+    private final GetExploreDiaryUseCase getExploreDiaryUseCase;
     private final ModifyDiaryUseCase modifyDiaryUseCase;
     private final RemoveDiaryUseCase removeDiaryUseCase;
 
@@ -121,7 +122,19 @@ public class DiaryController implements DiaryApi {
     }
 
     @Override
-    public DiaryExploreResponse exploreDiary(ExploreOrder order) {
-        return null;
+    public SliceResponse<DiaryThumbnail> exploreDiary(int page, int size, ExploreOrder order) {
+        GetExploreDiaryUseCase.Response response = switch (order) {
+            case LATEST -> getExploreDiaryUseCase.getExploreByLatest(new GetExploreDiaryUseCase.Query(page, size));
+            case POPULARITY -> getExploreDiaryUseCase.getExploreByLike(new GetExploreDiaryUseCase.Query(page, size));
+        };
+
+        return new SliceResponse<>(
+                response.diaries().stream()
+                        .map(diaryInfo -> new DiaryThumbnail(diaryInfo.diaryId(), diaryInfo.mainImageUrl()))
+                        .toList(),
+                response.size(),
+                response.number(),
+                response.hasNext()
+        );
     }
 }

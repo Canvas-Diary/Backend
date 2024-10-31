@@ -133,4 +133,27 @@ class DiaryJpaRepositoryTest {
                         LocalDateTime.now().plusDays(2)))
                 .isEmpty();
     }
+
+    @Test
+    @DisplayName("좋아요순 조회")
+    void findAllByOrderByLikeCountDescTest () {
+        // given
+        DiaryEntity publicMyDiary = PUBLIC_MY_DIARY.getDiaryEntity();
+        DiaryEntity publicOtherDiary = PUBLIC_OTHER_DIARY.getDiaryEntity();
+        DiaryEntity privateOtherDiary = PRIVATE_OTHER_DIARY.getDiaryEntity();
+
+        // when
+        Slice<DiaryEntity> slice = diaryJpaRepository.findAllByIsPublicOrderByLikeCountDesc(
+                PageRequest.of(0, 10),
+                true
+        );
+
+        slice.getContent().forEach(diaryEntity ->
+                log.info("id={} likes={}", diaryEntity.getId(), diaryEntity.getLikeEntities().size()));
+
+        // then
+        assertThat(slice)
+                .extracting(DiaryEntity::getId)
+                .containsExactly(publicMyDiary.getId(), publicOtherDiary.getId());
+    }
 }

@@ -1,6 +1,5 @@
 package com.canvas.bootstrap.diary.api;
 
-import com.canvas.application.common.enums.Style;
 import com.canvas.bootstrap.common.annotation.AccessUser;
 import com.canvas.bootstrap.diary.dto.*;
 import com.canvas.bootstrap.diary.enums.ExploreOrder;
@@ -121,8 +120,18 @@ public interface DiaryApi {
             @RequestParam String value
     );
 
-    @Operation(summary = "상대방 일기 탐색")
+    @Operation(summary = "일기 탐색")
     @GetMapping("/explore")
+    @Parameters({
+            @Parameter(
+                    name = "page",
+                    description = "요청할 페이지 번호"
+            ),
+            @Parameter(
+                    name = "size",
+                    description = "요청할 페이지 크기"
+            )
+    })
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "200",
@@ -133,5 +142,5 @@ public interface DiaryApi {
                     description = "쿼리 스트링 오류"
             )
     })
-    DiaryExploreResponse exploreDiary(@RequestParam ExploreOrder order);
+    SliceResponse<DiaryThumbnail> exploreDiary(@RequestParam int page, @RequestParam int size, @RequestParam ExploreOrder order);
 }

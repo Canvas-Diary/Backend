@@ -107,6 +107,22 @@ public class DiaryQueryService implements GetDiaryUseCase, GetAlbumDiaryUseCase 
         return toAlbumResponse(slice);
     }
 
+    @Override
+    public GetExploreDiaryUseCase.Response getExploreByLatest(GetExploreDiaryUseCase.Query query) {
+        Slice<Diary> slice = diaryManagementPort.getExploreByLatest(
+                new PageRequest(query.page(), query.size(), Sort.by(Sort.Direction.DESC, "createdAt")));
+
+        return toExploreResponse(slice);
+    }
+
+    @Override
+    public GetExploreDiaryUseCase.Response getExploreByLike(GetExploreDiaryUseCase.Query query) {
+        Slice<Diary> slice = diaryManagementPort.getExploreByLike(
+                new PageRequest(query.page(), query.size(), Sort.by(Sort.Direction.DESC, "createdAt")));
+
+        return toExploreResponse(slice);
+    }
+
     private static GetAlbumDiaryUseCase.Response toAlbumResponse(Slice<Diary> slice) {
         return new GetAlbumDiaryUseCase.Response(
                 slice.content().stream()
@@ -120,4 +136,16 @@ public class DiaryQueryService implements GetDiaryUseCase, GetAlbumDiaryUseCase 
         );
     }
 
+    private static GetExploreDiaryUseCase.Response toExploreResponse(Slice<Diary> slice) {
+        return new GetExploreDiaryUseCase.Response(
+                slice.content().stream()
+                        .map(diary -> new GetExploreDiaryUseCase.Response.DiaryInfo(
+                                diary.getId().toString(),
+                                diary.getMainImageOrDefault()))
+                        .toList(),
+                slice.size(),
+                slice.number(),
+                slice.hasNext()
+        );
+    }
 }

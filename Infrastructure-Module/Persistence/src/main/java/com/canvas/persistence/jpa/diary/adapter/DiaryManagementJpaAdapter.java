@@ -94,6 +94,26 @@ public class DiaryManagementJpaAdapter implements DiaryManagementPort {
     }
 
     @Override
+    public Slice<Diary> getExploreByLatest(PageRequest pageRequest) {
+        var diaryEntities = diaryJpaRepository.findAllByIsPublic(
+                PageMapper.toJpaPageRequest(pageRequest),
+                true
+        );
+
+        return PageMapper.toDomainSlice(diaryEntities, DiaryMapper::toDomain);
+    }
+
+    @Override
+    public Slice<Diary> getExploreByLike(PageRequest pageRequest) {
+        var diaryEntities = diaryJpaRepository.findAllByIsPublicOrderByLikeCountDesc(
+                PageMapper.toJpaPageRequest(pageRequest),
+                true
+        );
+
+        return PageMapper.toDomainSlice(diaryEntities, DiaryMapper::toDomain);
+    }
+
+    @Override
     public void deleteById(DomainId diaryId) {
         diaryJpaRepository.deleteById(diaryId.value());
     }
