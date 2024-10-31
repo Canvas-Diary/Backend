@@ -6,8 +6,8 @@ import com.canvas.bootstrap.diary.dto.*;
 import com.canvas.bootstrap.diary.enums.ExploreOrder;
 import com.canvas.bootstrap.diary.enums.SearchType;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -25,13 +25,7 @@ public interface DiaryApi {
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "200",
-                    description = "일기 생성 성공",
-                    content = {
-                            @Content(
-                                    mediaType = "application/json",
-                                    schema = @Schema(implementation = CreateDiaryResponse.class)
-                            )
-                    }
+                    description = "일기 생성 성공"
             )
     })
     CreateDiaryResponse createDiary(@AccessUser String userId, @RequestBody CreateDiaryRequest createDiaryRequest);
@@ -42,13 +36,7 @@ public interface DiaryApi {
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "200",
-                    description = "내 일기 단건 조회 성공",
-                    content = {
-                            @Content(
-                                    mediaType = "application/json",
-                                    schema = @Schema(implementation = ReadMyDiaryResponse.class)
-                            )
-                    }
+                    description = "내 일기 단건 조회 성공"
             )
     })
     ReadMyDiaryResponse readMyDiary(@AccessUser String userId, @PathVariable String diaryId);
@@ -58,13 +46,7 @@ public interface DiaryApi {
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "200",
-                    description = "타인 일기 단건 조회 성공",
-                    content = {
-                            @Content(
-                                    mediaType = "application/json",
-                                    schema = @Schema(implementation = ReadOtherDiaryResponse.class)
-                            )
-                    }
+                    description = "타인 일기 단건 조회 성공"
             )
     })
     ReadOtherDiaryResponse readOtherDiary(@AccessUser String userId, @PathVariable String diaryId);
@@ -75,13 +57,7 @@ public interface DiaryApi {
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "200",
-                    description = "일기 달력별로 조회 성공",
-                    content = {
-                            @Content(
-                                    mediaType = "application/json",
-                                    schema = @Schema(implementation = ReadDiaryCalenderResponse.class)
-                            )
-                    }
+                    description = "일기 달력별로 조회 성공"
             )
     })
     ReadDiaryCalenderResponse readDiaryCalender(@AccessUser String userId, @RequestParam @DateTimeFormat(pattern = "yyyy-MM") LocalDate date);
@@ -112,13 +88,7 @@ public interface DiaryApi {
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "200",
-                    description = "일기 검색 성공",
-                    content = {
-                            @Content(
-                                    mediaType = "application/json",
-                                    schema = @Schema(implementation = DiarySearchResponse.class)
-                            )
-                    }
+                    description = "일기 검색 성공"
             ),
             @ApiResponse(
                     responseCode = "400",
@@ -132,13 +102,7 @@ public interface DiaryApi {
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "200",
-                    description = "일기 탐색 성공",
-                    content = {
-                            @Content(
-                                    mediaType = "application/json",
-                                    schema = @Schema(implementation = DiaryExploreResponse.class)
-                            )
-                    }
+                    description = "일기 탐색 성공"
             ),
             @ApiResponse(
                     responseCode = "400",
