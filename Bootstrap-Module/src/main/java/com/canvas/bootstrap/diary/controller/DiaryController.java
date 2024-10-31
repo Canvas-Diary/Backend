@@ -1,10 +1,6 @@
 package com.canvas.bootstrap.diary.controller;
 
-import com.canvas.application.common.enums.Style;
-import com.canvas.application.diary.port.in.AddDiaryUseCase;
-import com.canvas.application.diary.port.in.GetDiaryUseCase;
-import com.canvas.application.diary.port.in.ModifyDiaryUseCase;
-import com.canvas.application.diary.port.in.RemoveDiaryUseCase;
+import com.canvas.application.diary.port.in.*;
 import com.canvas.bootstrap.diary.api.DiaryApi;
 import com.canvas.bootstrap.diary.dto.*;
 import com.canvas.bootstrap.diary.enums.ExploreOrder;
@@ -20,6 +16,7 @@ public class DiaryController implements DiaryApi {
 
     private final AddDiaryUseCase addDiaryUseCase;
     private final GetDiaryUseCase getDiaryUseCase;
+    private final GetAlbumDiaryUseCase getAlbumDiaryUseCase;
     private final ModifyDiaryUseCase modifyDiaryUseCase;
     private final RemoveDiaryUseCase removeDiaryUseCase;
 
@@ -98,8 +95,29 @@ public class DiaryController implements DiaryApi {
     }
 
     @Override
-    public DiarySearchResponse searchDiary(SearchType type, Style value) {
-        return null;
+    public SliceResponse<DiaryThumbnail> searchDiary(
+            String userId,
+            Integer page,
+            Integer size,
+            SearchType type,
+            String value
+    ) {
+        GetAlbumDiaryUseCase.Response response = switch (type) {
+            case CONTENT ->
+                    getAlbumDiaryUseCase.getAlbumByContent(new GetAlbumDiaryUseCase.Query.Content(userId, value, page, size));
+            case TAG ->
+                    getAlbumDiaryUseCase.getAlbumByEmotion(new GetAlbumDiaryUseCase.Query.Emotion(userId, value, page, size));
+            case NONE -> getAlbumDiaryUseCase.getAlbum(new GetAlbumDiaryUseCase.Query.Recent(userId, page, size));
+        };
+
+        return new SliceResponse<>(
+                response.diaries().stream()
+                        .map(diaryInfo -> new DiaryThumbnail(diaryInfo.diaryId(), diaryInfo.mainImageUrl()))
+                        .toList(),
+                response.size(),
+                response.number(),
+                response.hasNext()
+        );
     }
 
     @Override

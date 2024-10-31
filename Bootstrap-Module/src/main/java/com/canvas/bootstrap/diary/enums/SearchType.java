@@ -10,7 +10,8 @@ import java.util.Arrays;
 @Getter
 public enum SearchType {
     TAG("tag"),
-    CONTENT("content");
+    CONTENT("content"),
+    NONE("none");
 
     private final String value;
 

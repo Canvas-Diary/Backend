@@ -85,6 +85,24 @@ public interface DiaryApi {
 
     @Operation(summary = "일기 검색")
     @GetMapping("/search")
+    @Parameters({
+            @Parameter(
+                    name = "page",
+                    description = "요청할 페이지 번호"
+            ),
+            @Parameter(
+                    name = "size",
+                    description = "요청할 페이지 크기"
+            ),
+            @Parameter(
+                    name = "type",
+                    description = "검색 타입"
+            ),
+            @Parameter(
+                    name = "value",
+                    description = "검색 값"
+            )
+    })
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "200",
@@ -95,7 +113,13 @@ public interface DiaryApi {
                     description = "쿼리 스트링 오류"
             )
     })
-    DiarySearchResponse searchDiary(@RequestParam SearchType type, @RequestParam Style value);
+    SliceResponse<DiaryThumbnail> searchDiary(
+            @AccessUser String userId,
+            @RequestParam Integer page,
+            @RequestParam Integer size,
+            @RequestParam SearchType type,
+            @RequestParam String value
+    );
 
     @Operation(summary = "상대방 일기 탐색")
     @GetMapping("/explore")

@@ -82,7 +82,7 @@ public class DiaryQueryService implements GetDiaryUseCase, GetAlbumDiaryUseCase 
                 DomainId.from(query.userId())
         );
 
-        return toResponseAlbum(slice);
+        return toAlbumResponse(slice);
     }
 
     @Override
@@ -93,7 +93,7 @@ public class DiaryQueryService implements GetDiaryUseCase, GetAlbumDiaryUseCase 
                 query.content()
         );
 
-        return toResponseAlbum(slice);
+        return toAlbumResponse(slice);
     }
 
     @Override
@@ -104,10 +104,10 @@ public class DiaryQueryService implements GetDiaryUseCase, GetAlbumDiaryUseCase 
                 Emotion.parse(query.emotion())
         );
 
-        return toResponseAlbum(slice);
+        return toAlbumResponse(slice);
     }
 
-    private static GetAlbumDiaryUseCase.Response toResponseAlbum(Slice<Diary> slice) {
+    private static GetAlbumDiaryUseCase.Response toAlbumResponse(Slice<Diary> slice) {
         return new GetAlbumDiaryUseCase.Response(
                 slice.content().stream()
                         .map(diary -> new GetAlbumDiaryUseCase.Response.DiaryInfo(
