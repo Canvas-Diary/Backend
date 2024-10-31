@@ -32,10 +32,10 @@ public interface DiaryJpaRepository extends JpaRepository<DiaryEntity, UUID> {
         select d
         from DiaryEntity d
         left join fetch d.likeEntities
-        where d.writerId = :writerId and d.createdAt between :start and :end
+        where d.writerId = :writerId and d.dateTime between :start and :end
         order by d.dateTime asc
     """)
-    List<DiaryEntity> findByWriterIdAndCreatedAtBetween(UUID writerId, LocalDateTime start, LocalDateTime end);
+    List<DiaryEntity> findByWriterIdAndDateTimeBetween(UUID writerId, LocalDateTime start, LocalDateTime end);
 
     Slice<DiaryEntity> findByWriterId(Pageable pageable, UUID writerId);
     Slice<DiaryEntity> findByWriterIdAndContentContains(Pageable pageable, UUID writerId, String content);

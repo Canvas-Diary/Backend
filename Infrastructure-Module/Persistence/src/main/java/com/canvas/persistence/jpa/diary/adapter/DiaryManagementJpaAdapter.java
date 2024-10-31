@@ -56,7 +56,7 @@ public class DiaryManagementJpaAdapter implements DiaryManagementPort {
         LocalDateTime start = date.with(TemporalAdjusters.firstDayOfMonth()).atStartOfDay();
         LocalDateTime end = date.with(TemporalAdjusters.lastDayOfMonth()).atTime(LocalTime.MAX);
 
-        return diaryJpaRepository.findByWriterIdAndCreatedAtBetween(userId.value(), start, end).stream()
+        return diaryJpaRepository.findByWriterIdAndDateTimeBetween(userId.value(), start, end).stream()
                 .map(DiaryMapper::toDomain)
                 .toList();
     }

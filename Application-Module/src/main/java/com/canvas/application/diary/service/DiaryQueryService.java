@@ -2,6 +2,7 @@ package com.canvas.application.diary.service;
 
 import com.canvas.application.diary.port.in.GetAlbumDiaryUseCase;
 import com.canvas.application.diary.port.in.GetDiaryUseCase;
+import com.canvas.application.diary.port.in.GetExploreDiaryUseCase;
 import com.canvas.application.diary.port.out.DiaryManagementPort;
 import com.canvas.common.page.PageRequest;
 import com.canvas.common.page.Slice;
@@ -18,7 +19,8 @@ import java.util.List;
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
-public class DiaryQueryService implements GetDiaryUseCase, GetAlbumDiaryUseCase {
+public class DiaryQueryService
+        implements GetDiaryUseCase, GetAlbumDiaryUseCase, GetExploreDiaryUseCase {
 
     private final DiaryManagementPort diaryManagementPort;
 
