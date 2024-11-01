@@ -12,7 +12,7 @@ import java.util.List;
 
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Getter
-public class Diary {
+public class DiaryComplete {
     private DomainId id;
     private DomainId writerId;
     private String content;
@@ -23,7 +23,7 @@ public class Diary {
     private List<Image> images;
     private List<Like> likes;
 
-    public static Diary create(
+    public static DiaryComplete create(
             DomainId id,
             DomainId writerId,
             String content,
@@ -34,7 +34,7 @@ public class Diary {
             List<Image> images,
             List<Like> likes
     ) {
-        return new Diary(
+        return new DiaryComplete(
                 id,
                 writerId,
                 content,
@@ -47,7 +47,7 @@ public class Diary {
         );
     }
 
-    public static Diary create(
+    public static DiaryComplete create(
             DomainId id,
             DomainId writerId,
             String content,
@@ -56,7 +56,7 @@ public class Diary {
             Boolean isPublic,
             Image image
     ) {
-        return new Diary(
+        return new DiaryComplete(
                 id,
                 writerId,
                 content,
@@ -85,14 +85,5 @@ public class Diary {
 
     public void updatePublic(Boolean isPublic) {
         this.isPublic = isPublic;
-    }
-
-
-    public String getMainImageOrDefault() {
-        return images.stream()
-                     .filter(Image::isMain)
-                     .map(Image::getImageUrl)
-                     .findFirst()
-                     .orElse(Image.DEFAULT_IMAGE_URL);
     }
 }

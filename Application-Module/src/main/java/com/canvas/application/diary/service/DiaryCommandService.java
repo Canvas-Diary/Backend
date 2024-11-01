@@ -9,7 +9,7 @@ import com.canvas.application.diary.port.out.DiaryEmotionExtractPort;
 import com.canvas.application.diary.port.out.DiaryManagementPort;
 import com.canvas.application.image.port.in.AddImageUseCase;
 import com.canvas.domain.common.DomainId;
-import com.canvas.domain.diary.entity.Diary;
+import com.canvas.domain.diary.entity.DiaryComplete;
 import com.canvas.domain.diary.entity.Image;
 import com.canvas.domain.diary.enums.Emotion;
 import lombok.RequiredArgsConstructor;
@@ -33,7 +33,7 @@ public class DiaryCommandService
         Image image = createImage(diaryId, command.content(), command.style());
 
         diaryManagementPort.save(
-                Diary.create(
+                DiaryComplete.create(
                         diaryId,
                         DomainId.from(command.userId()),
                         command.content(),
@@ -51,7 +51,7 @@ public class DiaryCommandService
     public void modify(ModifyDiaryUseCase.Command command) {
         DomainId diarId = DomainId.from(command.diaryId());
 
-        Diary diary = diaryManagementPort.getByIdAndWriterId(
+        DiaryComplete diary = diaryManagementPort.getByIdAndWriterId(
                 diarId,
                 DomainId.from(command.userId())
         );
