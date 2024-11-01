@@ -18,6 +18,6 @@ public class AccessUserArgumentResolver implements HandlerMethodArgumentResolver
                                   ModelAndViewContainer mavContainer,
                                   NativeWebRequest webRequest,
                                   WebDataBinderFactory binderFactory) throws Exception {
-        return UserContextHolder.getContext();
+        return UserContextHolder.getContext().userId();
     }
 }
