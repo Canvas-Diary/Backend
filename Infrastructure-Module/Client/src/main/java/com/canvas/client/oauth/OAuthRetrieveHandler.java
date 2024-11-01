@@ -1,4 +1,4 @@
-package com.canvas.oauth;
+package com.canvas.client.oauth;
 
 import com.canvas.application.user.vo.OauthUserInfo;
 

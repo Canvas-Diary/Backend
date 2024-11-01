@@ -1,4 +1,4 @@
-package com.canvas.oauth;
+package com.canvas.client.oauth;
 
 import com.canvas.application.user.port.out.AuthInfoRetrievePort;
 import com.canvas.application.user.vo.OauthUserInfo;
@@ -27,6 +27,6 @@ public class OAuthRetrieveAdapter implements AuthInfoRetrievePort {
     }
 
     private OAuthRetrieveHandler getHandler(String provider) {
-        return this.oauthRetrieveHandlers.get(SocialLoginProvider.valueOf(provider));
+        return this.oauthRetrieveHandlers.get(SocialLoginProvider.parse(provider));
     }
 }

@@ -1,4 +1,4 @@
-package com.canvas.oauth;
+package com.canvas.client.oauth;
 
 import com.canvas.application.user.vo.OauthUserInfo;
 import org.springframework.beans.factory.annotation.Value;
@@ -7,15 +7,15 @@ import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 
 @Component
-public class KakaoOAuthRetrieveHandler implements OAuthRetrieveHandler{
+public class KakaoOAuthRetrieveHandler implements OAuthRetrieveHandler {
 
     private static final String CONTENT_TYPE = "application/x-www-form-urlencoded;charset=utf-8";
     private static final String grant_type = "authorization_code";
-    @Value("${KAKAO_REST_API_KEY}")
+    @Value("${kakao.rest-api-key}")
     private String clientId;
-    @Value("${KAKAO_CLIENT_SECRET}")
+    @Value("${kakao.client-secret}")
     private String clientSecret;
-    private String redirectUri = "http://localhost:8080/api/v1/auth/kakao/callback";
+    private static final String redirectUri = "http://localhost:8080/api/v1/auth/kakao/callback";
 
     @Override
     public String getAccessToken(String code) {
@@ -39,7 +39,7 @@ public class KakaoOAuthRetrieveHandler implements OAuthRetrieveHandler{
     @Override
     public OauthUserInfo getUserInfo(String accessToken) {
          return WebClient.builder()
-                .baseUrl("https://kauth.kakao.com")
+                .baseUrl("https://kapi.kakao.com")
                 .build()
                 .get()
                 .uri("/v2/user/me")
@@ -62,11 +62,13 @@ public class KakaoOAuthRetrieveHandler implements OAuthRetrieveHandler{
             String refreshTokenExpiresIn
     ){}
 
+    @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
     record KakaoUserInfo(
         String id,
         Properties properties
     ) {}
 
+    @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
     record Properties(
         String nickname
     ) {}
