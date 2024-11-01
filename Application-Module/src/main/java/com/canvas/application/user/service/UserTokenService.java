@@ -62,11 +62,11 @@ public class UserTokenService implements LoginUserUseCase, ReissueTokenUseCase, 
 
 
     private User getUserOrRegister(OauthUserInfo userInfo, String provider) {
-        if(userManagementPort.existsBySocialIdAndProviderId(userInfo.socialId(), SocialLoginProvider.valueOf(provider))) {
-            return userManagementPort.getBySocialIdAndProvider(userInfo.socialId(), SocialLoginProvider.valueOf(provider));
+        if(userManagementPort.existsBySocialIdAndProviderId(userInfo.socialId(), SocialLoginProvider.parse(provider))) {
+            return userManagementPort.getBySocialIdAndProvider(userInfo.socialId(), SocialLoginProvider.parse(provider));
         } else {
-            return userManagementPort.save(new User(DomainId.generate(), userInfo.username(),   // email 정보를 받을 수 없음
-                    userInfo.socialId(), SocialLoginProvider.valueOf(provider)));
+            return userManagementPort.save(new User(DomainId.generate(), userInfo.username(),
+                    userInfo.socialId(), SocialLoginProvider.parse(provider)));
         }
     }
 
