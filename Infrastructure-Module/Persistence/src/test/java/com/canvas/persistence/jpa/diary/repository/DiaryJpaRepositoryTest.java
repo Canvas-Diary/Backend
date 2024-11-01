@@ -12,10 +12,9 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Slice;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.Arrays;
 import java.util.List;
 
@@ -103,34 +102,61 @@ class DiaryJpaRepositoryTest {
 
     @Test
     @DisplayName("작성자 ID, 기간 조회 성공")
-    void findByWriterIdAndCreatedAtBetweenSuccessTest() {
+    void findByWriterIdAndDateTimeBetweenSuccessTest() {
         // given
         DiaryEntity publicMyDiary = PUBLIC_MY_DIARY.getDiaryEntity();
 
         // when
+        List<DiaryEntity> diaryEntities = diaryJpaRepository.findByWriterIdAndDateTimeBetween(
+                publicMyDiary.getWriterId(),
+                publicMyDiary.getDateTime().minusDays(1),
+                publicMyDiary.getDateTime().plusDays(1)
+        );
+
         // then
-        assertThat(
-                diaryJpaRepository.findByWriterIdAndCreatedAtBetween(
-                        publicMyDiary.getWriterId(),
-                        LocalDate.now().atStartOfDay(),
-                        LocalDate.now().atTime(LocalTime.MAX)))
+        assertThat(diaryEntities)
                 .extracting(DiaryEntity::getId)
-                .contains(publicMyDiary.getId());
+                .containsExactly(publicMyDiary.getId());
     }
 
     @Test
     @DisplayName("작성자 ID, 기간 조회 실패")
-    void findByWriterIdAndCreatedAtBetweenFailureTest() {
+    void findByWriterIdAndDateTimeBetweenFailureTest() {
         // given
         DiaryEntity publicMyDiary = PUBLIC_MY_DIARY.getDiaryEntity();
 
         // when
+        List<DiaryEntity> diaryEntities = diaryJpaRepository.findByWriterIdAndDateTimeBetween(
+                publicMyDiary.getWriterId(),
+                publicMyDiary.getDateTime().plusDays(1),
+                publicMyDiary.getDateTime().plusDays(2)
+        );
+
         // then
-        assertThat(
-                diaryJpaRepository.findByWriterIdAndCreatedAtBetween(
-                        publicMyDiary.getWriterId(),
-                        LocalDateTime.now().plusDays(1),
-                        LocalDateTime.now().plusDays(2)))
+        assertThat(diaryEntities)
                 .isEmpty();
+    }
+
+    @Test
+    @DisplayName("좋아요순 조회")
+    void findAllByOrderByLikeCountDescTest () {
+        // given
+        DiaryEntity publicMyDiary = PUBLIC_MY_DIARY.getDiaryEntity();
+        DiaryEntity publicOtherDiary = PUBLIC_OTHER_DIARY.getDiaryEntity();
+        DiaryEntity privateOtherDiary = PRIVATE_OTHER_DIARY.getDiaryEntity();
+
+        // when
+        Slice<DiaryEntity> slice = diaryJpaRepository.findAllByIsPublicOrderByLikeCountDesc(
+                PageRequest.of(0, 10),
+                true
+        );
+
+        slice.getContent().forEach(diaryEntity ->
+                log.info("id={} likes={}", diaryEntity.getId(), diaryEntity.getLikeEntities().size()));
+
+        // then
+        assertThat(slice)
+                .extracting(DiaryEntity::getId)
+                .containsExactly(publicMyDiary.getId(), publicOtherDiary.getId());
     }
 }

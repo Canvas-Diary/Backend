@@ -56,7 +56,7 @@ public class DiaryManagementJpaAdapter implements DiaryManagementPort {
         LocalDateTime start = date.with(TemporalAdjusters.firstDayOfMonth()).atStartOfDay();
         LocalDateTime end = date.with(TemporalAdjusters.lastDayOfMonth()).atTime(LocalTime.MAX);
 
-        return diaryJpaRepository.findByWriterIdAndCreatedAtBetween(userId.value(), start, end).stream()
+        return diaryJpaRepository.findByWriterIdAndDateTimeBetween(userId.value(), start, end).stream()
                 .map(DiaryMapper::toDomain)
                 .toList();
     }
@@ -88,6 +88,26 @@ public class DiaryManagementJpaAdapter implements DiaryManagementPort {
                 PageMapper.toJpaPageRequest(pageRequest),
                 userId.value(),
                 emotion.name()
+        );
+
+        return PageMapper.toDomainSlice(diaryEntities, DiaryMapper::toDomain);
+    }
+
+    @Override
+    public Slice<Diary> getExploreByLatest(PageRequest pageRequest) {
+        var diaryEntities = diaryJpaRepository.findAllByIsPublic(
+                PageMapper.toJpaPageRequest(pageRequest),
+                true
+        );
+
+        return PageMapper.toDomainSlice(diaryEntities, DiaryMapper::toDomain);
+    }
+
+    @Override
+    public Slice<Diary> getExploreByLike(PageRequest pageRequest) {
+        var diaryEntities = diaryJpaRepository.findAllByIsPublicOrderByLikeCountDesc(
+                PageMapper.toJpaPageRequest(pageRequest),
+                true
         );
 
         return PageMapper.toDomainSlice(diaryEntities, DiaryMapper::toDomain);

@@ -10,8 +10,8 @@ import java.util.Arrays;
 @Getter
 public enum ExploreOrder {
     LATEST("latest"),
-    POPULARITY("popularity"),
-    LIKED_DATE("likedDate");
+    POPULARITY("popularity");
+//    LIKED_DATE("likedDate");
 
     private final String value;
 
