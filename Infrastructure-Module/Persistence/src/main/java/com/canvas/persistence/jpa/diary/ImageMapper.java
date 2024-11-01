@@ -18,15 +18,15 @@ public class ImageMapper {
     }
 
     public static List<ImageEntity> toEntities(Diary diary) {
-        return diary.getDiaryContent().getImages().stream()
+        return diary.getImages().stream()
                 .map(ImageMapper::toEntity)
                 .toList();
     }
 
     public static Image toDomain(ImageEntity imageEntity) {
         return Image.create(
-                new DomainId(imageEntity.getId()),
-                new DomainId(imageEntity.getDiaryId()),
+                DomainId.from(imageEntity.getId()),
+                DomainId.from(imageEntity.getDiaryId()),
                 imageEntity.getIsMain(),
                 imageEntity.getImageUrl()
         );

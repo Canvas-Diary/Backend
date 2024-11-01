@@ -12,13 +12,9 @@ import com.canvas.domain.common.DomainId;
 import com.canvas.domain.diary.entity.Diary;
 import com.canvas.domain.diary.entity.Image;
 import com.canvas.domain.diary.enums.Emotion;
-import com.canvas.domain.diary.vo.DiaryContent;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Service
 @Transactional
@@ -33,14 +29,18 @@ public class DiaryCommandService
     @Override
     public Response add(AddDiaryUseCase.Command command) {
         DomainId diaryId = DomainId.generate();
+        Emotion emotion = diaryEmotionExtractPort.emotionExtract(command.content());
+        Image image = createImage(diaryId, command.content(), command.style());
 
         diaryManagementPort.save(
                 Diary.create(
                         diaryId,
                         DomainId.from(command.userId()),
-                        createDiaryContent(diaryId, command.content(), command.style()),
+                        command.content(),
+                        emotion,
                         command.dateTime(),
-                        command.isPublic()
+                        command.isPublic(),
+                        image
                 )
         );
 
@@ -49,29 +49,25 @@ public class DiaryCommandService
 
     @Override
     public void modify(ModifyDiaryUseCase.Command command) {
+        DomainId diarId = DomainId.from(command.diaryId());
+
         Diary diary = diaryManagementPort.getByIdAndWriterId(
-                DomainId.from(command.diaryId()),
+                diarId,
                 DomainId.from(command.userId())
         );
 
-        DiaryContent diaryContent = createDiaryContent(diary.getId(), command.content(), command.style());
+        Emotion emotion = diaryEmotionExtractPort.emotionExtract(command.content());
+        Image image = createImage(diarId, command.content(), command.style());
 
-        diary.updateDiaryContent(diaryContent);
+        diary.updateDiaryContent(command.content(), emotion, image);
         diary.updatePublic(command.isPublic());
 
         diaryManagementPort.save(diary);
     }
 
-    private DiaryContent createDiaryContent(DomainId diaryId, String content, Style style) {
+    private Image createImage(DomainId diaryId, String content, Style style) {
         String imageUrl = addImageUseCase.create(new AddImageUseCase.Command(diaryId.toString(), content, style)).imageUrl();
-
-        Emotion emotion = diaryEmotionExtractPort.emotionExtract(content);
-
-        return DiaryContent.create(
-                content,
-                emotion,
-                new ArrayList<>(List.of(Image.create(DomainId.generate(), diaryId, true, imageUrl)))
-        );
+        return Image.create(DomainId.generate(), diaryId, true, imageUrl);
     }
 
     @Override
