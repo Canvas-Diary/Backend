@@ -34,7 +34,7 @@ public class DiaryManagementJpaAdapter implements DiaryManagementPort {
 
     @Override
     public Diary getPublicById(DomainId diaryId) {
-        DiaryEntity diaryEntity = diaryJpaRepository.findPublicById(diaryId.value())
+        DiaryEntity diaryEntity = diaryJpaRepository.findByIdAndIsPublicTrue(diaryId.value())
                 .orElseThrow(DiaryException.DiaryNotFoundException::new);
         return DiaryMapper.toDomain(diaryEntity);
     }
@@ -95,9 +95,8 @@ public class DiaryManagementJpaAdapter implements DiaryManagementPort {
 
     @Override
     public Slice<Diary> getExploreByLatest(PageRequest pageRequest) {
-        var diaryEntities = diaryJpaRepository.findAllByIsPublic(
-                PageMapper.toJpaPageRequest(pageRequest),
-                true
+        var diaryEntities = diaryJpaRepository.findAllByIsPublicTrue(
+                PageMapper.toJpaPageRequest(pageRequest)
         );
 
         return PageMapper.toDomainSlice(diaryEntities, DiaryMapper::toDomain);
@@ -105,9 +104,8 @@ public class DiaryManagementJpaAdapter implements DiaryManagementPort {
 
     @Override
     public Slice<Diary> getExploreByLike(PageRequest pageRequest) {
-        var diaryEntities = diaryJpaRepository.findAllByIsPublicOrderByLikeCountDesc(
-                PageMapper.toJpaPageRequest(pageRequest),
-                true
+        var diaryEntities = diaryJpaRepository.findAllByIsPublicTrueOrderByLikeCountDesc(
+                PageMapper.toJpaPageRequest(pageRequest)
         );
 
         return PageMapper.toDomainSlice(diaryEntities, DiaryMapper::toDomain);
