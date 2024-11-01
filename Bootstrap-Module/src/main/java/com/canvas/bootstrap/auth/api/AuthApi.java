@@ -9,17 +9,17 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.*;
 
 @Tag(name = "Auth", description = "Auth API")
-@RequestMapping("api/v1/auth/{provider}")
+@RequestMapping("/api/v1/auth")
 public interface AuthApi {
 
     @Operation(summary = "회원가입 or 로그인")
-    @GetMapping("/callback")
+    @GetMapping("/{provider}/callback")
     @ApiResponses()
     LoginResponse login(@PathVariable String provider, @RequestParam String code);
 
 
     @Operation
     @PostMapping("/reissue")
-    @ApiResponses
+    @ApiResponses()
     ReissueResponse reissue(@RequestBody ReissueRequest reissueRequest);
 }
