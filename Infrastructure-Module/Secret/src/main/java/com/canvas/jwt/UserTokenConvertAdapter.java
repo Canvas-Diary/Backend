@@ -67,7 +67,11 @@ public class UserTokenConvertAdapter implements UserTokenConvertPort {
     @Override
     public UserClaim resolveRefreshToken(String token) {
         try {
-            Claims claims = Jwts.parser().verifyWith(generateKey(jwtProperties.getSecret())).build().parseSignedClaims(token).getPayload();
+            Claims claims = Jwts.parser()
+                    .verifyWith(generateKey(jwtProperties.getSecret()))
+                    .build()
+                    .parseSignedClaims(token)
+                    .getPayload();
             return new UserClaim(claims.get("userId", String.class));
         } catch (JwtException e) {
             if (e instanceof SignatureException) {

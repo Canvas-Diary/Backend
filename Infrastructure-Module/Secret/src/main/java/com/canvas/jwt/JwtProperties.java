@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 @ConfigurationProperties(prefix = "jwt")
 public class JwtProperties {
 
-    private String secret;
+    private final String secret = "a6lqVQUYJMMkgIC8vUVJn8Mn1Ee3dzyVc021u21v8TI=";
 
     public final String ISSUER = "canvas-diary";
     public final String SUBJECT = "canvas-diary-auth";
