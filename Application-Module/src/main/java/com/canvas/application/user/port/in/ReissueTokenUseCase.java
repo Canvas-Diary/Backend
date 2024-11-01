@@ -9,8 +9,7 @@ public interface ReissueTokenUseCase {
     }
 
     record Response(
-            String accessToken,
-            String refreshToken
+            String accessToken
     ) {
     }
 }

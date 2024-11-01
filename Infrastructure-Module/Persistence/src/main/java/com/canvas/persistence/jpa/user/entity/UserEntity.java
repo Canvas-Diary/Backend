@@ -1,6 +1,9 @@
 package com.canvas.persistence.jpa.user.entity;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -19,9 +22,8 @@ public class UserEntity {
     private UUID id;
 
     @Column(nullable = false)
-    private String email;
-    @Column(nullable = false)
     private String username;
+    private String socialId;
     private String socialLoginProvider;
 
 }

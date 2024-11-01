@@ -5,21 +5,14 @@ public interface LoginUserUseCase {
 
     record Command(
             String provider,
-            String socialLoginProviderToken
+            String code
     ) {
     }
 
-    sealed interface Response
-            permits Response.Login, Response.Register {
-        public record Login(
+
+    record Response(
                 String accessToken,
                 String refreshToken
-        ) implements Response {
+        ) {
         }
-
-        public record Register(
-                String registerToken
-        ) implements Response {
-        }
-    }
 }
