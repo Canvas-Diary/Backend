@@ -47,13 +47,13 @@ class DiaryJpaRepositoryTest {
 
     @Test
     @DisplayName("ID, public 조회 성공")
-    void findPublicByIdSuccessTest() {
+    void findByIdAndIsPublicTrueSuccessTest() {
         // given
         DiaryEntity publicMyDiary = PUBLIC_MY_DIARY.getDiaryEntity();
 
         // when
         // then
-        assertThat(diaryJpaRepository.findPublicById(publicMyDiary.getId()))
+        assertThat(diaryJpaRepository.findByIdAndIsPublicTrue(publicMyDiary.getId()))
                 .isPresent()
                 .get()
                 .extracting(DiaryEntity::getId)
@@ -62,13 +62,13 @@ class DiaryJpaRepositoryTest {
 
     @Test
     @DisplayName("ID, public 조회 실패")
-    void findPublicByIdFailureTest() {
+    void findByIdAndIsPublicTrueFailureTest() {
         // given
         DiaryEntity privateOtherDiary = PRIVATE_OTHER_DIARY.getDiaryEntity();
 
         // when
         // then
-        assertThat(diaryJpaRepository.findPublicById(privateOtherDiary.getId()))
+        assertThat(diaryJpaRepository.findByIdAndIsPublicTrue(privateOtherDiary.getId()))
                 .isNotPresent();
     }
 
@@ -146,9 +146,8 @@ class DiaryJpaRepositoryTest {
         DiaryEntity privateOtherDiary = PRIVATE_OTHER_DIARY.getDiaryEntity();
 
         // when
-        Slice<DiaryEntity> slice = diaryJpaRepository.findAllByIsPublicOrderByLikeCountDesc(
-                PageRequest.of(0, 10),
-                true
+        Slice<DiaryEntity> slice = diaryJpaRepository.findAllByIsPublicTrueOrderByLikeCountDesc(
+                PageRequest.of(0, 10)
         );
 
         slice.getContent().forEach(diaryEntity ->
