@@ -1,6 +1,8 @@
 package com.canvas.client.oauth;
 
 import com.canvas.application.user.vo.OauthUserInfo;
+import com.fasterxml.jackson.databind.PropertyNamingStrategy;
+import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.BodyInserters;
@@ -54,6 +56,7 @@ public class KakaoOAuthRetrieveHandler implements OAuthRetrieveHandler {
     }
 
 
+    @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
     record KakaoAccessTokenResponse(
             String tokenType,
             String accessToken,
