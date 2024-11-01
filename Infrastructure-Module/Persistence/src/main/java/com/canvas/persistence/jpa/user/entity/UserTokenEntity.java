@@ -18,6 +18,7 @@ public class UserTokenEntity {
     @Id
     private UUID id;
 
+    @Column(length = 500)
     private String token;
     @Column(name = "user_id", nullable = false)
     private UUID userId;
