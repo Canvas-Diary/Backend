@@ -8,7 +8,9 @@ import com.canvas.common.page.PageRequest;
 import com.canvas.common.page.Slice;
 import com.canvas.common.page.Sort;
 import com.canvas.domain.common.DomainId;
-import com.canvas.domain.diary.entity.Diary;
+import com.canvas.domain.diary.entity.DiaryBasic;
+import com.canvas.domain.diary.entity.DiaryComplete;
+import com.canvas.domain.diary.entity.DiaryOverview;
 import com.canvas.domain.diary.enums.Emotion;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -26,7 +28,7 @@ public class DiaryQueryService
 
     @Override
     public GetDiaryUseCase.Response.DiaryInfo getMyDiary(GetDiaryUseCase.Query.Diary query) {
-        Diary diary = diaryManagementPort.getByIdAndWriterId(
+        DiaryComplete diary = diaryManagementPort.getByIdAndWriterId(
                 DomainId.from(query.diaryId()),
                 DomainId.from(query.userId())
         );
@@ -36,14 +38,14 @@ public class DiaryQueryService
 
     @Override
     public GetDiaryUseCase.Response.DiaryInfo getOtherDiary(GetDiaryUseCase.Query.Diary query) {
-        Diary diary = diaryManagementPort.getPublicById(DomainId.from(query.diaryId()));
+        DiaryComplete diary = diaryManagementPort.getPublicById(DomainId.from(query.diaryId()));
 
         return toResponseDiary(query.userId(), diary);
     }
 
     @Override
     public GetDiaryUseCase.Response.HomeCalendar getHomeCalendar(GetDiaryUseCase.Query.HomeCalendar query) {
-        List<Diary> diaries = diaryManagementPort.getByUserIdAndMonth(
+        List<DiaryBasic> diaries = diaryManagementPort.getByUserIdAndMonth(
                 DomainId.from(query.userId()),
                 query.date()
         );
@@ -58,7 +60,7 @@ public class DiaryQueryService
         );
     }
 
-    private static GetDiaryUseCase.Response.DiaryInfo toResponseDiary(String userId, Diary diary) {
+    private static GetDiaryUseCase.Response.DiaryInfo toResponseDiary(String userId, DiaryComplete diary) {
         return new GetDiaryUseCase.Response.DiaryInfo(
                 diary.getId().toString(),
                 diary.getContent(),
@@ -79,7 +81,7 @@ public class DiaryQueryService
 
     @Override
     public GetAlbumDiaryUseCase.Response getAlbum(GetAlbumDiaryUseCase.Query.Recent query) {
-        Slice<Diary> slice = diaryManagementPort.getAlbum(
+        Slice<DiaryOverview> slice = diaryManagementPort.getAlbum(
                 new PageRequest(query.page(), query.size(), Sort.by(Sort.Direction.DESC, "createdAt")),
                 DomainId.from(query.userId())
         );
@@ -89,7 +91,7 @@ public class DiaryQueryService
 
     @Override
     public GetAlbumDiaryUseCase.Response getAlbumByContent(GetAlbumDiaryUseCase.Query.Content query) {
-        Slice<Diary> slice = diaryManagementPort.getAlbumByContent(
+        Slice<DiaryOverview> slice = diaryManagementPort.getAlbumByContent(
                 new PageRequest(query.page(), query.size(), Sort.by(Sort.Direction.DESC, "createdAt")),
                 DomainId.from(query.userId()),
                 query.content()
@@ -100,7 +102,7 @@ public class DiaryQueryService
 
     @Override
     public GetAlbumDiaryUseCase.Response getAlbumByEmotion(GetAlbumDiaryUseCase.Query.Emotion query) {
-        Slice<Diary> slice = diaryManagementPort.getAlbumByEmotion(
+        Slice<DiaryOverview> slice = diaryManagementPort.getAlbumByEmotion(
                 new PageRequest(query.page(), query.size(), Sort.by(Sort.Direction.DESC, "createdAt")),
                 DomainId.from(query.userId()),
                 Emotion.parse(query.emotion())
@@ -109,9 +111,22 @@ public class DiaryQueryService
         return toAlbumResponse(slice);
     }
 
+    private static GetAlbumDiaryUseCase.Response toAlbumResponse(Slice<DiaryOverview> slice) {
+        return new GetAlbumDiaryUseCase.Response(
+                slice.content().stream()
+                     .map(diary -> new GetAlbumDiaryUseCase.Response.DiaryInfo(
+                             diary.getId().toString(),
+                             diary.getMainImageOrDefault()))
+                     .toList(),
+                slice.size(),
+                slice.number(),
+                slice.hasNext()
+        );
+    }
+
     @Override
     public GetExploreDiaryUseCase.Response getExploreByLatest(GetExploreDiaryUseCase.Query query) {
-        Slice<Diary> slice = diaryManagementPort.getExploreByLatest(
+        Slice<DiaryOverview> slice = diaryManagementPort.getExploreByLatest(
                 new PageRequest(query.page(), query.size(), Sort.by(Sort.Direction.DESC, "createdAt")));
 
         return toExploreResponse(slice);
@@ -119,26 +134,13 @@ public class DiaryQueryService
 
     @Override
     public GetExploreDiaryUseCase.Response getExploreByLike(GetExploreDiaryUseCase.Query query) {
-        Slice<Diary> slice = diaryManagementPort.getExploreByLike(
+        Slice<DiaryOverview> slice = diaryManagementPort.getExploreByLike(
                 new PageRequest(query.page(), query.size(), Sort.by(Sort.Direction.DESC, "createdAt")));
 
         return toExploreResponse(slice);
     }
 
-    private static GetAlbumDiaryUseCase.Response toAlbumResponse(Slice<Diary> slice) {
-        return new GetAlbumDiaryUseCase.Response(
-                slice.content().stream()
-                        .map(diary -> new GetAlbumDiaryUseCase.Response.DiaryInfo(
-                                diary.getId().toString(),
-                                diary.getMainImageOrDefault()))
-                        .toList(),
-                slice.size(),
-                slice.number(),
-                slice.hasNext()
-        );
-    }
-
-    private static GetExploreDiaryUseCase.Response toExploreResponse(Slice<Diary> slice) {
+    private static GetExploreDiaryUseCase.Response toExploreResponse(Slice<DiaryOverview> slice) {
         return new GetExploreDiaryUseCase.Response(
                 slice.content().stream()
                         .map(diary -> new GetExploreDiaryUseCase.Response.DiaryInfo(
