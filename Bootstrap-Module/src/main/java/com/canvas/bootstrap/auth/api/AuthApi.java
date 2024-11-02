@@ -1,7 +1,9 @@
 package com.canvas.bootstrap.auth.api;
 
+import com.canvas.bootstrap.auth.dto.LogoutRequest;
 import com.canvas.bootstrap.auth.dto.ReissueRequest;
 import com.canvas.bootstrap.auth.dto.ReissueResponse;
+import com.canvas.bootstrap.common.annotation.AccessUser;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -22,4 +24,9 @@ public interface AuthApi {
     @PostMapping("/reissue")
     @ApiResponses()
     ReissueResponse reissue(@RequestBody ReissueRequest reissueRequest);
+
+    @Operation
+    @PostMapping("/logout")
+    @ApiResponses()
+    void logout(@AccessUser String userId, LogoutRequest logoutRequest);
 }
