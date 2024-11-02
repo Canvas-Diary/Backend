@@ -111,6 +111,18 @@ public class DiaryQueryService
         return toAlbumResponse(slice);
     }
 
+    @Override
+    public GetAlbumDiaryUseCase.Response getAlbumByContentAndEmotion(GetAlbumDiaryUseCase.Query.All query) {
+        Slice<DiaryOverview> slice = diaryManagementPort.getAlbumByContentAndEmotion(
+                new PageRequest(query.page(), query.size(), Sort.by(Sort.Direction.DESC, "createdAt")),
+                DomainId.from(query.userId()),
+                query.content(),
+                Emotion.parse(query.emotion())
+        );
+
+        return toAlbumResponse(slice);
+    }
+
     private static GetAlbumDiaryUseCase.Response toAlbumResponse(Slice<DiaryOverview> slice) {
         return new GetAlbumDiaryUseCase.Response(
                 slice.content().stream()
