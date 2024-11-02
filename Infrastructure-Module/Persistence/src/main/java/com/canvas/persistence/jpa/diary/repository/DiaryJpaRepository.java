@@ -6,7 +6,7 @@ import org.springframework.data.domain.Slice;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -32,10 +32,10 @@ public interface DiaryJpaRepository extends JpaRepository<DiaryEntity, UUID> {
         select d
         from DiaryEntity d
         left join fetch d.likeEntities
-        where d.writerId = :writerId and d.dateTime between :start and :end
-        order by d.dateTime asc
+        where d.writerId = :writerId and d.date between :start and :end
+        order by d.date asc
     """)
-    List<DiaryEntity> findByWriterIdAndDateTimeBetween(UUID writerId, LocalDateTime start, LocalDateTime end);
+    List<DiaryEntity> findByWriterIdAndDateBetween(UUID writerId, LocalDate start, LocalDate end);
 
     Slice<DiaryEntity> findByWriterId(Pageable pageable, UUID writerId);
     Slice<DiaryEntity> findByWriterIdAndContentContains(Pageable pageable, UUID writerId, String content);

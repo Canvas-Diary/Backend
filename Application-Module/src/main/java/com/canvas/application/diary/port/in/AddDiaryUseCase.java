@@ -2,14 +2,14 @@ package com.canvas.application.diary.port.in;
 
 import com.canvas.application.common.enums.Style;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 public interface AddDiaryUseCase {
     Response add(Command command);
 
     record Command(
             String userId,
-            LocalDateTime dateTime,
+            LocalDate date,
             String content,
             Style style,
             Boolean isPublic

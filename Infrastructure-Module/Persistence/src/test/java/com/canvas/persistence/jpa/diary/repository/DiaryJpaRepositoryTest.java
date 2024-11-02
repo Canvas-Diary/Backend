@@ -102,15 +102,15 @@ class DiaryJpaRepositoryTest {
 
     @Test
     @DisplayName("작성자 ID, 기간 조회 성공")
-    void findByWriterIdAndDateTimeBetweenSuccessTest() {
+    void findByWriterIdAndDateBetweenSuccessTest() {
         // given
         DiaryEntity publicMyDiary = PUBLIC_MY_DIARY.getDiaryEntity();
 
         // when
-        List<DiaryEntity> diaryEntities = diaryJpaRepository.findByWriterIdAndDateTimeBetween(
+        List<DiaryEntity> diaryEntities = diaryJpaRepository.findByWriterIdAndDateBetween(
                 publicMyDiary.getWriterId(),
-                publicMyDiary.getDateTime().minusDays(1),
-                publicMyDiary.getDateTime().plusDays(1)
+                publicMyDiary.getDate().minusDays(1),
+                publicMyDiary.getDate().plusDays(1)
         );
 
         // then
@@ -121,15 +121,15 @@ class DiaryJpaRepositoryTest {
 
     @Test
     @DisplayName("작성자 ID, 기간 조회 실패")
-    void findByWriterIdAndDateTimeBetweenFailureTest() {
+    void findByWriterIdAndDateBetweenFailureTest() {
         // given
         DiaryEntity publicMyDiary = PUBLIC_MY_DIARY.getDiaryEntity();
 
         // when
-        List<DiaryEntity> diaryEntities = diaryJpaRepository.findByWriterIdAndDateTimeBetween(
+        List<DiaryEntity> diaryEntities = diaryJpaRepository.findByWriterIdAndDateBetween(
                 publicMyDiary.getWriterId(),
-                publicMyDiary.getDateTime().plusDays(1),
-                publicMyDiary.getDateTime().plusDays(2)
+                publicMyDiary.getDate().plusDays(1),
+                publicMyDiary.getDate().plusDays(2)
         );
 
         // then

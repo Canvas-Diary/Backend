@@ -6,7 +6,7 @@ import com.canvas.persistence.jpa.diary.entity.LikeEntity;
 import com.canvas.persistence.jpa.user.entity.UserEntity;
 import org.springframework.test.util.ReflectionTestUtils;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
@@ -16,7 +16,7 @@ public class DiaryEntityBuilder {
     private String content;
     private String emotion;
     private Boolean isPublic;
-    private LocalDateTime dateTime;
+    private LocalDate date;
     private UUID writerId;
     private UserEntity writer;
     private List<ImageEntity> imageEntities;
@@ -42,8 +42,8 @@ public class DiaryEntityBuilder {
         return this;
     }
 
-    public DiaryEntityBuilder dateTime(LocalDateTime dateTime) {
-        this.dateTime = dateTime;
+    public DiaryEntityBuilder date(LocalDate date) {
+        this.date = date;
         return this;
     }
 
@@ -73,7 +73,7 @@ public class DiaryEntityBuilder {
                 this.content,
                 this.emotion,
                 this.isPublic,
-                this.dateTime,
+                this.date,
                 this.writerId
         );
 
