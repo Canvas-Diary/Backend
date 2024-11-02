@@ -4,7 +4,6 @@ import com.canvas.application.diary.port.in.*;
 import com.canvas.bootstrap.diary.api.DiaryApi;
 import com.canvas.bootstrap.diary.dto.*;
 import com.canvas.bootstrap.diary.enums.ExploreOrder;
-import com.canvas.bootstrap.diary.enums.SearchType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -106,15 +105,17 @@ public class DiaryController implements DiaryApi {
             String userId,
             Integer page,
             Integer size,
-            SearchType type,
-            String value
+            String tag,
+            String content
     ) {
-        GetAlbumDiaryUseCase.Response response = switch (type) {
-            case CONTENT ->
-                    getAlbumDiaryUseCase.getAlbumByContent(new GetAlbumDiaryUseCase.Query.Content(userId, value, page, size));
-            case TAG ->
-                    getAlbumDiaryUseCase.getAlbumByEmotion(new GetAlbumDiaryUseCase.Query.Emotion(userId, value, page, size));
-            case NONE -> getAlbumDiaryUseCase.getAlbum(new GetAlbumDiaryUseCase.Query.Recent(userId, page, size));
+        GetAlbumDiaryUseCase.Response response = switch (getQueryType(tag, content)) {
+            case "ALL" ->
+                    getAlbumDiaryUseCase.getAlbumByContentAndEmotion(new GetAlbumDiaryUseCase.Query.All(userId, content, tag, page, size));
+            case "CONTENT" ->
+                    getAlbumDiaryUseCase.getAlbumByContent(new GetAlbumDiaryUseCase.Query.Content(userId, content, page, size));
+            case "EMOTION" ->
+                    getAlbumDiaryUseCase.getAlbumByEmotion(new GetAlbumDiaryUseCase.Query.Emotion(userId, tag, page, size));
+            default -> getAlbumDiaryUseCase.getAlbum(new GetAlbumDiaryUseCase.Query.Recent(userId, page, size));
         };
 
         return new SliceResponse<>(
@@ -125,6 +126,13 @@ public class DiaryController implements DiaryApi {
                 response.number(),
                 response.hasNext()
         );
+    }
+
+    private String getQueryType(String tag, String content) {
+        if (tag == null && content == null) return "RECENT";
+        if (tag == null) return "CONTENT";
+        if (content == null) return "EMOTION";
+        return "ALL";
     }
 
     @Override

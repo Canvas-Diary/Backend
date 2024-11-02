@@ -42,6 +42,7 @@ public interface DiaryJpaRepository extends JpaRepository<DiaryEntity, UUID> {
     Slice<DiaryEntity> findByWriterId(Pageable pageable, UUID writerId);
     Slice<DiaryEntity> findByWriterIdAndContentContains(Pageable pageable, UUID writerId, String content);
     Slice<DiaryEntity> findByWriterIdAndEmotion(Pageable pageable, UUID writerId, String emotion);
+    Slice<DiaryEntity> findByWriterIdAndContentContainsAndEmotion(Pageable pageable, UUID writerId, String content, String emotion);
     Slice<DiaryEntity> findAllByIsPublicTrue(Pageable pageable);
 
     @Query("""

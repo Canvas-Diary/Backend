@@ -3,7 +3,6 @@ package com.canvas.bootstrap.diary.api;
 import com.canvas.bootstrap.common.annotation.AccessUser;
 import com.canvas.bootstrap.diary.dto.*;
 import com.canvas.bootstrap.diary.enums.ExploreOrder;
-import com.canvas.bootstrap.diary.enums.SearchType;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
@@ -116,8 +115,8 @@ public interface DiaryApi {
             @AccessUser String userId,
             @RequestParam Integer page,
             @RequestParam Integer size,
-            @RequestParam SearchType type,
-            @RequestParam String value
+            @RequestParam(required = false) String tag,
+            @RequestParam(required = false) String content
     );
 
     @Operation(summary = "일기 탐색")

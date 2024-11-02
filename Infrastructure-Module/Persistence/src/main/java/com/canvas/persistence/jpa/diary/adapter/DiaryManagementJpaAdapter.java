@@ -99,6 +99,23 @@ public class DiaryManagementJpaAdapter implements DiaryManagementPort {
     }
 
     @Override
+    public Slice<DiaryOverview> getAlbumByContentAndEmotion(
+            PageRequest pageRequest,
+            DomainId userId,
+            String content,
+            Emotion emotion
+    ) {
+        var diaryEntities = diaryJpaRepository.findByWriterIdAndContentContainsAndEmotion(
+                PageMapper.toJpaPageRequest(pageRequest),
+                userId.value(),
+                content,
+                emotion.name()
+        );
+
+        return PageMapper.toDomainSlice(diaryEntities, DiaryMapper::toOverviewDomain);
+    }
+
+    @Override
     public Slice<DiaryOverview> getExploreByLatest(PageRequest pageRequest) {
         var diaryEntities = diaryJpaRepository.findAllByIsPublicTrue(
                 PageMapper.toJpaPageRequest(pageRequest)

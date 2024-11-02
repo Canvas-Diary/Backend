@@ -6,6 +6,7 @@ public interface GetAlbumDiaryUseCase {
     Response getAlbum(Query.Recent query);
     Response getAlbumByContent(Query.Content query);
     Response getAlbumByEmotion(Query.Emotion query);
+    Response getAlbumByContentAndEmotion(Query.All query);
 
     class Query {
         public record Recent(
@@ -23,6 +24,14 @@ public interface GetAlbumDiaryUseCase {
 
         public record Emotion(
                 String userId,
+                String emotion,
+                Integer page,
+                Integer size
+        ) {}
+
+        public record All(
+                String userId,
+                String content,
                 String emotion,
                 Integer page,
                 Integer size
