@@ -70,7 +70,7 @@ public interface DiaryApi {
                     description = "일기 내용 수정 성공"
             )
     })
-    void updateDiary(@PathVariable String diaryId, @RequestBody UpdateDiaryRequest updateDiaryRequest);
+    void updateDiary(@AccessUser String userId, @PathVariable String diaryId, @RequestBody UpdateDiaryRequest updateDiaryRequest);
 
     @Operation(summary = "일기 삭제")
     @DeleteMapping("/{diaryId}")
@@ -80,7 +80,7 @@ public interface DiaryApi {
                     description = "일기 삭제 성공"
             )
     })
-    void deleteDiary(@PathVariable String diaryId);
+    void deleteDiary(@AccessUser String userId, @PathVariable String diaryId);
 
     @Operation(summary = "일기 검색")
     @GetMapping("/search")
