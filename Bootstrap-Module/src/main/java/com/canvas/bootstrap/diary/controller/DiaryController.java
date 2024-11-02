@@ -85,14 +85,20 @@ public class DiaryController implements DiaryApi {
                         .toList());
     }
 
+    // 그날의 일기 일기 다시 재생성
+    // 일기 수정할 때 그림 자체를 재생성하는데, 일기 내용 수정만 하는 경우도 생각해야 할 것 같음.
     @Override
-    public void updateDiary(String diaryId, UpdateDiaryRequest request) {
-
+    public void updateDiary(String userId, String diaryId, UpdateDiaryRequest request) {
+        modifyDiaryUseCase.modify(new ModifyDiaryUseCase.Command(
+                userId, diaryId, request.content(), request.style(), request.isPublic()
+        ));
     }
 
     @Override
-    public void deleteDiary(String diaryId) {
-
+    public void deleteDiary(String userId, String diaryId) {
+        removeDiaryUseCase.remove(new RemoveDiaryUseCase.Command(
+                diaryId, userId
+        ));
     }
 
     @Override
