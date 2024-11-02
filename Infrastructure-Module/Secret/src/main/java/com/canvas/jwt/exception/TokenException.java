@@ -17,15 +17,21 @@ public class TokenException extends BusinessException {
         super(CODE_PREFIX, errorCode, httpStatus, message);
     }
 
-    public static class TokenExpiredException extends TokenException {
-        public TokenExpiredException() {
-            super(1, DEFAULT_HTTP_STATUS, "만료된 토큰입니다.");
+    public static class AccessTokenExpiredException extends TokenException {
+        public AccessTokenExpiredException() {
+            super(1, DEFAULT_HTTP_STATUS, "만료된 access 토큰입니다.");
+        }
+    }
+
+    public static class RefreshTokenExpiredException extends TokenException {
+        public RefreshTokenExpiredException() {
+            super(2, DEFAULT_HTTP_STATUS, "만료된 refresh 토큰입니다.");
         }
     }
 
     public static class TokenSignatureException extends TokenException {
         public TokenSignatureException() {
-            super(2, DEFAULT_HTTP_STATUS, "서명이 올바르지 않습니다.");
+            super(3, DEFAULT_HTTP_STATUS, "서명이 올바르지 않습니다.");
         }
     }
 }

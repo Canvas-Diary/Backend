@@ -60,7 +60,7 @@ public class UserTokenConvertAdapter implements UserTokenConvertPort {
                 throw new TokenException.TokenSignatureException();
             }
             else if (e instanceof ExpiredJwtException) {
-                throw new TokenException.TokenExpiredException();
+                throw new TokenException.AccessTokenExpiredException();
             }
             else {
                 throw new TokenException();
@@ -82,7 +82,7 @@ public class UserTokenConvertAdapter implements UserTokenConvertPort {
                 throw new TokenException.TokenSignatureException();
             }
             else if (e instanceof ExpiredJwtException) {
-                throw new TokenException.TokenExpiredException();
+                throw new TokenException.RefreshTokenExpiredException();
             }
             else {
                 throw new TokenException();
