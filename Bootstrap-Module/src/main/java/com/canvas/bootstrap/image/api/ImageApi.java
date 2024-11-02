@@ -1,5 +1,6 @@
 package com.canvas.bootstrap.image.api;
 
+import com.canvas.bootstrap.common.annotation.AccessUser;
 import com.canvas.bootstrap.image.dto.CreateImageRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -19,7 +20,7 @@ public interface ImageApi {
                     description = "이미지 생성 성공"
             )
     })
-    void createImage(@PathVariable String diaryId, @RequestBody CreateImageRequest createImageRequest);
+    void createImage(@AccessUser String userId, @PathVariable String diaryId, @RequestBody CreateImageRequest createImageRequest);
 
     @Operation(summary = "이미지 삭제")
     @DeleteMapping("/{imageId}")
@@ -29,7 +30,7 @@ public interface ImageApi {
                     description = "이미지 삭제 성공"
             )
     })
-    void deleteImage(@PathVariable String diaryId, @PathVariable String imageId);
+    void deleteImage(@AccessUser String userId,  @PathVariable String diaryId, @PathVariable String imageId);
 
     @Operation(summary = "일기 대표 이미지 수정")
     @PatchMapping("/{imageId}")
@@ -39,6 +40,6 @@ public interface ImageApi {
                     description = "일기 대표 이미지 수정 성공"
             )
     })
-    void updateMainImage(@PathVariable String diaryId, @PathVariable String imageId);
+    void updateMainImage(@AccessUser String userId, @PathVariable String diaryId, @PathVariable String imageId);
 
 }
