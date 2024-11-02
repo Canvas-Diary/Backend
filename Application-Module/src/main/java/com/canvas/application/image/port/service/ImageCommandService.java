@@ -27,6 +27,7 @@ public class ImageCommandService
     private final ImagePromptGeneratePort imagePromptGeneratePort;
     private final ImageUploadPort imageUploadPort;
 
+    // 이미지를 생성하고 저장하면 add
     @Override
     public Response.add add(AddImageUseCase.Command command) {
         Response.create create = create(command);
@@ -37,6 +38,7 @@ public class ImageCommandService
         return new Response.add(image.getId().toString(), image.getIsMain(), image.getImageUrl());
     }
 
+    // 이미지를 생성하기만 하면 create
     @Override
     public Response.create create(AddImageUseCase.Command command) {
 //        String prompt = imagePromptGeneratePort.generatePrompt(command.content());
@@ -55,7 +57,7 @@ public class ImageCommandService
             throw new ImageException.ImageNotFoundException();
         }
 
-        imageManagementPort.deleteById(DomainId.from(command.diaryId()));
+        imageManagementPort.deleteById(DomainId.from(command.imageId()));
     }
 
     @Override
