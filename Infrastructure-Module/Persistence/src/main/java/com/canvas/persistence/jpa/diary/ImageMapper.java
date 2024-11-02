@@ -1,7 +1,7 @@
 package com.canvas.persistence.jpa.diary;
 
 import com.canvas.domain.common.DomainId;
-import com.canvas.domain.diary.entity.Diary;
+import com.canvas.domain.diary.entity.DiaryComplete;
 import com.canvas.domain.diary.entity.Image;
 import com.canvas.persistence.jpa.diary.entity.ImageEntity;
 
@@ -17,16 +17,16 @@ public class ImageMapper {
         );
     }
 
-    public static List<ImageEntity> toEntities(Diary diary) {
-        return diary.getDiaryContent().getImages().stream()
+    public static List<ImageEntity> toEntities(DiaryComplete diary) {
+        return diary.getImages().stream()
                 .map(ImageMapper::toEntity)
                 .toList();
     }
 
     public static Image toDomain(ImageEntity imageEntity) {
         return Image.create(
-                new DomainId(imageEntity.getId()),
-                new DomainId(imageEntity.getDiaryId()),
+                DomainId.from(imageEntity.getId()),
+                DomainId.from(imageEntity.getDiaryId()),
                 imageEntity.getIsMain(),
                 imageEntity.getImageUrl()
         );

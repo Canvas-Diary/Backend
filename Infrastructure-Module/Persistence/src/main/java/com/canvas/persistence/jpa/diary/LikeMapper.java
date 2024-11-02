@@ -1,7 +1,7 @@
 package com.canvas.persistence.jpa.diary;
 
 import com.canvas.domain.common.DomainId;
-import com.canvas.domain.diary.entity.Diary;
+import com.canvas.domain.diary.entity.DiaryComplete;
 import com.canvas.domain.diary.entity.Like;
 import com.canvas.persistence.jpa.diary.entity.LikeEntity;
 
@@ -16,7 +16,7 @@ public class LikeMapper {
         );
     }
 
-    public static List<LikeEntity> toEntities(Diary diary) {
+    public static List<LikeEntity> toEntities(DiaryComplete diary) {
         return diary.getLikes().stream()
                 .map(LikeMapper::toEntity)
                 .toList();

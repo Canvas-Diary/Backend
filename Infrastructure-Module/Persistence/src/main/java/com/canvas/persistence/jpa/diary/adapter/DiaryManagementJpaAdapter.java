@@ -5,7 +5,9 @@ import com.canvas.application.diary.port.out.DiaryManagementPort;
 import com.canvas.common.page.PageRequest;
 import com.canvas.common.page.Slice;
 import com.canvas.domain.common.DomainId;
-import com.canvas.domain.diary.entity.Diary;
+import com.canvas.domain.diary.entity.DiaryBasic;
+import com.canvas.domain.diary.entity.DiaryComplete;
+import com.canvas.domain.diary.entity.DiaryOverview;
 import com.canvas.domain.diary.enums.Emotion;
 import com.canvas.persistence.jpa.common.PageMapper;
 import com.canvas.persistence.jpa.diary.DiaryMapper;
@@ -27,23 +29,23 @@ public class DiaryManagementJpaAdapter implements DiaryManagementPort {
     private final DiaryJpaRepository diaryJpaRepository;
 
     @Override
-    public Diary save(Diary diary) {
+    public DiaryComplete save(DiaryComplete diary) {
         DiaryEntity diaryEntity = diaryJpaRepository.save(DiaryMapper.toEntity(diary));
-        return DiaryMapper.toDomain(diaryEntity);
+        return DiaryMapper.toCompleteDomain(diaryEntity);
     }
 
     @Override
-    public Diary getPublicById(DomainId diaryId) {
+    public DiaryComplete getPublicById(DomainId diaryId) {
         DiaryEntity diaryEntity = diaryJpaRepository.findByIdAndIsPublicTrue(diaryId.value())
                 .orElseThrow(DiaryException.DiaryNotFoundException::new);
-        return DiaryMapper.toDomain(diaryEntity);
+        return DiaryMapper.toCompleteDomain(diaryEntity);
     }
 
     @Override
-    public Diary getByIdAndWriterId(DomainId diaryId, DomainId writerId) {
+    public DiaryComplete getByIdAndWriterId(DomainId diaryId, DomainId writerId) {
         DiaryEntity diaryEntity = diaryJpaRepository.findByIdAndWriterId(diaryId.value(), writerId.value())
                 .orElseThrow(DiaryException.DiaryNotFoundException::new);
-        return DiaryMapper.toDomain(diaryEntity);
+        return DiaryMapper.toCompleteDomain(diaryEntity);
     }
 
     @Override
@@ -52,63 +54,63 @@ public class DiaryManagementJpaAdapter implements DiaryManagementPort {
     }
 
     @Override
-    public List<Diary> getByUserIdAndMonth(DomainId userId, LocalDate date) {
+    public List<DiaryBasic> getByUserIdAndMonth(DomainId userId, LocalDate date) {
         LocalDateTime start = date.with(TemporalAdjusters.firstDayOfMonth()).atStartOfDay();
         LocalDateTime end = date.with(TemporalAdjusters.lastDayOfMonth()).atTime(LocalTime.MAX);
 
         return diaryJpaRepository.findByWriterIdAndDateTimeBetween(userId.value(), start, end).stream()
-                .map(DiaryMapper::toDomain)
+                .map(DiaryMapper::toBasicDomain)
                 .toList();
     }
 
     @Override
-    public Slice<Diary> getAlbum(PageRequest pageRequest, DomainId userId) {
+    public Slice<DiaryOverview> getAlbum(PageRequest pageRequest, DomainId userId) {
         var diaryEntities = diaryJpaRepository.findByWriterId(
                 PageMapper.toJpaPageRequest(pageRequest),
                 userId.value()
         );
 
-        return PageMapper.toDomainSlice(diaryEntities, DiaryMapper::toDomain);
+        return PageMapper.toDomainSlice(diaryEntities, DiaryMapper::toOverviewDomain);
     }
 
     @Override
-    public Slice<Diary> getAlbumByContent(PageRequest pageRequest, DomainId userId, String content) {
+    public Slice<DiaryOverview> getAlbumByContent(PageRequest pageRequest, DomainId userId, String content) {
         var diaryEntities = diaryJpaRepository.findByWriterIdAndContentContains(
                 PageMapper.toJpaPageRequest(pageRequest),
                 userId.value(),
                 content
         );
 
-        return PageMapper.toDomainSlice(diaryEntities, DiaryMapper::toDomain);
+        return PageMapper.toDomainSlice(diaryEntities, DiaryMapper::toOverviewDomain);
     }
 
     @Override
-    public Slice<Diary> getAlbumByEmotion(PageRequest pageRequest, DomainId userId, Emotion emotion) {
+    public Slice<DiaryOverview> getAlbumByEmotion(PageRequest pageRequest, DomainId userId, Emotion emotion) {
         var diaryEntities = diaryJpaRepository.findByWriterIdAndEmotion(
                 PageMapper.toJpaPageRequest(pageRequest),
                 userId.value(),
                 emotion.name()
         );
 
-        return PageMapper.toDomainSlice(diaryEntities, DiaryMapper::toDomain);
+        return PageMapper.toDomainSlice(diaryEntities, DiaryMapper::toOverviewDomain);
     }
 
     @Override
-    public Slice<Diary> getExploreByLatest(PageRequest pageRequest) {
+    public Slice<DiaryOverview> getExploreByLatest(PageRequest pageRequest) {
         var diaryEntities = diaryJpaRepository.findAllByIsPublicTrue(
                 PageMapper.toJpaPageRequest(pageRequest)
         );
 
-        return PageMapper.toDomainSlice(diaryEntities, DiaryMapper::toDomain);
+        return PageMapper.toDomainSlice(diaryEntities, DiaryMapper::toOverviewDomain);
     }
 
     @Override
-    public Slice<Diary> getExploreByLike(PageRequest pageRequest) {
+    public Slice<DiaryOverview> getExploreByLike(PageRequest pageRequest) {
         var diaryEntities = diaryJpaRepository.findAllByIsPublicTrueOrderByLikeCountDesc(
                 PageMapper.toJpaPageRequest(pageRequest)
         );
 
-        return PageMapper.toDomainSlice(diaryEntities, DiaryMapper::toDomain);
+        return PageMapper.toDomainSlice(diaryEntities, DiaryMapper::toOverviewDomain);
     }
 
     @Override
