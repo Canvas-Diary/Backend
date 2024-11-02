@@ -3,7 +3,7 @@ package com.canvas.bootstrap.diary.dto;
 import com.canvas.domain.diary.enums.Emotion;
 import io.swagger.v3.oas.annotations.media.Schema;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 
 @Schema(description = "일기 조회 반환")
@@ -19,7 +19,7 @@ public record ReadMyDiaryResponse(
         @Schema(description = "일기 좋아요 선택 여부")
         Boolean isLiked,
         @Schema(description = "일기 생성 날짜")
-        LocalDateTime date,
+        LocalDate date,
         @Schema(description = "일기 공개 여부")
         Boolean isPublic,
         @Schema(description = "일기의 이미지 정보 리스트")

@@ -14,7 +14,7 @@ public class DiaryMapper {
                 diary.getContent(),
                 diary.getEmotion().name(),
                 diary.getIsPublic(),
-                diary.getDateTime(),
+                diary.getDate(),
                 diary.getWriterId().value()
         );
 
@@ -30,7 +30,7 @@ public class DiaryMapper {
                 DomainId.from(diaryEntity.getWriterId()),
                 diaryEntity.getContent(),
                 Emotion.parse(diaryEntity.getEmotion()),
-                diaryEntity.getDateTime(),
+                diaryEntity.getDate(),
                 diaryEntity.getCreatedAt(),
                 diaryEntity.getIsPublic()
         );
@@ -42,7 +42,7 @@ public class DiaryMapper {
                 DomainId.from(diaryEntity.getWriterId()),
                 diaryEntity.getContent(),
                 Emotion.parse(diaryEntity.getEmotion()),
-                diaryEntity.getDateTime(),
+                diaryEntity.getDate(),
                 diaryEntity.getCreatedAt(),
                 diaryEntity.getIsPublic(),
                 diaryEntity.getImageEntities().stream()
@@ -57,7 +57,7 @@ public class DiaryMapper {
                 DomainId.from(diaryEntity.getWriterId()),
                 diaryEntity.getContent(),
                 Emotion.parse(diaryEntity.getEmotion()),
-                diaryEntity.getDateTime(),
+                diaryEntity.getDate(),
                 diaryEntity.getCreatedAt(),
                 diaryEntity.getIsPublic(),
                 diaryEntity.getImageEntities().stream()

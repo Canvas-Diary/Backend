@@ -6,6 +6,7 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +18,7 @@ public class DiaryComplete {
     private DomainId writerId;
     private String content;
     private Emotion emotion;
-    private LocalDateTime dateTime;     // 일기 날짜
+    private LocalDate date;     // 일기 날짜
     private LocalDateTime createdAt;    // 일기가 생성된 실제 시각
     private Boolean isPublic;
     private List<Image> images;
@@ -28,7 +29,7 @@ public class DiaryComplete {
             DomainId writerId,
             String content,
             Emotion emotion,
-            LocalDateTime dateTime,
+            LocalDate date,
             LocalDateTime createdAt,
             Boolean isPublic,
             List<Image> images,
@@ -39,7 +40,7 @@ public class DiaryComplete {
                 writerId,
                 content,
                 emotion,
-                dateTime,
+                date,
                 createdAt,
                 isPublic,
                 images,
@@ -52,7 +53,7 @@ public class DiaryComplete {
             DomainId writerId,
             String content,
             Emotion emotion,
-            LocalDateTime dateTime,
+            LocalDate date,
             Boolean isPublic,
             Image image
     ) {
@@ -61,7 +62,7 @@ public class DiaryComplete {
                 writerId,
                 content,
                 emotion,
-                dateTime,
+                date,
                 null,
                 isPublic,
                 new ArrayList<>(List.of(image)),

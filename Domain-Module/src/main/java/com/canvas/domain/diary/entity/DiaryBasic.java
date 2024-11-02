@@ -5,6 +5,7 @@ import com.canvas.domain.diary.enums.Emotion;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @AllArgsConstructor
@@ -15,7 +16,7 @@ public class DiaryBasic {
     private DomainId writerId;
     private String content;
     private Emotion emotion;
-    private LocalDateTime dateTime;
+    private LocalDate date;
     private LocalDateTime createdAt;
     private Boolean isPublic;
 
@@ -24,10 +25,10 @@ public class DiaryBasic {
             DomainId writerId,
             String content,
             Emotion emotion,
-            LocalDateTime dateTime,
+            LocalDate date,
             LocalDateTime createdAt,
             Boolean isPublic
     ) {
-        return new DiaryBasic(id, writerId, content, emotion, dateTime, createdAt, isPublic);
+        return new DiaryBasic(id, writerId, content, emotion, date, createdAt, isPublic);
     }
 }

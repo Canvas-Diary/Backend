@@ -7,7 +7,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -25,7 +25,7 @@ public class DiaryEntity extends BaseEntity {
     private String content;
     private String emotion;
     private Boolean isPublic;
-    private LocalDateTime dateTime;
+    private LocalDate date;
 
     @Column(name = "writer_id", nullable = false)
     private UUID writerId;
@@ -39,12 +39,12 @@ public class DiaryEntity extends BaseEntity {
     @OneToMany(mappedBy = "diaryEntity", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<LikeEntity> likeEntities = new ArrayList<>();
 
-    public DiaryEntity(UUID id, String content, String emotion, Boolean isPublic, LocalDateTime dateTime, UUID writerId) {
+    public DiaryEntity(UUID id, String content, String emotion, Boolean isPublic, LocalDate date, UUID writerId) {
         this.id = id;
         this.content = content;
         this.emotion = emotion;
         this.isPublic = isPublic;
-        this.dateTime = dateTime;
+        this.date = date;
         this.writerId = writerId;
     }
 

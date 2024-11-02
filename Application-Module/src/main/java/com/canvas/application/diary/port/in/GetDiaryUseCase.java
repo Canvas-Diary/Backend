@@ -3,7 +3,6 @@ package com.canvas.application.diary.port.in;
 import com.canvas.domain.diary.enums.Emotion;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 
 public interface GetDiaryUseCase {
@@ -30,7 +29,7 @@ public interface GetDiaryUseCase {
                 Emotion emotion,
                 Integer likeCount,
                 Boolean isLiked,
-                LocalDateTime date,
+                LocalDate date,
                 Boolean isPublic,
                 List<ImageInfo> images
         ) {

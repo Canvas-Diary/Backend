@@ -6,7 +6,6 @@ import com.canvas.persistence.jpa.diary.entity.DiaryEntity;
 import lombok.Getter;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.UUID;
 
@@ -17,7 +16,7 @@ public enum DiaryEntityFixture {
             "내용1",
             "감정1",
             true,
-            LocalDate.of(2024, 10, 15).atStartOfDay(),
+            LocalDate.of(2024, 10, 15),
             MYSELF
     ),
 
@@ -25,7 +24,7 @@ public enum DiaryEntityFixture {
             "내용2",
             "감정2",
             true,
-            LocalDate.of(2024, 10, 17).atStartOfDay(),
+            LocalDate.of(2024, 10, 17),
             OTHER1
     ),
 
@@ -33,7 +32,7 @@ public enum DiaryEntityFixture {
             "내용3",
             "감정3",
             false,
-            LocalDate.of(2024, 10, 31).atStartOfDay(),
+            LocalDate.of(2024, 10, 31),
             OTHER2
     );
 
@@ -42,15 +41,15 @@ public enum DiaryEntityFixture {
     private final String content;
     private final String emotion;
     private final Boolean isPublic;
-    private final LocalDateTime dateTime;
+    private final LocalDate date;
     private final UserEntityFixture userEntityFixture;
 
-    DiaryEntityFixture(String content, String emotion, Boolean isPublic, LocalDateTime dateTime, UserEntityFixture userEntityFixture) {
+    DiaryEntityFixture(String content, String emotion, Boolean isPublic, LocalDate date, UserEntityFixture userEntityFixture) {
         this.id = DomainId.generate().value();
         this.content = content;
         this.emotion = emotion;
         this.isPublic = isPublic;
-        this.dateTime = dateTime;
+        this.date = date;
         this.userEntityFixture = userEntityFixture;
     }
 
@@ -60,7 +59,7 @@ public enum DiaryEntityFixture {
                 .content(content)
                 .emotion(emotion)
                 .isPublic(isPublic)
-                .dateTime(dateTime)
+                .date(date)
                 .writerId(userEntityFixture.getId())
                 .writer(userEntityFixture.getUserEntity())
                 .imageEntities(

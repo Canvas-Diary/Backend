@@ -28,6 +28,10 @@ public class DiaryCommandService
 
     @Override
     public Response add(AddDiaryUseCase.Command command) {
+        if (diaryManagementPort.existsByWriterIdAndDate(DomainId.from(command.userId()), command.date())) {
+            throw new DiaryException.DiaryBadRequestException();
+        }
+
         DomainId diaryId = DomainId.generate();
         Emotion emotion = diaryEmotionExtractPort.emotionExtract(command.content());
         Image image = createImage(diaryId, command.content(), command.style());
@@ -38,7 +42,7 @@ public class DiaryCommandService
                         DomainId.from(command.userId()),
                         command.content(),
                         emotion,
-                        command.dateTime(),
+                        command.date(),
                         command.isPublic(),
                         image
                 )

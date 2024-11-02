@@ -54,7 +54,7 @@ public class DiaryQueryService
                 diaries.stream()
                         .map(diary -> new GetDiaryUseCase.Response.HomeCalendar.DiaryInfo(
                                 diary.getId().toString(),
-                                diary.getDateTime().toLocalDate(),
+                                diary.getDate(),
                                 diary.getEmotion()
                         )).toList()
         );
@@ -68,7 +68,7 @@ public class DiaryQueryService
                 diary.getLikes().size(),
                 diary.getLikes().stream()
                         .anyMatch(like -> like.getUserId().equals(DomainId.from(userId))),
-                diary.getDateTime(),
+                diary.getDate(),
                 diary.getIsPublic(),
                 diary.getImages().stream()
                         .map(image -> new GetDiaryUseCase.Response.DiaryInfo.ImageInfo(

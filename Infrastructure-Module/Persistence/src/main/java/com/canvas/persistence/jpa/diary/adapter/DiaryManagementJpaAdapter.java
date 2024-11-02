@@ -17,8 +17,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.time.temporal.TemporalAdjusters;
 import java.util.List;
 
@@ -32,6 +30,11 @@ public class DiaryManagementJpaAdapter implements DiaryManagementPort {
     public DiaryComplete save(DiaryComplete diary) {
         DiaryEntity diaryEntity = diaryJpaRepository.save(DiaryMapper.toEntity(diary));
         return DiaryMapper.toCompleteDomain(diaryEntity);
+    }
+
+    @Override
+    public boolean existsByWriterIdAndDate(DomainId userId, LocalDate date) {
+        return diaryJpaRepository.existsByWriterIdAndDate(userId.value(), date);
     }
 
     @Override
@@ -55,12 +58,12 @@ public class DiaryManagementJpaAdapter implements DiaryManagementPort {
 
     @Override
     public List<DiaryBasic> getByUserIdAndMonth(DomainId userId, LocalDate date) {
-        LocalDateTime start = date.with(TemporalAdjusters.firstDayOfMonth()).atStartOfDay();
-        LocalDateTime end = date.with(TemporalAdjusters.lastDayOfMonth()).atTime(LocalTime.MAX);
+        LocalDate start = date.with(TemporalAdjusters.firstDayOfMonth());
+        LocalDate end = date.with(TemporalAdjusters.lastDayOfMonth());
 
-        return diaryJpaRepository.findByWriterIdAndDateTimeBetween(userId.value(), start, end).stream()
-                .map(DiaryMapper::toBasicDomain)
-                .toList();
+        return diaryJpaRepository.findByWriterIdAndDateBetween(userId.value(), start, end).stream()
+                                 .map(DiaryMapper::toBasicDomain)
+                                 .toList();
     }
 
     @Override
