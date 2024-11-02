@@ -17,7 +17,8 @@ public class KakaoOAuthRetrieveHandler implements OAuthRetrieveHandler {
     private String clientId;
     @Value("${kakao.client-secret}")
     private String clientSecret;
-    private static final String redirectUri = "http://localhost:8080/api/v1/auth/kakao/callback";
+    @Value("${kakao.redirect-uri}")
+    private String redirectUri;
 
     @Override
     public String getAccessToken(String code) {
