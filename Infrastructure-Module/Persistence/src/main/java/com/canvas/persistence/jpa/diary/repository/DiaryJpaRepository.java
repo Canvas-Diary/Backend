@@ -12,6 +12,8 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface DiaryJpaRepository extends JpaRepository<DiaryEntity, UUID> {
+    boolean existsByWriterIdAndDate(UUID writerId, LocalDate date);
+
     @Query("""
         select d
         from DiaryEntity d

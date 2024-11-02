@@ -13,6 +13,7 @@ import java.util.List;
 
 public interface DiaryManagementPort {
     DiaryComplete save(DiaryComplete diary);
+    boolean existsByWriterIdAndDate(DomainId userId, LocalDate date);
     DiaryComplete getPublicById(DomainId diaryId);
     DiaryComplete getByIdAndWriterId(DomainId diaryId, DomainId writerId);
     boolean existsByIdAndWriterId(DomainId diaryId, DomainId writerId);

@@ -28,6 +28,9 @@ public class DiaryCommandService
 
     @Override
     public Response add(AddDiaryUseCase.Command command) {
+        if (diaryManagementPort.existsByWriterIdAndDate(DomainId.from(command.userId()), command.date())) {
+            throw new DiaryException.DiaryBadRequestException();
+        }
 
         DomainId diaryId = DomainId.generate();
         Emotion emotion = diaryEmotionExtractPort.emotionExtract(command.content());

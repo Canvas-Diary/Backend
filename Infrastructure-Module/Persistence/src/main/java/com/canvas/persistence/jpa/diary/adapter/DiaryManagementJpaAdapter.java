@@ -33,6 +33,11 @@ public class DiaryManagementJpaAdapter implements DiaryManagementPort {
     }
 
     @Override
+    public boolean existsByWriterIdAndDate(DomainId userId, LocalDate date) {
+        return diaryJpaRepository.existsByWriterIdAndDate(userId.value(), date);
+    }
+
+    @Override
     public DiaryComplete getPublicById(DomainId diaryId) {
         DiaryEntity diaryEntity = diaryJpaRepository.findByIdAndIsPublicTrue(diaryId.value())
                 .orElseThrow(DiaryException.DiaryNotFoundException::new);
