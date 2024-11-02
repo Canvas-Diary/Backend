@@ -27,7 +27,7 @@ public class AuthController implements AuthApi {
         LoginUserUseCase.Response response = loginUserUseCase.login(command);
 
         String uri = UriComponentsBuilder.fromUriString("http://www.canvas-diary.kro.kr")
-                                         .path("/login")
+                                         .path("/")
                                          .queryParam("access", response.accessToken())
                                          .queryParam("refresh", response.refreshToken())
                                          .build()
