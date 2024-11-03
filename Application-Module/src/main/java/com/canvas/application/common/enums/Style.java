@@ -9,14 +9,15 @@ import java.util.List;
 @RequiredArgsConstructor
 @Getter
 public enum Style {
-    PHOTOREALISTIC("photorealistic", "실사화"),
-    OILPAINTING("oil painting", "유화"),
-    WATERCOLOR("watercolor", "수채화"),
-    ANIMATION("animation", "애니메이션"),
-    PIXELART("pixel art", "픽셀 아트");
+    PHOTOREALISTIC("photorealistic", "실사화", "https://canvas-diary.s3.ap-northeast-2.amazonaws.com/%ED%99%94%ED%92%8D/%E1%84%89%E1%85%B5%E1%86%AF%E1%84%89%E1%85%A1%E1%84%92%E1%85%AA.webp"),
+    OILPAINTING("oil painting", "유화", "https://canvas-diary.s3.ap-northeast-2.amazonaws.com/%ED%99%94%ED%92%8D/%E1%84%8B%E1%85%B2%E1%84%92%E1%85%AA.webp"),
+    WATERCOLOR("watercolor", "수채화", "https://canvas-diary.s3.ap-northeast-2.amazonaws.com/%ED%99%94%ED%92%8D/%E1%84%89%E1%85%AE%E1%84%8E%E1%85%A2%E1%84%92%E1%85%AA.webp"),
+    ANIMATION("animation", "애니메이션", "https://canvas-diary.s3.ap-northeast-2.amazonaws.com/%ED%99%94%ED%92%8D/%E1%84%8B%E1%85%A2%E1%84%82%E1%85%B5%E1%84%86%E1%85%A6%E1%84%8B%E1%85%B5%E1%84%89%E1%85%A7%E1%86%AB+.webp"),
+    PIXELART("pixel art", "픽셀 아트", "https://canvas-diary.s3.ap-northeast-2.amazonaws.com/%ED%99%94%ED%92%8D/%E1%84%91%E1%85%B5%E1%86%A8%E1%84%89%E1%85%A6%E1%86%AF+%E1%84%8B%E1%85%A1%E1%84%90%E1%85%B3.webp");
 
     private final String value;
     private final String koreanName;
+    private final String imageUrl;
 
     public static Style parse(String value) {
         return Arrays.stream(Style.values())
@@ -33,10 +34,11 @@ public enum Style {
 
     public record StyleInfo(
             String name,
-            String koreanName
+            String koreanName,
+            String imageUrl
     ) {
         public static StyleInfo create(Style style) {
-            return new StyleInfo(style.name(), style.getKoreanName());
+            return new StyleInfo(style.name(), style.getKoreanName(), style.getImageUrl());
         }
     }
 
