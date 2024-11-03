@@ -16,10 +16,11 @@ public record StyleResponse(
 
     public record StyleInfo(
             String name,
-            String koreanName
+            String koreanName,
+            String imageUrl
     ) {
         public static StyleInfo from(Style.StyleInfo styleInfo) {
-            return new StyleInfo(styleInfo.name(), styleInfo.koreanName());
+            return new StyleInfo(styleInfo.name(), styleInfo.koreanName(), styleInfo.imageUrl());
         }
     }
 }
