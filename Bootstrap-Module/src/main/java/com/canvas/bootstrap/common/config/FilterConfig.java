@@ -10,6 +10,6 @@ public class FilterConfig {
 
     @Bean
     public List<String> excludedAuthUrls() {
-        return List.of("/api/v1/auth/**");
+        return List.of("/api/v1/auth/**", "/swagger-ui/**", "/swagger-resources/**", "/v3/api-docs/**");
     }
 }

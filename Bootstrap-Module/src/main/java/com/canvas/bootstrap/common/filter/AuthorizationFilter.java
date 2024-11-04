@@ -44,9 +44,10 @@ public class AuthorizationFilter extends OncePerRequestFilter {
 
         String authorization = request.getHeader(AUTHORIZATION_HEADER);
 
-        if(!(authorization != null && authorization.startsWith(BEARER_PREFIX))) {
+        if (!(authorization != null && authorization.startsWith(BEARER_PREFIX))) {
             throw new AuthorizationFilterException();
         }
+
         String accessToken = authorization.substring(BEARER_PREFIX.length());
         // 토큰 검증
         UserClaim userClaim = tokenResolveUserCase.resolveToken(accessToken);
