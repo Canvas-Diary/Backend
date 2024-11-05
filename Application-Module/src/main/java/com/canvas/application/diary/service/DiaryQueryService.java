@@ -60,6 +60,25 @@ public class DiaryQueryService
         );
     }
 
+    @Override
+    public GetDiaryUseCase.Response.LikedDiaries getLikedDiaries(GetDiaryUseCase.Query.LikedDiaries query) {
+        Slice<DiaryOverview> slice = diaryManagementPort.getLikedDiaries(
+                new PageRequest(query.page(), query.size(), Sort.by(Sort.Direction.DESC, "createdAt")),
+                DomainId.from(query.userId())
+        );
+
+        return new GetDiaryUseCase.Response.LikedDiaries(
+                slice.content().stream()
+                     .map(diary -> new GetDiaryUseCase.Response.LikedDiaries.DiaryInfo(
+                             diary.getId().toString(),
+                             diary.getMainImageOrDefault()))
+                     .toList(),
+                slice.size(),
+                slice.number(),
+                slice.hasNext()
+        );
+    }
+
     private static GetDiaryUseCase.Response.DiaryInfo toResponseDiary(String userId, DiaryComplete diary) {
         return new GetDiaryUseCase.Response.DiaryInfo(
                 diary.getId().toString(),

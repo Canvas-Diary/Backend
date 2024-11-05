@@ -134,6 +134,16 @@ public class DiaryManagementJpaAdapter implements DiaryManagementPort {
     }
 
     @Override
+    public Slice<DiaryOverview> getLikedDiaries(PageRequest pageRequest, DomainId userId) {
+        var diaryEntities = diaryJpaRepository.findByUserLiked(
+                PageMapper.toJpaPageRequest(pageRequest),
+                userId.value()
+        );
+
+        return PageMapper.toDomainSlice(diaryEntities, DiaryMapper::toOverviewDomain);
+    }
+
+    @Override
     public void deleteById(DomainId diaryId) {
         diaryJpaRepository.deleteById(diaryId.value());
     }
