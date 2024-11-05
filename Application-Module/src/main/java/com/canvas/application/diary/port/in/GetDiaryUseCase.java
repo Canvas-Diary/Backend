@@ -9,6 +9,8 @@ public interface GetDiaryUseCase {
     Response.DiaryInfo getMyDiary(Query.Diary query);
     Response.DiaryInfo getOtherDiary(Query.Diary query);
     Response.HomeCalendar getHomeCalendar(Query.HomeCalendar query);
+    Response.LikedDiaries getLikedDiaries(Query.LikedDiaries query);
+
 
     class Query {
         public record Diary(
@@ -19,6 +21,12 @@ public interface GetDiaryUseCase {
         public record HomeCalendar(
                 String userId,
                 LocalDate date
+        ) {}
+
+        public record LikedDiaries(
+                String userId,
+                Integer page,
+                Integer size
         ) {}
     }
 
@@ -47,6 +55,18 @@ public interface GetDiaryUseCase {
                     String diaryId,
                     LocalDate date,
                     Emotion emotion
+            ) {}
+        }
+
+        public record LikedDiaries(
+                List<DiaryInfo> diaries,
+                Integer size,
+                Integer number,
+                Boolean hasNext
+        ) {
+            public record DiaryInfo(
+                    String diaryId,
+                    String mainImageUrl
             ) {}
         }
     }

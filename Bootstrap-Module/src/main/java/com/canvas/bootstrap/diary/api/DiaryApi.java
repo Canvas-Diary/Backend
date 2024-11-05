@@ -141,5 +141,37 @@ public interface DiaryApi {
                     description = "쿼리 스트링 오류"
             )
     })
-    SliceResponse<DiaryThumbnail> exploreDiary(@RequestParam int page, @RequestParam int size, @RequestParam ExploreOrder order);
+    SliceResponse<DiaryThumbnail> exploreDiary(
+            @RequestParam int page,
+            @RequestParam int size,
+            @RequestParam ExploreOrder order
+    );
+
+    @Operation(summary = "좋아요 누른 일기 조회")
+    @GetMapping("/like")
+    @Parameters({
+            @Parameter(
+                    name = "page",
+                    description = "요청할 페이지 번호"
+            ),
+            @Parameter(
+                    name = "size",
+                    description = "요청할 페이지 크기"
+            )
+    })
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "일기 탐색 성공"
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "쿼리 스트링 오류"
+            )
+    })
+    SliceResponse<DiaryThumbnail> readLikedDiary(
+            @AccessUser String userId,
+            @RequestParam Integer page,
+            @RequestParam Integer size
+    );
 }

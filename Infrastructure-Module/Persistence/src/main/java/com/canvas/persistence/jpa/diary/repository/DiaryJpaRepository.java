@@ -55,5 +55,14 @@ public interface DiaryJpaRepository extends JpaRepository<DiaryEntity, UUID> {
     """)
     Slice<DiaryEntity> findAllByIsPublicTrueOrderByLikeCountDesc(Pageable pageable);
 
+    @Query("""
+        select d
+        from DiaryEntity d
+        where d.id in (select l.diaryId
+                       from LikeEntity l
+                       where l.userId = :userId)
+    """)
+    Slice<DiaryEntity> findByUserLiked(Pageable pageable, UUID userId);
+
     boolean existsByIdAndWriterId(UUID diaryId, UUID writerId);
 }
