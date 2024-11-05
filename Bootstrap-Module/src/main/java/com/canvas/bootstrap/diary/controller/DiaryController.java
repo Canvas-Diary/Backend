@@ -15,6 +15,7 @@ public class DiaryController implements DiaryApi {
 
     private final AddDiaryUseCase addDiaryUseCase;
     private final GetDiaryUseCase getDiaryUseCase;
+
     private final GetAlbumDiaryUseCase getAlbumDiaryUseCase;
     private final GetExploreDiaryUseCase getExploreDiaryUseCase;
     private final ModifyDiaryUseCase modifyDiaryUseCase;
@@ -151,4 +152,25 @@ public class DiaryController implements DiaryApi {
                 response.hasNext()
         );
     }
+
+    @Override
+    public SliceResponse<DiaryThumbnail> readLikedDiary(String userId, Integer page, Integer size) {
+        GetDiaryUseCase.Response.LikedDiaries response = getDiaryUseCase.getLikedDiaries(
+                new GetDiaryUseCase.Query.LikedDiaries(
+                        userId,
+                        page,
+                        size
+                )
+        );
+
+        return new SliceResponse<>(
+                response.diaries().stream()
+                        .map(diaryInfo -> new DiaryThumbnail(diaryInfo.diaryId(), diaryInfo.mainImageUrl()))
+                        .toList(),
+                response.size(),
+                response.number(),
+                response.hasNext()
+        );
+    }
+
 }
