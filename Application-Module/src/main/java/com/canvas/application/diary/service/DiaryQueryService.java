@@ -84,9 +84,8 @@ public class DiaryQueryService
                 diary.getId().toString(),
                 diary.getContent(),
                 diary.getEmotion(),
-                diary.getLikes().size(),
-                diary.getLikes().stream()
-                        .anyMatch(like -> like.getUserId().equals(DomainId.from(userId))),
+                diary.getLikeCount(),
+                diary.isLiked(DomainId.from(userId)),
                 diary.getDate(),
                 diary.getIsPublic(),
                 diary.getImages().stream()

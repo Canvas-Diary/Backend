@@ -87,4 +87,13 @@ public class DiaryComplete {
     public void updatePublic(Boolean isPublic) {
         this.isPublic = isPublic;
     }
+
+    public Integer getLikeCount() {
+        return likes.size();
+    }
+
+    public boolean isLiked(DomainId userId) {
+        return likes.stream()
+                .anyMatch(like -> like.getUserId().equals(userId));
+    }
 }
