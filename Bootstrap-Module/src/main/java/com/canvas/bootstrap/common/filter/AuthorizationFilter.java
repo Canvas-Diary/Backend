@@ -16,16 +16,22 @@ import org.springframework.util.PathMatcher;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
-@RequiredArgsConstructor
+@Order(2)
 @Component
-@Order(1)
+@RequiredArgsConstructor
 public class AuthorizationFilter extends OncePerRequestFilter {
 
     private static final String AUTHORIZATION_HEADER = "Authorization";
     private static final String BEARER_PREFIX = "Bearer ";
-    private final List<String> excludedAuthUrls;
+    private static final Set<String> excludedAuthUrls = new HashSet<>();
+
+    static {
+        excludedAuthUrls.add("/api/v1/auth/**");
+    }
+
     private final PathMatcher pathMatcher = new AntPathMatcher();
     private final TokenResolveUserCase tokenResolveUserCase;
 
@@ -56,7 +62,8 @@ public class AuthorizationFilter extends OncePerRequestFilter {
     }
 
     private boolean isExcludedPath(String requestURI) {
-        return excludedAuthUrls.stream().anyMatch(pattern -> pathMatcher.match(pattern, requestURI));
+        return excludedAuthUrls.stream()
+                               .anyMatch(pattern -> pathMatcher.match(pattern, requestURI));
     }
 
 }

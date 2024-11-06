@@ -14,15 +14,16 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 
-@Order(0)
 @Slf4j
+@Order(1)
 @Component
 public class ExceptionHandlerFilter extends OncePerRequestFilter {
 
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+            throws ServletException, IOException {
         try {
             filterChain.doFilter(request, response);
         } catch (Exception e) {
@@ -32,7 +33,7 @@ public class ExceptionHandlerFilter extends OncePerRequestFilter {
 
     private void handleException(HttpServletResponse response, Exception e) throws IOException {
         int status = getStatus(e);
-        setResponseHeaders(response, status);
+        response.setStatus(status);
 
         ExceptionResponse errorResponse = new ExceptionResponse("000", e.getMessage());
         response.getWriter().write(objectMapper.writeValueAsString(errorResponse));
@@ -46,17 +47,6 @@ public class ExceptionHandlerFilter extends OncePerRequestFilter {
         log.error("알 수 없는 서버 오류: {0}", e);
 
         return HttpServletResponse.SC_INTERNAL_SERVER_ERROR;
-    }
-
-    private void setResponseHeaders(HttpServletResponse response, int status) {
-        response.setStatus(status);
-        response.addHeader("Access-Control-Allow-Origin", "http://www.canvas-diary.kro.kr");
-        response.addHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
-        response.setHeader("Access-Control-Allow-Headers", "*");
-        response.setHeader("Access-Control-Allow-Credentials", "true");
-
-        response.setContentType("application/json");
-        response.setCharacterEncoding("UTF-8");
     }
 
 }
