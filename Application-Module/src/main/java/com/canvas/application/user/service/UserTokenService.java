@@ -35,12 +35,12 @@ public class UserTokenService implements LoginUserUseCase, ReissueTokenUseCase, 
 
         User user = getUserOrRegister(userInfo, command.provider());
 
-        String userId = user.getDomainId().toString();
+        String userId = user.getId().toString();
 
         String accessToken = userTokenConvertPort.createAccessToken(userId);
         String refreshToken = userTokenConvertPort.createRefreshToken(userId);
 
-        userTokenManagementPort.save(new UserToken(DomainId.generate(), refreshToken, DomainId.from(userId)));
+//        userTokenManagementPort.save(UserToken.create(DomainId.generate(), refreshToken, DomainId.from(userId)));
 
         return new LoginUserUseCase.Response(accessToken, refreshToken);
     }
@@ -65,7 +65,7 @@ public class UserTokenService implements LoginUserUseCase, ReissueTokenUseCase, 
         if(userManagementPort.existsBySocialIdAndProviderId(userInfo.socialId(), SocialLoginProvider.parse(provider))) {
             return userManagementPort.getBySocialIdAndProvider(userInfo.socialId(), SocialLoginProvider.parse(provider));
         } else {
-            return userManagementPort.save(new User(DomainId.generate(), userInfo.username(),
+            return userManagementPort.save(User.create(DomainId.generate(), userInfo.username(),
                     userInfo.socialId(), SocialLoginProvider.parse(provider)));
         }
     }

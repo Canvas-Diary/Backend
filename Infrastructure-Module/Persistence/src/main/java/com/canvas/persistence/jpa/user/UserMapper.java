@@ -10,7 +10,7 @@ import com.canvas.persistence.jpa.user.entity.UserTokenEntity;
 public class UserMapper {
     public static UserEntity toEntity(User user) {
         return new UserEntity(
-                user.getDomainId().value(),
+                user.getId().value(),
                 user.getUsername(),
                 user.getSocialId(),
                 user.getSocialLoginProvider().name()
@@ -26,7 +26,7 @@ public class UserMapper {
     }
 
     public static User toDomain(UserEntity userEntity) {
-        return new User(
+        return User.create(
                 new DomainId(userEntity.getId()),
                 userEntity.getUsername(),
                 userEntity.getSocialId(),
@@ -35,7 +35,7 @@ public class UserMapper {
     }
 
     public static UserToken toDomain(UserTokenEntity userTokenEntity) {
-        return new UserToken(
+        return UserToken.create(
                 new DomainId(userTokenEntity.getId()),
                 userTokenEntity.getToken(),
                 new DomainId(userTokenEntity.getUserId())

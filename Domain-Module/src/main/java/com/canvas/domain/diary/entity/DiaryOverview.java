@@ -2,6 +2,7 @@ package com.canvas.domain.diary.entity;
 
 import com.canvas.domain.common.DomainId;
 import com.canvas.domain.diary.enums.Emotion;
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -9,7 +10,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
-@AllArgsConstructor
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Getter
 public class DiaryOverview {
     // 조회 전용 도메인
