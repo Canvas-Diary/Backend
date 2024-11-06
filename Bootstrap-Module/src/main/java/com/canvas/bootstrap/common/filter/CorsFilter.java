@@ -4,6 +4,7 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Component;
@@ -13,6 +14,7 @@ import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 
+@Slf4j
 @Order(0)
 @Component
 public class CorsFilter extends OncePerRequestFilter {
@@ -28,12 +30,14 @@ public class CorsFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
         String origin = request.getHeader(HttpHeaders.ORIGIN);
-        if (allowedOrigins.contains(origin)) {
-            response.setHeader("Access-Control-Allow-Origin", origin);
+        if (!allowedOrigins.contains(origin)) {
+            filterChain.doFilter(request, response);
+            return;
         }
 
+        response.addHeader("Access-Control-Allow-Origin", origin);
         response.setHeader("Access-Control-Allow-Methods", "GET, POST, PATCH, DELETE, OPTIONS");
-        response.setHeader("Access-Control-Allow-Headers", "*");
+        response.setHeader("Access-Control-Allow-Headers", "Authorization");
         response.setHeader("Access-Control-Allow-Credentials", "true");
 
         response.setContentType("application/json");
