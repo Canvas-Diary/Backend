@@ -46,33 +46,6 @@ class DiaryJpaRepositoryTest {
     }
 
     @Test
-    @DisplayName("ID, public 조회 성공")
-    void findByIdAndIsPublicTrueSuccessTest() {
-        // given
-        DiaryEntity publicMyDiary = PUBLIC_MY_DIARY.getDiaryEntity();
-
-        // when
-        // then
-        assertThat(diaryJpaRepository.findByIdAndIsPublicTrue(publicMyDiary.getId()))
-                .isPresent()
-                .get()
-                .extracting(DiaryEntity::getId)
-                .isEqualTo(publicMyDiary.getId());
-    }
-
-    @Test
-    @DisplayName("ID, public 조회 실패")
-    void findByIdAndIsPublicTrueFailureTest() {
-        // given
-        DiaryEntity privateOtherDiary = PRIVATE_OTHER_DIARY.getDiaryEntity();
-
-        // when
-        // then
-        assertThat(diaryJpaRepository.findByIdAndIsPublicTrue(privateOtherDiary.getId()))
-                .isNotPresent();
-    }
-
-    @Test
     @DisplayName("ID, 작성자 ID 조회 성공")
     void findByIdAndWriterIdSuccessTest() {
         // given

@@ -7,7 +7,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Schema(description = "일기 조회 반환")
-public record ReadOtherDiaryResponse(
+public record ReadDiaryResponse(
         @Schema(description = "일기 ID")
         String diaryId,
         @Schema(description = "일기 내용")
@@ -18,8 +18,12 @@ public record ReadOtherDiaryResponse(
         Integer likedCount,
         @Schema(description = "일기 좋아요 선택 여부")
         Boolean isLiked,
+        @Schema(description = "내 일기인지 여부")
+        Boolean isMine,
         @Schema(description = "일기 생성 날짜")
         LocalDate date,
+        @Schema(description = "일기 공개 여부")
+        Boolean isPublic,
         @Schema(description = "일기의 이미지 정보 리스트")
         List<ImageInfo> images) {
     @Schema(description = "일기의 이미지 정보")
