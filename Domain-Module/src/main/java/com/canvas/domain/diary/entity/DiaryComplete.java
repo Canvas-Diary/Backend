@@ -88,7 +88,7 @@ public class DiaryComplete {
         this.isPublic = isPublic;
     }
 
-    public Integer getLikeCount() {
+    public int getLikeCount() {
         return likes.size();
     }
 
@@ -96,4 +96,9 @@ public class DiaryComplete {
         return likes.stream()
                 .anyMatch(like -> like.getUserId().equals(userId));
     }
+
+    public boolean isWriter(DomainId userId) {
+        return writerId.value().equals(userId.value());
+    }
+
 }

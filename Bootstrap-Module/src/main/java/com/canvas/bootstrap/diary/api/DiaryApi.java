@@ -29,26 +29,15 @@ public interface DiaryApi {
     CreateDiaryResponse createDiary(@AccessUser String userId, @RequestBody CreateDiaryRequest createDiaryRequest);
 
 
-    @Operation(summary = "내 일기 단건 조회")
-    @GetMapping("/{diaryId}/my")
-    @ApiResponses(value = {
-            @ApiResponse(
-                    responseCode = "200",
-                    description = "내 일기 단건 조회 성공"
-            )
-    })
-    ReadMyDiaryResponse readMyDiary(@AccessUser String userId, @PathVariable String diaryId);
-
-    @Operation(summary = "타인 일기 단건 조회")
+    @Operation(summary = "일기 단건 조회")
     @GetMapping("/{diaryId}")
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "200",
-                    description = "타인 일기 단건 조회 성공"
+                    description = "일기 단건 조회 성공"
             )
     })
-    ReadOtherDiaryResponse readOtherDiary(@AccessUser String userId, @PathVariable String diaryId);
-
+    ReadDiaryResponse readDiary(@AccessUser String userId, @PathVariable String diaryId);
 
     @Operation(summary = "일기 달력 조회")
     @GetMapping()
