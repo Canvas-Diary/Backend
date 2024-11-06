@@ -31,7 +31,7 @@ public class UserManagementJpaAdapter implements UserManagementPort {
 
     @Override
     public void delete(User user) {
-        userJpaRepository.deleteById(user.getDomainId().value());
+        userJpaRepository.deleteById(user.getId().value());
     }
 
     @Override

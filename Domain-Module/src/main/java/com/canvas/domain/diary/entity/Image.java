@@ -1,10 +1,11 @@
 package com.canvas.domain.diary.entity;
 
 import com.canvas.domain.common.DomainId;
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-@AllArgsConstructor
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Getter
 public class Image {
     private DomainId id;
