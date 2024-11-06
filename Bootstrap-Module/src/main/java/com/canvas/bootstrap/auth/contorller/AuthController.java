@@ -9,11 +9,13 @@ import com.canvas.bootstrap.auth.dto.ReissueRequest;
 import com.canvas.bootstrap.auth.dto.ReissueResponse;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.io.IOException;
 
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 public class AuthController implements AuthApi {
@@ -45,6 +47,8 @@ public class AuthController implements AuthApi {
 
     @Override
     public ReissueResponse reissue(ReissueRequest reissueRequest) {
+        log.info("refreshToken: {}", reissueRequest.refreshToken());
+
         ReissueTokenUseCase.Command command = new ReissueTokenUseCase.Command(reissueRequest.refreshToken());
 
         ReissueTokenUseCase.Response response = reissueTokenUseCase.reissue(command);
