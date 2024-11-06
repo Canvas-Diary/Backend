@@ -6,8 +6,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 public interface GetDiaryUseCase {
-    Response.DiaryInfo getMyDiary(Query.Diary query);
-    Response.DiaryInfo getOtherDiary(Query.Diary query);
+    Response.DiaryInfo getDiary(Query.Diary query);
     Response.HomeCalendar getHomeCalendar(Query.HomeCalendar query);
     Response.LikedDiaries getLikedDiaries(Query.LikedDiaries query);
 
@@ -37,6 +36,7 @@ public interface GetDiaryUseCase {
                 Emotion emotion,
                 Integer likeCount,
                 Boolean isLiked,
+                Boolean isMine,
                 LocalDate date,
                 Boolean isPublic,
                 List<ImageInfo> images

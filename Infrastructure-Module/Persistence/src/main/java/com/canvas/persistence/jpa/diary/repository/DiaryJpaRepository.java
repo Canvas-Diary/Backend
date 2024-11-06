@@ -18,14 +18,6 @@ public interface DiaryJpaRepository extends JpaRepository<DiaryEntity, UUID> {
         select d
         from DiaryEntity d
         left join fetch d.likeEntities
-        where d.id = :diaryId and d.isPublic = true
-    """)
-    Optional<DiaryEntity> findByIdAndIsPublicTrue(UUID diaryId);
-
-    @Query("""
-        select d
-        from DiaryEntity d
-        left join fetch d.likeEntities
         where d.id = :diaryId and d.writerId = :writerId
     """)
     Optional<DiaryEntity> findByIdAndWriterId(UUID diaryId, UUID writerId);

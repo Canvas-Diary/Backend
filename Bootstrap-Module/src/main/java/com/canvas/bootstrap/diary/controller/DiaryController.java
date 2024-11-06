@@ -37,36 +37,20 @@ public class DiaryController implements DiaryApi {
     }
 
     @Override
-    public ReadMyDiaryResponse readMyDiary(String userId, String diaryId) {
-        GetDiaryUseCase.Response.DiaryInfo response = getDiaryUseCase.getMyDiary(new GetDiaryUseCase.Query.Diary(userId, diaryId));
+    public ReadDiaryResponse readDiary(String userId, String diaryId) {
+        GetDiaryUseCase.Response.DiaryInfo response = getDiaryUseCase.getDiary(new GetDiaryUseCase.Query.Diary(userId, diaryId));
 
-        return new ReadMyDiaryResponse(
+        return new ReadDiaryResponse(
                 response.diaryId(),
                 response.content(),
                 response.emotion(),
                 response.likeCount(),
                 response.isLiked(),
+                response.isMine(),
                 response.date(),
                 response.isPublic(),
                 response.images().stream()
-                        .map(image -> new ReadMyDiaryResponse.ImageInfo(image.imageId(), image.isMain(), image.imageUrl()))
-                        .toList()
-        );
-    }
-
-    @Override
-    public ReadOtherDiaryResponse readOtherDiary(String userId, String diaryId) {
-        GetDiaryUseCase.Response.DiaryInfo response = getDiaryUseCase.getOtherDiary(new GetDiaryUseCase.Query.Diary(userId, diaryId));
-
-        return new ReadOtherDiaryResponse(
-                response.diaryId(),
-                response.content(),
-                response.emotion(),
-                response.likeCount(),
-                response.isLiked(),
-                response.date(),
-                response.images().stream()
-                        .map(image -> new ReadOtherDiaryResponse.ImageInfo(image.imageId(), image.isMain(), image.imageUrl()))
+                        .map(image -> new ReadDiaryResponse.ImageInfo(image.imageId(), image.isMain(), image.imageUrl()))
                         .toList()
         );
     }

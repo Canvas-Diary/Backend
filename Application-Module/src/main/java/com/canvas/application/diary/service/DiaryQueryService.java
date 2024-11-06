@@ -1,5 +1,6 @@
 package com.canvas.application.diary.service;
 
+import com.canvas.application.diary.exception.DiaryException;
 import com.canvas.application.diary.port.in.GetAlbumDiaryUseCase;
 import com.canvas.application.diary.port.in.GetDiaryUseCase;
 import com.canvas.application.diary.port.in.GetExploreDiaryUseCase;
@@ -27,20 +28,32 @@ public class DiaryQueryService
     private final DiaryManagementPort diaryManagementPort;
 
     @Override
-    public GetDiaryUseCase.Response.DiaryInfo getMyDiary(GetDiaryUseCase.Query.Diary query) {
-        DiaryComplete diary = diaryManagementPort.getByIdAndWriterId(
-                DomainId.from(query.diaryId()),
-                DomainId.from(query.userId())
+    public GetDiaryUseCase.Response.DiaryInfo getDiary(GetDiaryUseCase.Query.Diary query) {
+        DomainId diaryId = DomainId.from(query.diaryId());
+        DomainId userId = DomainId.from(query.userId());
+
+        DiaryComplete diary = diaryManagementPort.getById(diaryId);
+
+        if (!diary.getIsPublic() && !diary.isWriter(userId)) {
+            throw new DiaryException.DiaryForbiddenException();
+        }
+
+        return new GetDiaryUseCase.Response.DiaryInfo(
+                diary.getId().toString(),
+                diary.getContent(),
+                diary.getEmotion(),
+                diary.getLikeCount(),
+                diary.isLiked(userId),
+                diary.isWriter(userId),
+                diary.getDate(),
+                diary.getIsPublic(),
+                diary.getImages().stream()
+                     .map(image -> new GetDiaryUseCase.Response.DiaryInfo.ImageInfo(
+                             image.getId().toString(),
+                             image.getIsMain(),
+                             image.getImageUrl()
+                     )).toList()
         );
-
-        return toResponseDiary(query.userId(), diary);
-    }
-
-    @Override
-    public GetDiaryUseCase.Response.DiaryInfo getOtherDiary(GetDiaryUseCase.Query.Diary query) {
-        DiaryComplete diary = diaryManagementPort.getPublicById(DomainId.from(query.diaryId()));
-
-        return toResponseDiary(query.userId(), diary);
     }
 
     @Override
@@ -76,24 +89,6 @@ public class DiaryQueryService
                 slice.size(),
                 slice.number(),
                 slice.hasNext()
-        );
-    }
-
-    private static GetDiaryUseCase.Response.DiaryInfo toResponseDiary(String userId, DiaryComplete diary) {
-        return new GetDiaryUseCase.Response.DiaryInfo(
-                diary.getId().toString(),
-                diary.getContent(),
-                diary.getEmotion(),
-                diary.getLikeCount(),
-                diary.isLiked(DomainId.from(userId)),
-                diary.getDate(),
-                diary.getIsPublic(),
-                diary.getImages().stream()
-                        .map(image -> new GetDiaryUseCase.Response.DiaryInfo.ImageInfo(
-                                image.getId().toString(),
-                                image.getIsMain(),
-                                image.getImageUrl()
-                        )).toList()
         );
     }
 
