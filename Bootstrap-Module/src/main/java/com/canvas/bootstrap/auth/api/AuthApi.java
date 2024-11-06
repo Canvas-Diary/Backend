@@ -19,7 +19,6 @@ public interface AuthApi {
     @ApiResponses()
     void login(@PathVariable String provider, @RequestParam String code, HttpServletResponse httpServletResponse);
 
-
     @Operation
     @PostMapping("/reissue")
     @ApiResponses()
