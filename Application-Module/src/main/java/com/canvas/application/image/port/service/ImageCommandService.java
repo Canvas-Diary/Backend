@@ -1,5 +1,6 @@
 package com.canvas.application.image.port.service;
 
+import com.canvas.application.diary.port.out.DiaryManagementPort;
 import com.canvas.application.image.port.exception.ImageException;
 import com.canvas.application.image.port.in.AddImageUseCase;
 import com.canvas.application.image.port.in.RemoveImageUseCase;
@@ -9,6 +10,7 @@ import com.canvas.application.image.port.out.ImageManagementPort;
 import com.canvas.application.image.port.out.ImagePromptGeneratePort;
 import com.canvas.application.image.port.out.ImageUploadPort;
 import com.canvas.domain.common.DomainId;
+import com.canvas.domain.diary.entity.DiaryComplete;
 import com.canvas.domain.diary.entity.Image;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -22,6 +24,7 @@ import java.util.List;
 public class ImageCommandService
         implements AddImageUseCase, RemoveImageUseCase, SetMainImageUseCase {
 
+    private final DiaryManagementPort diaryManagementPort;
     private final ImageGenerationPort imageGenerationPort;
     private final ImageManagementPort imageManagementPort;
     private final ImagePromptGeneratePort imagePromptGeneratePort;
@@ -29,23 +32,29 @@ public class ImageCommandService
 
     // 이미지를 생성하고 저장하면 add
     @Override
-    public Response.add add(AddImageUseCase.Command command) {
-        Response.create create = create(command);
-        Image image = Image.create(DomainId.generate(), DomainId.from(command.diaryId()), true, create.imageUrl());
+    public Response.Add add(AddImageUseCase.Command.Add command) {
+        DomainId diaryId = DomainId.from(command.diaryId());
+        DiaryComplete diary = diaryManagementPort.getById(diaryId);
+
+        Response.Create create = create(
+                new AddImageUseCase.Command.Create(command.diaryId(), diary.getContent(), command.style()));
+
+        Image image = Image.create(DomainId.generate(),
+                                   diaryId, false, create.imageUrl());
 
         imageManagementPort.save(image);
 
-        return new Response.add(image.getId().toString(), image.getIsMain(), image.getImageUrl());
+        return new Response.Add(image.getId().toString(), image.getIsMain(), image.getImageUrl());
     }
 
     // 이미지를 생성하기만 하면 create
     @Override
-    public Response.create create(AddImageUseCase.Command command) {
+    public Response.Create create(AddImageUseCase.Command.Create command) {
         String prompt = imagePromptGeneratePort.generatePrompt(command.content());
         String generatedImageUrl = imageGenerationPort.generate(prompt, command.style());
         String uploadedImageUrl = imageUploadPort.upload(generatedImageUrl);
 
-        return new Response.create(uploadedImageUrl);
+        return new Response.Create(uploadedImageUrl);
     }
 
     @Override
