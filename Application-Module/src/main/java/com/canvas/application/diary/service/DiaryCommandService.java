@@ -70,7 +70,7 @@ public class DiaryCommandService
     }
 
     private Image createImage(DomainId diaryId, String content, Style style) {
-        String imageUrl = addImageUseCase.create(new AddImageUseCase.Command(diaryId.toString(), content, style)).imageUrl();
+        String imageUrl = addImageUseCase.create(new AddImageUseCase.Command.Create(diaryId.toString(), content, style)).imageUrl();
         return Image.create(DomainId.generate(), diaryId, true, imageUrl);
     }
 
