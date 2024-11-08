@@ -14,7 +14,7 @@ import static com.canvas.persistence.jpa.fixture.UserEntityFixture.*;
 public enum DiaryEntityFixture {
     PUBLIC_MY_DIARY(
             "내용1",
-            "감정1",
+            "JOY",
             true,
             LocalDate.of(2024, 10, 15),
             MYSELF
@@ -22,7 +22,7 @@ public enum DiaryEntityFixture {
 
     PUBLIC_OTHER_DIARY(
             "내용2",
-            "감정2",
+            "ANGER",
             true,
             LocalDate.of(2024, 10, 17),
             OTHER1
@@ -30,7 +30,7 @@ public enum DiaryEntityFixture {
 
     PRIVATE_OTHER_DIARY(
             "내용3",
-            "감정3",
+            "SADNESS",
             false,
             LocalDate.of(2024, 10, 31),
             OTHER2

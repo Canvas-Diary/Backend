@@ -7,7 +7,7 @@ import java.util.UUID;
 public class UserEntityBuilder {
 
     private UUID id;
-    private String email;
+    private String socialId;
     private String username;
     private String socialLoginProvider;
 
@@ -16,8 +16,8 @@ public class UserEntityBuilder {
         return this;
     }
 
-    public UserEntityBuilder email(String email) {
-        this.email = email;
+    public UserEntityBuilder socialId(String socialId) {
+        this.socialId = socialId;
         return this;
     }
 
@@ -34,7 +34,7 @@ public class UserEntityBuilder {
     public UserEntity build() {
         return new UserEntity(
                 this.id,
-                this.email,
+                this.socialId,
                 this.username,
                 this.socialLoginProvider
         );
