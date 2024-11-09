@@ -78,10 +78,9 @@ public class DiaryComplete {
         this.likes.add(like);
     }
 
-    public void updateDiaryContent(String content, Emotion emotion, Image image) {
+    public void updateDiaryContent(String content, Emotion emotion) {
         this.content = content;
         this.emotion = emotion;
-        this.images = new ArrayList<>(List.of(image));
     }
 
     public void updatePublic(Boolean isPublic) {

@@ -53,17 +53,16 @@ public class DiaryCommandService
 
     @Override
     public void modify(ModifyDiaryUseCase.Command command) {
-        DomainId diarId = DomainId.from(command.diaryId());
-
         DiaryComplete diary = diaryManagementPort.getByIdAndWriterId(
-                diarId,
+                DomainId.from(command.diaryId()),
                 DomainId.from(command.userId())
         );
 
-        Emotion emotion = diaryEmotionExtractPort.emotionExtract(command.content());
-        Image image = createImage(diarId, command.content(), command.style());
+        if (!command.content().equals(diary.getContent())) {
+            Emotion emotion = diaryEmotionExtractPort.emotionExtract(command.content());
+            diary.updateDiaryContent(command.content(), emotion);
+        }
 
-        diary.updateDiaryContent(command.content(), emotion, image);
         diary.updatePublic(command.isPublic());
 
         diaryManagementPort.save(diary);
