@@ -41,6 +41,14 @@ public enum DiaryFixture {
             LocalDateTime.now(),
             false,
             OTHER2
+    ),
+    NO_MAIN_IMAGE_DIARY(
+            "내용4",
+            FEAR,
+            LocalDate.of(2024, 11, 1),
+            LocalDateTime.now(),
+            true,
+            MYSELF
     );
 
     @Getter
