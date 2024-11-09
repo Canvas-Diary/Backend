@@ -51,7 +51,7 @@ public interface DiaryApi {
 
 
     @Operation(summary = "일기 내용 수정")
-    @PatchMapping("/{diaryId}")
+    @PutMapping("/{diaryId}")
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "200",
