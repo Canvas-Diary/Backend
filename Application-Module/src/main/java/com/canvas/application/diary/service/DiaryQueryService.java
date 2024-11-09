@@ -151,26 +151,27 @@ public class DiaryQueryService
 
     @Override
     public GetExploreDiaryUseCase.Response getExploreByLatest(GetExploreDiaryUseCase.Query query) {
-        Slice<DiaryOverview> slice = diaryManagementPort.getExploreByLatest(
+        Slice<DiaryComplete> slice = diaryManagementPort.getExploreByLatest(
                 new PageRequest(query.page(), query.size(), Sort.by(Sort.Direction.DESC, "createdAt")));
 
-        return toExploreResponse(slice);
+        return toExploreResponse(DomainId.from(query.userId()), slice);
     }
 
     @Override
     public GetExploreDiaryUseCase.Response getExploreByLike(GetExploreDiaryUseCase.Query query) {
-        Slice<DiaryOverview> slice = diaryManagementPort.getExploreByLike(
+        Slice<DiaryComplete> slice = diaryManagementPort.getExploreByLike(
                 new PageRequest(query.page(), query.size(), Sort.by(Sort.Direction.DESC, "createdAt")));
 
-        return toExploreResponse(slice);
+        return toExploreResponse(DomainId.from(query.userId()), slice);
     }
 
-    private static GetExploreDiaryUseCase.Response toExploreResponse(Slice<DiaryOverview> slice) {
+    private static GetExploreDiaryUseCase.Response toExploreResponse(DomainId userId, Slice<DiaryComplete> slice) {
         return new GetExploreDiaryUseCase.Response(
                 slice.content().stream()
                         .map(diary -> new GetExploreDiaryUseCase.Response.DiaryInfo(
                                 diary.getId().toString(),
-                                diary.getMainImageOrDefault()))
+                                diary.getMainImageOrDefault(),
+                                diary.isLiked(userId)))
                         .toList(),
                 slice.size(),
                 slice.number(),

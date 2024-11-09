@@ -7,6 +7,7 @@ public interface GetExploreDiaryUseCase {
     Response getExploreByLike(Query query);
 
     record Query(
+            String userId,
             Integer page,
             Integer size
     ) {}
@@ -19,7 +20,8 @@ public interface GetExploreDiaryUseCase {
     ) {
         public record DiaryInfo(
                 String diaryId,
-                String mainImageUrl
+                String mainImageUrl,
+                Boolean isLiked
         ) {}
     }
 }
