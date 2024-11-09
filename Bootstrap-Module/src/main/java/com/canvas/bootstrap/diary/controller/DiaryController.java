@@ -74,7 +74,7 @@ public class DiaryController implements DiaryApi {
     @Override
     public void updateDiary(String userId, String diaryId, UpdateDiaryRequest request) {
         modifyDiaryUseCase.modify(new ModifyDiaryUseCase.Command(
-                userId, diaryId, request.content(), request.style(), request.isPublic()
+                userId, diaryId, request.content(), request.isPublic()
         ));
     }
 
