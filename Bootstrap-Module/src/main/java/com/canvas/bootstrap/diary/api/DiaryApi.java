@@ -130,7 +130,8 @@ public interface DiaryApi {
                     description = "쿼리 스트링 오류"
             )
     })
-    SliceResponse<DiaryThumbnail> exploreDiary(
+    SliceResponse<ExploreDiaryResponse> exploreDiary(
+            @AccessUser String userId,
             @RequestParam int page,
             @RequestParam int size,
             @RequestParam ExploreOrder order

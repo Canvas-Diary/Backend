@@ -121,15 +121,18 @@ public class DiaryController implements DiaryApi {
     }
 
     @Override
-    public SliceResponse<DiaryThumbnail> exploreDiary(int page, int size, ExploreOrder order) {
+    public SliceResponse<ExploreDiaryResponse> exploreDiary(String userId, int page, int size, ExploreOrder order) {
         GetExploreDiaryUseCase.Response response = switch (order) {
-            case LATEST -> getExploreDiaryUseCase.getExploreByLatest(new GetExploreDiaryUseCase.Query(page, size));
-            case POPULARITY -> getExploreDiaryUseCase.getExploreByLike(new GetExploreDiaryUseCase.Query(page, size));
+            case LATEST -> getExploreDiaryUseCase.getExploreByLatest(new GetExploreDiaryUseCase.Query(userId, page, size));
+            case POPULARITY -> getExploreDiaryUseCase.getExploreByLike(new GetExploreDiaryUseCase.Query(userId, page, size));
         };
 
         return new SliceResponse<>(
                 response.diaries().stream()
-                        .map(diaryInfo -> new DiaryThumbnail(diaryInfo.diaryId(), diaryInfo.mainImageUrl()))
+                        .map(diaryInfo -> new ExploreDiaryResponse(
+                                diaryInfo.diaryId(),
+                                diaryInfo.mainImageUrl(),
+                                diaryInfo.isLiked()))
                         .toList(),
                 response.size(),
                 response.number(),

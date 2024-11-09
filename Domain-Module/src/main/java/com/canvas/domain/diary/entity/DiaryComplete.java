@@ -100,4 +100,12 @@ public class DiaryComplete {
         return writerId.value().equals(userId.value());
     }
 
+    public String getMainImageOrDefault() {
+        return images.stream()
+                     .filter(Image::isMain)
+                     .map(Image::getImageUrl)
+                     .findFirst()
+                     .orElse(Image.DEFAULT_IMAGE_URL);
+    }
+
 }
