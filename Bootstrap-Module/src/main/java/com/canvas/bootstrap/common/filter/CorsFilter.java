@@ -36,7 +36,7 @@ public class CorsFilter extends OncePerRequestFilter {
         }
 
         response.addHeader("Access-Control-Allow-Origin", origin);
-        response.setHeader("Access-Control-Allow-Methods", "GET, POST, PATCH, DELETE, OPTIONS");
+        response.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, PATCH, DELETE, OPTIONS");
         response.setHeader("Access-Control-Allow-Headers", "*, Content-Type, Authorization");
         response.setHeader("Access-Control-Allow-Credentials", "true");
 
