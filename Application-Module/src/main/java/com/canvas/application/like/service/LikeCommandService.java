@@ -1,8 +1,8 @@
 package com.canvas.application.like.service;
 
-import com.canvas.application.like.in.AddLikeUseCase;
-import com.canvas.application.like.in.CancelLikeUseCase;
-import com.canvas.application.like.out.LikeManagementPort;
+import com.canvas.application.like.port.in.AddLikeUseCase;
+import com.canvas.application.like.port.in.CancelLikeUseCase;
+import com.canvas.application.like.port.out.LikeManagementPort;
 import com.canvas.domain.common.DomainId;
 import com.canvas.domain.diary.entity.Like;
 import lombok.RequiredArgsConstructor;

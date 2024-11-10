@@ -1,7 +1,7 @@
-package com.canvas.application.image.port.service;
+package com.canvas.application.image.service;
 
 import com.canvas.application.diary.port.out.DiaryManagementPort;
-import com.canvas.application.image.port.exception.ImageException;
+import com.canvas.application.image.exception.ImageException;
 import com.canvas.application.image.port.in.AddImageUseCase;
 import com.canvas.application.image.port.in.RemoveImageUseCase;
 import com.canvas.application.image.port.in.SetMainImageUseCase;

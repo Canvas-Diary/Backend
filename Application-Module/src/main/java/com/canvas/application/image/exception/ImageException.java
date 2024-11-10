@@ -1,4 +1,4 @@
-package com.canvas.application.image.port.exception;
+package com.canvas.application.image.exception;
 
 import com.canvas.common.exception.BusinessException;
 import org.springframework.http.HttpStatus;
