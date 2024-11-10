@@ -1,7 +1,7 @@
 package com.canvas.persistence.jpa.diary.adapter;
 
 import com.canvas.application.like.exception.LikeException;
-import com.canvas.application.like.out.LikeManagementPort;
+import com.canvas.application.like.port.out.LikeManagementPort;
 import com.canvas.domain.common.DomainId;
 import com.canvas.domain.diary.entity.Like;
 import com.canvas.persistence.jpa.diary.LikeMapper;
