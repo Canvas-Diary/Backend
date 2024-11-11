@@ -1,7 +1,7 @@
 package com.canvas.bootstrap.like.controller;
 
-import com.canvas.application.like.in.AddLikeUseCase;
-import com.canvas.application.like.in.CancelLikeUseCase;
+import com.canvas.application.like.port.in.AddLikeUseCase;
+import com.canvas.application.like.port.in.CancelLikeUseCase;
 import com.canvas.application.like.service.LikeCommandService;
 import com.canvas.bootstrap.like.api.LikeApi;
 import lombok.RequiredArgsConstructor;

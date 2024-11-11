@@ -1,4 +1,4 @@
-package com.canvas.application.like.out;
+package com.canvas.application.like.port.out;
 
 import com.canvas.domain.common.DomainId;
 import com.canvas.domain.diary.entity.Like;
