@@ -13,6 +13,7 @@ import lombok.Getter;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Arrays;
+import java.util.List;
 
 import static com.canvas.domain.diary.enums.Emotion.*;
 import static com.canvas.domain.fixture.UserFixture.*;
@@ -126,5 +127,20 @@ public enum DiaryFixture {
                                 .map(LikeFixture::getLike)
                                 .toList())
                 .build();
+    }
+
+    public static List<DiaryBasic> getAllDiaryBasicByUser(UserFixture userFixture) {
+        return Arrays.stream(DiaryFixture.values())
+                .filter(diaryFixture -> diaryFixture.userFixture.equals(userFixture))
+                .map(DiaryFixture::getDiaryBasie)
+                .toList();
+    }
+
+    public static List<DiaryOverview> getLikedDiaries(UserFixture userFixture) {
+        return Arrays.stream(LikeFixture.values())
+                .filter(likeFixture -> likeFixture.getUserFixture().equals(userFixture))
+                .map(LikeFixture::getDiaryFixture)
+                .map(DiaryFixture::getDiaryOverview)
+                .toList();
     }
 }
