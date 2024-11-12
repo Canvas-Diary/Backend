@@ -20,7 +20,6 @@ public class DiaryContentConvertGeminiAdapter
     @Override
     public Emotion emotionExtract(String content) {
         String emotion = geminiService.generate(GeminiPromptConsts.EMOTION_EXTRACT + content);
-        log.info("emotion={}", emotion);
         return Emotion.parse(emotion);
     }
 
