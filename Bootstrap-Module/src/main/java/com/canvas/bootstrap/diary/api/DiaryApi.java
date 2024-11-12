@@ -164,4 +164,18 @@ public interface DiaryApi {
             @RequestParam Integer page,
             @RequestParam Integer size
     );
+
+    @Operation(summary = "회고 일기 조회")
+    @PostMapping("/reminiscence")
+    ReminiscenceResponse getReminiscenceDiary(
+            @AccessUser String userId, @RequestBody ReminiscenceRequest request
+    );
+
+    @Operation(summary = "키워드 저장")
+    @PostMapping("/{diaryId}/reminiscence")
+    void saveKeyword(
+            @AccessUser String userId,
+            @PathVariable String diaryId,
+            @RequestBody SaveKeywordRequest request
+    );
 }
