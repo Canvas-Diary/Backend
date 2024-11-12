@@ -38,6 +38,9 @@ public class DiaryEntity extends BaseEntity {
     private List<ImageEntity> imageEntities = new ArrayList<>();
     @OneToMany(mappedBy = "diaryEntity", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<LikeEntity> likeEntities = new ArrayList<>();
+    @OneToMany(mappedBy = "diaryEntity", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<DiaryKeywordEntity> diaryKeywordEntities = new ArrayList<>();
+
 
     public DiaryEntity(UUID id, String content, String emotion, Boolean isPublic, LocalDate date, UUID writerId) {
         this.id = id;
