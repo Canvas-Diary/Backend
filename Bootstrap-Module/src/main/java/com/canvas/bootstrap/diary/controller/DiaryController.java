@@ -160,4 +160,15 @@ public class DiaryController implements DiaryApi {
         );
     }
 
+    @Override
+    public ReminiscenceResponse getReminiscenceDiary(String userId, ReminiscenceRequest request) {
+
+        return null;
+    }
+
+    @Override
+    public void saveKeyword(String userId, String diaryId, SaveKeywordRequest request) {
+
+    }
+
 }
