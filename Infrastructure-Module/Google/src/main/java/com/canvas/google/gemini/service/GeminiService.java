@@ -4,10 +4,13 @@ import com.canvas.google.gemini.exception.GeminiException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
+import reactor.util.retry.Retry;
 
+import java.time.Duration;
 import java.util.List;
 import java.util.Objects;
 
@@ -28,10 +31,22 @@ public class GeminiService {
                             httpHeaders.add("x-goog-api-key", API_KEY);
                         }).bodyValue(Request.of(prompt))
                         .retrieve()
+                        .onStatus(status -> status.isSameCodeAs(HttpStatusCode.valueOf(429)), response -> {
+                            throw new GeminiException.GeminiTooManyRequestsException();
+                        })
                         .bodyToMono(Response.class)
+                        .retryWhen(
+                                 Retry.fixedDelay(3, Duration.ofSeconds(3))
+                                        .filter(throwable -> throwable instanceof GeminiException.GeminiTooManyRequestsException))
+                        .doOnError(error -> new GeminiException.GeminiTooManyRequestsException())
+                        .map(response -> {
+                            if (response.candidates == null || response.isUnhealthy() || response.getText().startsWith("FORBIDDEN")) {
+                                throw new GeminiException.GeminiSafetyException();
+                            }
+                            return response;
+                        })
                         .block())
-                .getText()
-                .trim();
+                .getText();
     }
 
     public record Request(
@@ -55,14 +70,15 @@ public class GeminiService {
             List<Candidate> candidates
     ) {
         public String getText() {
-            if (candidates.get(0).finishReason.equals("SAFETY")) {
-                throw new GeminiException.GeminiSafetyException();
-            }
-
             return candidates.get(0)
                     .content
                     .parts.get(0)
-                    .text;
+                    .text
+                    .trim();
+        }
+
+        public boolean isUnhealthy() {
+            return candidates.get(0).finishReason.equals("SAFETY");
         }
 
         public record Candidate(
