@@ -1,17 +1,20 @@
 package com.canvas.generator.flux;
 
+import com.canvas.generator.flux.exception.FluxException;
+import com.canvas.generator.flux.exception.FluxResultStatus;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
-import reactor.core.publisher.Mono;
 import reactor.util.retry.Retry;
 
 import java.time.Duration;
 import java.util.Objects;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class FluxClient {
@@ -24,8 +27,8 @@ public class FluxClient {
 
     private final WebClient webClient = WebClient.create("https://api.bfl.ml/v1");
 
-    // TODO - 예외 처리 필요
     public String generateImage(String prompt) {
+        log.info("prompt={}", prompt);
         return Objects.requireNonNull(webClient.post()
                 .uri("/flux-pro-1.1")
                 .headers(httpHeaders -> {
@@ -51,16 +54,13 @@ public class FluxClient {
                         .build())
                 .retrieve()
                 .bodyToMono(GetResponse.class)
-                .flatMap(response -> {
-                    if (response.status.equals("Pending")) {
-                        return Mono.error(new RuntimeException("status is pending"));
-                    }
-                    return Mono.just(response);
+                .map(response -> {
+                    FluxResultStatus.parse(response.status).validate();
+                    return response;
                 })
                 .retryWhen(
                         Retry.fixedDelay(3, Duration.ofSeconds(1))
-                                .filter(throwable -> throwable instanceof RuntimeException))
-                .doOnError(error -> System.err.println("최대 재시도에 도달했습니다: " + error.getMessage()))
+                                .filter(throwable -> throwable instanceof FluxException.FluxPendingException))
                 .block())
                 .getSample();
     }
