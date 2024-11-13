@@ -4,6 +4,8 @@ import com.canvas.application.diary.exception.DiaryException;
 import com.canvas.application.diary.port.in.GetAlbumDiaryUseCase;
 import com.canvas.application.diary.port.in.GetDiaryUseCase;
 import com.canvas.application.diary.port.in.GetExploreDiaryUseCase;
+import com.canvas.application.diary.port.in.GetReminiscenceDiaryUseCase;
+import com.canvas.application.diary.port.out.DiaryKeywordExtractPort;
 import com.canvas.application.diary.port.out.DiaryManagementPort;
 import com.canvas.common.page.PageRequest;
 import com.canvas.common.page.Slice;
@@ -23,9 +25,10 @@ import java.util.List;
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class DiaryQueryService
-        implements GetDiaryUseCase, GetAlbumDiaryUseCase, GetExploreDiaryUseCase {
+        implements GetDiaryUseCase, GetAlbumDiaryUseCase, GetExploreDiaryUseCase, GetReminiscenceDiaryUseCase {
 
     private final DiaryManagementPort diaryManagementPort;
+    private final DiaryKeywordExtractPort diaryKeywordExtractPort;
 
     @Override
     public GetDiaryUseCase.Response.DiaryInfo getDiary(GetDiaryUseCase.Query.Diary query) {
@@ -177,5 +180,38 @@ public class DiaryQueryService
                 slice.number(),
                 slice.hasNext()
         );
+    }
+
+    @Override
+    public GetReminiscenceDiaryUseCase.Response getReminiscenceDiary(GetReminiscenceDiaryUseCase.Query query) {
+
+        DomainId userId = DomainId.from(query.userId());
+
+        List<String> keywords = diaryKeywordExtractPort.keywordExtract(query.content());
+
+        List<DiaryComplete> diaries = diaryManagementPort.getByWriteIdAndKeywords(userId, keywords);
+
+        DiaryComplete reminiscenceDiary = findDiaryForReminiscence(diaries);
+
+        return new GetReminiscenceDiaryUseCase.Response(
+                reminiscenceDiary.getId().toString(),
+                reminiscenceDiary.getContent(),
+                reminiscenceDiary.getEmotion(),
+                reminiscenceDiary.getLikeCount(),
+                reminiscenceDiary.isLiked(userId),
+                reminiscenceDiary.getDate(),
+                reminiscenceDiary.getImages().stream()
+                        .map(image -> new GetReminiscenceDiaryUseCase.Response.ImageInfo(
+                                image.getId().toString(),
+                                image.getIsMain(),
+                                image.getImageUrl()
+                        )).toList(),
+                keywords
+        );
+    }
+
+    //TODO: 회고 일기 정하는 로직 구현
+    private DiaryComplete findDiaryForReminiscence(List<DiaryComplete> diaries) {
+        return diaries.get(0);
     }
 }
