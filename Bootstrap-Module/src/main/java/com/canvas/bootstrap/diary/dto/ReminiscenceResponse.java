@@ -21,7 +21,10 @@ public record ReminiscenceResponse(
         @Schema(description = "과거 일기 생성 날짜")
         LocalDate date,
         @Schema(description = "과거 일기의 이미지 정보 리스트")
-        List<ReminiscenceResponse.ImageInfo> images) {
+        List<ReminiscenceResponse.ImageInfo> images,
+        @Schema(description = "추출된 키워드 리스트")
+        List<String> keywords
+    ) {
     @Schema(description = "일기의 이미지 정보")
     public record ImageInfo(
             @Schema(description = "이미지 ID")
