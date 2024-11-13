@@ -144,6 +144,14 @@ public class DiaryManagementJpaAdapter implements DiaryManagementPort {
     }
 
     @Override
+    public List<DiaryComplete> getByWriteIdAndKeywords(DomainId userId, List<String> keywords) {
+        List<DiaryEntity> diaryEntities = diaryJpaRepository.findByWriterIdAndKeywords(userId.value(), keywords);
+        return diaryEntities.stream()
+                .map(DiaryMapper::toCompleteDomain)
+                .toList();
+    }
+
+    @Override
     public void deleteById(DomainId diaryId) {
         diaryJpaRepository.deleteById(diaryId.value());
     }
