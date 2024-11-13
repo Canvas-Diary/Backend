@@ -25,5 +25,6 @@ public interface DiaryManagementPort {
     Slice<DiaryComplete> getExploreByLatest(PageRequest pageRequest);
     Slice<DiaryComplete> getExploreByLike(PageRequest pageRequest);
     Slice<DiaryOverview> getLikedDiaries(PageRequest pageRequest, DomainId userId);
+    List<DiaryComplete> getByWriteIdAndKeywords(DomainId userId, List<String> keywords);
     void deleteById(DomainId diaryId);
 }
