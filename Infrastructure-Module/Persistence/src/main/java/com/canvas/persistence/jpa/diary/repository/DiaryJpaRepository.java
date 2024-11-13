@@ -57,4 +57,16 @@ public interface DiaryJpaRepository extends JpaRepository<DiaryEntity, UUID> {
     Slice<DiaryEntity> findByUserLiked(Pageable pageable, UUID userId);
 
     boolean existsByIdAndWriterId(UUID diaryId, UUID writerId);
+
+    @Query("""
+        select d
+        from DiaryEntity d
+        where d.writerId = :writerId and d.id in (
+            select dk.diary.id
+            from DiaryKeywordEntity dk
+            join dk.keyword k
+            where k.name in :keywords
+        )
+    """)
+    List<DiaryEntity> findByWriterIdAndKeywords(UUID writerId, List<String> keywords);
 }
