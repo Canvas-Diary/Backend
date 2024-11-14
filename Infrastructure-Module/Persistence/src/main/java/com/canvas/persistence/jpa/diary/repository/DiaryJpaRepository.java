@@ -62,9 +62,9 @@ public interface DiaryJpaRepository extends JpaRepository<DiaryEntity, UUID> {
         select d
         from DiaryEntity d
         where d.writerId = :writerId and d.id in (
-            select dk.diary.id
+            select dk.diaryEntity.id
             from DiaryKeywordEntity dk
-            join dk.keyword k
+            join dk.keywordEntity k
             where k.name in :keywords
         )
     """)

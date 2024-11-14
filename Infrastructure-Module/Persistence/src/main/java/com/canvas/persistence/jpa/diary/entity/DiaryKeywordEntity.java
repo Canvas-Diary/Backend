@@ -25,11 +25,11 @@ public class DiaryKeywordEntity extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "keyword_id", insertable = false, updatable = false)
-    private KeywordEntity keyword;
+    private KeywordEntity keywordEntity;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "diary_id", insertable = false, updatable = false)
-    private DiaryEntity diary;
+    private DiaryEntity diaryEntity;
 
 
 }
