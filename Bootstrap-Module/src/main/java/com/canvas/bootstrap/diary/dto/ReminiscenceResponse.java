@@ -6,7 +6,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import java.time.LocalDate;
 import java.util.List;
 
-@Schema(description = "과거 일기 조히 응답")
+@Schema(description = "과거 일기 조회 응답")
 public record ReminiscenceResponse(
         @Schema(description = "과거 일기 ID")
         String diaryId,

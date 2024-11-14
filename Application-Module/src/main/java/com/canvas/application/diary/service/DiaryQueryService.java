@@ -189,7 +189,7 @@ public class DiaryQueryService
 
         List<String> keywords = diaryKeywordExtractPort.keywordExtract(query.content());
 
-        List<DiaryComplete> diaries = diaryManagementPort.getByWriteIdAndKeywords(userId, keywords);
+        List<DiaryComplete> diaries = diaryManagementPort.getByWriterIdAndKeywords(userId, keywords);
 
         DiaryComplete reminiscenceDiary = findDiaryForReminiscence(diaries);
 
