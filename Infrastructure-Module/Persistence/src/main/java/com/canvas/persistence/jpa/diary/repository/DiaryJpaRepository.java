@@ -58,15 +58,29 @@ public interface DiaryJpaRepository extends JpaRepository<DiaryEntity, UUID> {
 
     boolean existsByIdAndWriterId(UUID diaryId, UUID writerId);
 
+
     @Query("""
         select d
         from DiaryEntity d
-        where d.writerId = :writerId and d.id in (
+        where d.writerId = :writerId and (d.date = :beforeYear or d.date = :beforeMonth)
+        order by
+          case
+            when d.date = :beforeMonth then 0
+            when d.date = :beforeYear then 1
+            else 2
+          end
+    """)
+    Optional<DiaryEntity> findByWriterIdAndDate(UUID writerId, LocalDate beforeYear, LocalDate beforeMonth);
+
+    @Query("""
+        select d
+        from DiaryEntity d
+        where d.writerId = :writerId and d.date < :baseDate and d.id in (
             select dk.diaryEntity.id
             from DiaryKeywordEntity dk
             join dk.keywordEntity k
             where k.name in :keywords
         )
     """)
-    List<DiaryEntity> findByWriterIdAndKeywords(UUID writerId, List<String> keywords);
+    List<DiaryEntity> findDiariesByWriterIdAndKeywordsBeforeBaseDate(UUID writerId, List<String> keywords, LocalDate baseDate);
 }
