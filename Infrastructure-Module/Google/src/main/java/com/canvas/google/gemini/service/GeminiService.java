@@ -16,7 +16,7 @@ import java.util.Objects;
 
 @Component
 @Slf4j
-public class GeminiService {
+public class GeminiService implements LLMService{
 
     @Value("${gemini.api-key}")
     private String API_KEY;
@@ -36,7 +36,7 @@ public class GeminiService {
                         })
                         .bodyToMono(Response.class)
                         .retryWhen(
-                                 Retry.fixedDelay(3, Duration.ofSeconds(3))
+                                Retry.fixedDelay(3, Duration.ofSeconds(3))
                                         .filter(throwable -> throwable instanceof GeminiException.GeminiTooManyRequestsException))
                         .doOnError(error -> new GeminiException.GeminiTooManyRequestsException())
                         .map(response -> {
@@ -48,6 +48,8 @@ public class GeminiService {
                         .block())
                 .getText();
     }
+
+
 
     public record Request(
             List<Content> contents
