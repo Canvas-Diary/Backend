@@ -19,7 +19,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional(readOnly = true)
@@ -182,25 +184,46 @@ public class DiaryQueryService
         );
     }
 
+    // 회고 조회 기준
+    // 1년 전 확인
+    // 1달 전 확인
+    // 1주일 이상의 일기에서 키워드 확인
     @Override
     public GetReminiscenceDiaryUseCase.Response getReminiscenceDiary(GetReminiscenceDiaryUseCase.Query query) {
-
         DomainId userId = DomainId.from(query.userId());
-
+        LocalDate date = query.date();
         List<String> keywords = diaryKeywordExtractPort.keywordExtract(query.content());
 
-        List<DiaryComplete> diaries = diaryManagementPort.getByWriterIdAndKeywords(userId, keywords);
+        Optional<DiaryComplete> targetDateDiary = diaryManagementPort.getByWriterIdAndDate(
+                userId,
+                date.minusYears(1),
+                date.minusMonths(1)
+        );
 
-        DiaryComplete reminiscenceDiary = findDiaryForReminiscence(diaries);
+        DiaryComplete reminiscenceDiary = targetDateDiary.orElseGet(() -> findDiaryByKeywords(userId, keywords, date));
 
+        return ToReminiscenceDiaryResponse(reminiscenceDiary, keywords, userId);
+    }
+
+    private DiaryComplete findDiaryByKeywords(DomainId userId, List<String> keywords, LocalDate date) {
+        return diaryManagementPort.getByWriterIdAndKeywords(
+                        userId,
+                        keywords,
+                        date.minusWeeks(1)
+                ).stream()
+                .findAny()
+                .orElseThrow(DiaryException.DiaryNotFoundException::new);
+    }
+
+    private static GetReminiscenceDiaryUseCase.Response ToReminiscenceDiaryResponse(DiaryComplete diary, List<String> keywords, DomainId userId) {
         return new GetReminiscenceDiaryUseCase.Response(
-                reminiscenceDiary.getId().toString(),
-                reminiscenceDiary.getContent(),
-                reminiscenceDiary.getEmotion(),
-                reminiscenceDiary.getLikeCount(),
-                reminiscenceDiary.isLiked(userId),
-                reminiscenceDiary.getDate(),
-                reminiscenceDiary.getImages().stream()
+                diary.getId().toString(),
+                diary.getContent(),
+                diary.getEmotion(),
+                diary.getLikeCount(),
+                diary.isLiked(userId),
+                diary.getDate(),
+                diary.getImages().stream()
                         .map(image -> new GetReminiscenceDiaryUseCase.Response.ImageInfo(
                                 image.getId().toString(),
                                 image.getIsMain(),
@@ -208,10 +231,5 @@ public class DiaryQueryService
                         )).toList(),
                 keywords
         );
-    }
-
-    //TODO: 회고 일기 정하는 로직 구현
-    private DiaryComplete findDiaryForReminiscence(List<DiaryComplete> diaries) {
-        return diaries.get(0);
     }
 }
