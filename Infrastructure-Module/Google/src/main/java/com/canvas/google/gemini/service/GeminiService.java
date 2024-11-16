@@ -16,7 +16,7 @@ import java.util.Objects;
 
 @Component
 @Slf4j
-public class GeminiService {
+public class GeminiService implements LLMService{
 
     @Value("${gemini.api-key}")
     private String API_KEY;
@@ -48,6 +48,8 @@ public class GeminiService {
                         .block())
                 .getText();
     }
+
+
 
     public record Request(
             List<Content> contents
