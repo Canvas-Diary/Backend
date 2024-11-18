@@ -12,6 +12,6 @@ public class GeminiPromptConsts {
             """;
 
     public static final String KEYWORD_EXTRACT = """
-            일기에서 가장 핵심적인 키워드를 1~5개를 뽑아줘. 정확히 이 형식에 맞춰 뽑아줘 "keyword1, keyword2, keyword3, keyword4, keyword5"
+            "일기에서 가장 핵심적인 키워드를 1~5개를 뽑아줘. 키워드를 뽑을 때 보편적인 단어로만 뽑아줘 그리고 키워드를 뽑앨 때 글에 있는 내용으로만 뽑아줘. 딱히 적절한 키워드가 없으면 5개 미만으로 보내줘도 돼. 너가 반환하는 값을 무조건 이 형식에 맞춰서 반환해줘 '키워드1, 키워드2, 키워드3, 키워드4, 키워드5'"
             """;
 }
