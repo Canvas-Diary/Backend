@@ -21,6 +21,7 @@ import static com.canvas.domain.fixture.UserFixture.*;
 public enum DiaryFixture {
     PUBLIC_MY_DIARY(
             "내용1",
+            List.of("강조내용1"),
             JOY,
             LocalDate.of(2024, 10, 15),
             LocalDateTime.now(),
@@ -29,6 +30,7 @@ public enum DiaryFixture {
     ),
     PUBLIC_OTHER_DIARY(
             "내용2",
+            List.of(),
             ANGER,
             LocalDate.of(2024, 10, 17),
             LocalDateTime.now(),
@@ -37,6 +39,7 @@ public enum DiaryFixture {
     ),
     PRIVATE_OTHER_DIARY(
             "내용3",
+            List.of("강조내용3"),
             SADNESS,
             LocalDate.of(2024, 10, 31),
             LocalDateTime.now(),
@@ -45,6 +48,7 @@ public enum DiaryFixture {
     ),
     NO_MAIN_IMAGE_DIARY(
             "내용4",
+            List.of(),
             FEAR,
             LocalDate.of(2024, 11, 1),
             LocalDateTime.now(),
@@ -55,6 +59,7 @@ public enum DiaryFixture {
     @Getter
     private final DomainId id;
     private final String content;
+    private final List<String> weightedContents;
     private final Emotion emotion;
     private final LocalDate date;
     private final LocalDateTime createdAt;
@@ -63,6 +68,7 @@ public enum DiaryFixture {
 
     DiaryFixture(
             String content,
+            List<String> weightedContents,
             Emotion emotion,
             LocalDate date,
             LocalDateTime createdAt,
@@ -71,6 +77,7 @@ public enum DiaryFixture {
     ) {
         this.id = DomainId.generate();
         this.content = content;
+        this.weightedContents = weightedContents;
         this.emotion = emotion;
         this.date = date;
         this.createdAt = createdAt;
@@ -112,6 +119,7 @@ public enum DiaryFixture {
                 .id(id)
                 .writerId(userFixture.getId())
                 .content(content)
+                .weightedContents(weightedContents)
                 .emotion(emotion)
                 .date(date)
                 .createdAt(createdAt)

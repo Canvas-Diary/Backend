@@ -14,6 +14,7 @@ public class DiaryEntityBuilder {
 
     private UUID id;
     private String content;
+    private String weightedContents;
     private String emotion;
     private Boolean isPublic;
     private LocalDate date;
@@ -29,6 +30,11 @@ public class DiaryEntityBuilder {
 
     public DiaryEntityBuilder content(String content) {
         this.content = content;
+        return this;
+    }
+
+    public DiaryEntityBuilder weightedContents(String weightedContents) {
+        this.weightedContents = weightedContents;
         return this;
     }
 
@@ -71,6 +77,7 @@ public class DiaryEntityBuilder {
         DiaryEntity diary = new DiaryEntity(
                 this.id,
                 this.content,
+                this.weightedContents,
                 this.emotion,
                 this.isPublic,
                 this.date,

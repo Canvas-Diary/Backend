@@ -23,6 +23,8 @@ public class DiaryEntity extends BaseEntity {
 
     @Column(length = 1_500)
     private String content;
+    @Column(length = 1_500)
+    private String joinedWeightedContents;
     private String emotion;
     private Boolean isPublic;
     private LocalDate date;
@@ -42,9 +44,10 @@ public class DiaryEntity extends BaseEntity {
     private List<DiaryKeywordEntity> diaryKeywordEntities = new ArrayList<>();
 
 
-    public DiaryEntity(UUID id, String content, String emotion, Boolean isPublic, LocalDate date, UUID writerId) {
+    public DiaryEntity(UUID id, String content, String joinedWeightedContents, String emotion, Boolean isPublic, LocalDate date, UUID writerId) {
         this.id = id;
         this.content = content;
+        this.joinedWeightedContents = joinedWeightedContents;
         this.emotion = emotion;
         this.isPublic = isPublic;
         this.date = date;

@@ -41,6 +41,7 @@ public class DiaryCommandService
                         diaryId,
                         DomainId.from(command.userId()),
                         command.content(),
+                        command.weightedContent(),
                         emotion,
                         command.date(),
                         command.isPublic(),

@@ -14,6 +14,7 @@ public class DiaryCompleteBuilder {
     private DomainId id;
     private DomainId writerId;
     private String content;
+    private List<String> weightedContents;
     private Emotion emotion;
     private LocalDate date;
     private LocalDateTime createdAt;
@@ -33,6 +34,11 @@ public class DiaryCompleteBuilder {
 
     public DiaryCompleteBuilder content(String content) {
         this.content = content;
+        return this;
+    }
+
+    public DiaryCompleteBuilder weightedContents(List<String> weightedContents) {
+        this.weightedContents = weightedContents;
         return this;
     }
 
@@ -67,7 +73,8 @@ public class DiaryCompleteBuilder {
     }
 
     public DiaryComplete build() {
-        return DiaryComplete.create(id, writerId, content, emotion, date, createdAt, isPublic, images, likes);
+        return DiaryComplete.create(id, writerId, content,
+                                    weightedContents, emotion, date, createdAt, isPublic, images, likes);
     }
 
 }
