@@ -20,6 +20,8 @@ public class DiaryMapper {
 
         ImageMapper.toEntities(diary).forEach(diaryEntity::addImageEntity);
         LikeMapper.toEntities(diary).forEach(diaryEntity::addLikeEntity);
+//        DiaryKeywordMapper.toEntities(diary).forEach(diaryEntity::addDiaryKeywordEntity);
+
 
         return diaryEntity;
     }

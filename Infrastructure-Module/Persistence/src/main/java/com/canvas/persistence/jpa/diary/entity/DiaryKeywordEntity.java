@@ -31,5 +31,9 @@ public class DiaryKeywordEntity extends BaseEntity {
     @JoinColumn(name = "diary_id", insertable = false, updatable = false)
     private DiaryEntity diaryEntity;
 
-
+    public DiaryKeywordEntity(UUID id, UUID diaryId, UUID keywordId) {
+        this.id = id;
+        this.diaryId = diaryId;
+        this.keywordId = keywordId;
+    }
 }
