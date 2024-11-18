@@ -48,6 +48,7 @@ public class DiaryQueryService
         return new GetDiaryUseCase.Response.DiaryInfo(
                 diary.getId().toString(),
                 diary.getContent(),
+                diary.getWeightedContents(),
                 diary.getEmotion(),
                 diary.getLikeCount(),
                 diary.isLiked(userId),

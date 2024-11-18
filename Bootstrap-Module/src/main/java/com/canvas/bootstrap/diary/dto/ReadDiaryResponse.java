@@ -12,6 +12,8 @@ public record ReadDiaryResponse(
         String diaryId,
         @Schema(description = "일기 내용")
         String content,
+        @Schema(description = "강조된 일기 내용")
+        List<String> weightedContent,
         @Schema(description = "일기의 감정")
         Emotion emotion,
         @Schema(description = "일기 좋아요 수")

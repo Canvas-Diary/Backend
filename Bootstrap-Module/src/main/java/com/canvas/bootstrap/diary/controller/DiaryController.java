@@ -45,6 +45,7 @@ public class DiaryController implements DiaryApi {
         return new ReadDiaryResponse(
                 response.diaryId(),
                 response.content(),
+                response.weightedContent(),
                 response.emotion(),
                 response.likeCount(),
                 response.isLiked(),
