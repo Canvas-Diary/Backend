@@ -1,4 +1,4 @@
-package com.canvas.application.like.in;
+package com.canvas.application.like.port.in;
 
 public interface AddLikeUseCase {
     void add(Command command);

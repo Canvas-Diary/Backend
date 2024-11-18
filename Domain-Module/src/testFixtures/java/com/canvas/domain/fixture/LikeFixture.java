@@ -16,6 +16,7 @@ public enum LikeFixture {
     PUBLIC_OTHER_DIARY_LIKE2(OTHER2, PUBLIC_OTHER_DIARY);
 
     private final DomainId id;
+    @Getter
     private final UserFixture userFixture;
     @Getter
     private final DiaryFixture diaryFixture;

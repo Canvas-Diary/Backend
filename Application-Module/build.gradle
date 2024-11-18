@@ -1,6 +1,11 @@
 dependencies {
     implementation(project(":Domain-Module"))
+    testImplementation(testFixtures(project(":Domain-Module")))
+    testFixturesImplementation(testFixtures(project(":Domain-Module")))
+
     implementation(project(":Common-Module"))
+    testImplementation(testFixtures(project(":Common-Module")))
+    testFixturesImplementation(testFixtures(project(":Common-Module")))
 
     implementation "org.springframework:spring-tx"
 }
