@@ -40,7 +40,7 @@ public class GeminiService {
                                         .filter(throwable -> throwable instanceof GeminiException.GeminiTooManyRequestsException))
                         .doOnError(error -> new GeminiException.GeminiTooManyRequestsException())
                         .map(response -> {
-                            if (response.candidates == null || response.isUnhealthy() || response.getText().startsWith("FORBIDDEN")) {
+                            if (response.candidates == null || response.isUnhealthy()) {
                                 throw new GeminiException.GeminiSafetyException();
                             }
                             return response;
