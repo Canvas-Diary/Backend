@@ -1,10 +1,7 @@
 package com.canvas.application.diary.service;
 
 import com.canvas.application.diary.exception.DiaryException;
-import com.canvas.application.diary.port.in.GetAlbumDiaryUseCase;
-import com.canvas.application.diary.port.in.GetDiaryUseCase;
-import com.canvas.application.diary.port.in.GetExploreDiaryUseCase;
-import com.canvas.application.diary.port.in.GetReminiscenceDiaryUseCase;
+import com.canvas.application.diary.port.in.*;
 import com.canvas.application.diary.port.out.DiaryKeywordExtractPort;
 import com.canvas.application.diary.port.out.DiaryManagementPort;
 import com.canvas.common.page.PageRequest;
@@ -15,20 +12,24 @@ import com.canvas.domain.diary.entity.DiaryBasic;
 import com.canvas.domain.diary.entity.DiaryComplete;
 import com.canvas.domain.diary.entity.DiaryOverview;
 import com.canvas.domain.diary.enums.Emotion;
+import com.canvas.domain.diary.enums.Sentiment;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.YearMonth;
 import java.time.temporal.ChronoUnit;
 import java.time.temporal.TemporalAdjusters;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class DiaryQueryService
-        implements GetDiaryUseCase, GetAlbumDiaryUseCase, GetExploreDiaryUseCase, GetReminiscenceDiaryUseCase {
+        implements GetDiaryUseCase, GetAlbumDiaryUseCase, GetExploreDiaryUseCase, GetReminiscenceDiaryUseCase, GetEmotionStatsUseCase {
 
     private final DiaryManagementPort diaryManagementPort;
     private final DiaryKeywordExtractPort diaryKeywordExtractPort;
@@ -235,6 +236,87 @@ public class DiaryQueryService
                                 image.getImageUrl()
                         )).toList(),
                 keywords
+        );
+    }
+
+
+    @Override
+    public GetEmotionStatsUseCase.Response getWeekEmotionStats(GetEmotionStatsUseCase.Query.Week query) {
+        LocalDate startDate = query.date().with(TemporalAdjusters.previousOrSame(DayOfWeek.SUNDAY)).minusWeeks(5);
+        LocalDate endDate = query.date().with(TemporalAdjusters.nextOrSame(DayOfWeek.SATURDAY));
+
+        List<DiaryBasic> diaries = diaryManagementPort.getByWriterIdAndDateBetween(
+                DomainId.from(query.userId()),
+                startDate,
+                endDate
+        );
+
+        Map<Long, Map<Sentiment, Long>> barData = diaries.stream()
+                .collect(Collectors.groupingBy(
+                        diary -> -(ChronoUnit.DAYS.between(diary.getDate(), endDate) / 7),
+                        Collectors.groupingBy(
+                                diary -> diary.getEmotion().getSentiment(),
+                                Collectors.counting())
+                ));
+
+        Map<Emotion, Long> pieData = diaries.stream()
+                .filter(diary -> diary.getDate().isAfter(endDate.minusWeeks(1)))
+                .collect(Collectors.groupingBy(DiaryBasic::getEmotion, Collectors.counting()));
+
+        return toEmotionStatsResponse(barData, pieData);
+    }
+
+    @Override
+    public GetEmotionStatsUseCase.Response getMonthEmotionStats(GetEmotionStatsUseCase.Query.Month query) {
+        LocalDate startDate = query.date().with(TemporalAdjusters.firstDayOfMonth()).minusMonths(5);
+        LocalDate endDate = query.date().with(TemporalAdjusters.lastDayOfMonth());
+
+        List<DiaryBasic> diaries = diaryManagementPort.getByWriterIdAndDateBetween(
+                DomainId.from(query.userId()),
+                startDate,
+                endDate
+        );
+
+        Map<Long, Map<Sentiment, Long>> barData = diaries.stream()
+                .collect(Collectors.groupingBy(
+                        diary -> -ChronoUnit.MONTHS.between(
+                                YearMonth.from(diary.getDate()),
+                                YearMonth.from(endDate)),
+                        Collectors.groupingBy(
+                                diary -> diary.getEmotion().getSentiment(),
+                                Collectors.counting())
+                ));
+
+        LocalDate previousMonthLastDate = endDate.minusMonths(1)
+                                                 .withDayOfMonth(endDate.minusMonths(1).lengthOfMonth());
+
+
+        Map<Emotion, Long> pieData = diaries.stream()
+                .filter(diary -> diary.getDate().isAfter(previousMonthLastDate))
+                .collect(Collectors.groupingBy(DiaryBasic::getEmotion, Collectors.counting()));
+
+        return toEmotionStatsResponse(barData, pieData);
+    }
+
+    private static GetEmotionStatsUseCase.Response toEmotionStatsResponse(
+            Map<Long, Map<Sentiment, Long>> barData,
+            Map<Emotion, Long> pieData
+    ) {
+        return new GetEmotionStatsUseCase.Response(
+                barData.entrySet()
+                       .stream()
+                       .map(entry -> new GetEmotionStatsUseCase.Response.BarData(
+                               entry.getKey(),
+                               entry.getValue().getOrDefault(Sentiment.POSITIVE, 0L),
+                               entry.getValue().getOrDefault(Sentiment.NEUTRAL, 0L),
+                               entry.getValue().getOrDefault(Sentiment.NEGATIVE, 0L)))
+                       .toList(),
+                pieData.entrySet()
+                       .stream()
+                       .map(entry -> new GetEmotionStatsUseCase.Response.PieData(
+                               entry.getKey(),
+                               entry.getValue()))
+                       .toList()
         );
     }
 }
