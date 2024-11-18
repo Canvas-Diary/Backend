@@ -15,6 +15,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDate;
+import java.time.temporal.TemporalAdjusters;
 import java.util.List;
 
 import static com.canvas.application.diary.DiaryApplicationFixture.getGetDiaryQuery;
@@ -88,10 +89,13 @@ class DiaryQueryServiceTest {
         // given
         User user = MYSELF.getUser();
         LocalDate date = LocalDate.now();
+        LocalDate startDate = LocalDate.now().with(TemporalAdjusters.firstDayOfMonth());
+        LocalDate endDate = LocalDate.now().with(TemporalAdjusters.lastDayOfMonth());
+
         GetDiaryUseCase.Query.HomeCalendar query = getHomeCalendarQuery(user, date);
         List<DiaryBasic> diaries = DiaryFixture.getAllDiaryBasicByUser(MYSELF);
 
-        given(diaryManagementPort.getByUserIdAndMonth(user.getId(), date))
+        given(diaryManagementPort.getByWriterIdAndDateBetween(user.getId(), startDate, endDate))
                 .willReturn(diaries);
 
         // when

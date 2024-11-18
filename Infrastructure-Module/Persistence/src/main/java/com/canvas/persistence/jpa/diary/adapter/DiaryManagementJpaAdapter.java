@@ -17,7 +17,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
-import java.time.temporal.TemporalAdjusters;
 import java.util.List;
 import java.util.Optional;
 
@@ -58,10 +57,7 @@ public class DiaryManagementJpaAdapter implements DiaryManagementPort {
     }
 
     @Override
-    public List<DiaryBasic> getByUserIdAndMonth(DomainId userId, LocalDate date) {
-        LocalDate start = date.with(TemporalAdjusters.firstDayOfMonth());
-        LocalDate end = date.with(TemporalAdjusters.lastDayOfMonth());
-
+    public List<DiaryBasic> getByWriterIdAndDateBetween(DomainId userId, LocalDate start, LocalDate end) {
         return diaryJpaRepository.findByWriterIdAndDateBetween(userId.value(), start, end).stream()
                                  .map(DiaryMapper::toBasicDomain)
                                  .toList();

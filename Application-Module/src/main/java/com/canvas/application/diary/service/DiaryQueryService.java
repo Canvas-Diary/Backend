@@ -20,8 +20,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
-import java.util.List;
-import java.util.Optional;
+import java.time.temporal.ChronoUnit;
+import java.time.temporal.TemporalAdjusters;
+import java.util.*;
 
 @Service
 @Transactional(readOnly = true)
@@ -63,9 +64,13 @@ public class DiaryQueryService
 
     @Override
     public GetDiaryUseCase.Response.HomeCalendar getHomeCalendar(GetDiaryUseCase.Query.HomeCalendar query) {
-        List<DiaryBasic> diaries = diaryManagementPort.getByUserIdAndMonth(
+        LocalDate startDate = query.date().with(TemporalAdjusters.firstDayOfMonth());
+        LocalDate endDate = query.date().with(TemporalAdjusters.lastDayOfMonth());
+
+        List<DiaryBasic> diaries = diaryManagementPort.getByWriterIdAndDateBetween(
                 DomainId.from(query.userId()),
-                query.date()
+                startDate,
+                endDate
         );
 
         return new GetDiaryUseCase.Response.HomeCalendar(
