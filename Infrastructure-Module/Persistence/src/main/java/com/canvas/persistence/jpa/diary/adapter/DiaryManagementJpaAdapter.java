@@ -19,6 +19,7 @@ import org.springframework.stereotype.Repository;
 import java.time.LocalDate;
 import java.time.temporal.TemporalAdjusters;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
@@ -141,6 +142,24 @@ public class DiaryManagementJpaAdapter implements DiaryManagementPort {
         );
 
         return PageMapper.toDomainSlice(diaryEntities, DiaryMapper::toOverviewDomain);
+    }
+
+    @Override
+    public List<DiaryComplete> getByWriterIdAndKeywords(DomainId userId, List<String> keywords, LocalDate baseDate) {
+        List<DiaryEntity> diaryEntities = diaryJpaRepository.findDiariesByWriterIdAndKeywordsBeforeBaseDate(
+                userId.value(),
+                keywords,
+                baseDate
+        );
+        return diaryEntities.stream()
+                .map(DiaryMapper::toCompleteDomain)
+                .toList();
+    }
+
+    @Override
+    public Optional<DiaryComplete> getByWriterIdAndDate(DomainId userId, LocalDate beforeYear, LocalDate beforeMonth) {
+        return diaryJpaRepository.findByWriterIdAndDate(userId.value(), beforeYear, beforeMonth)
+                .map(DiaryMapper::toCompleteDomain);
     }
 
     @Override

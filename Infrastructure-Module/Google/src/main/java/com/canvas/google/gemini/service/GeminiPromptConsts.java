@@ -10,4 +10,8 @@ public class GeminiPromptConsts {
             Choose one of ANGER, SADNESS, JOY, FEAR, DISGUST, SHAME, SURPRISE, CURIOSITY, and print out the main emotions in the following diary contents in just one word. If the contents are inappropriate, print FORBIDDEN, and if the emotions are not clearly visible or listed, print NONE.
             
             """;
+
+    public static final String KEYWORD_EXTRACT = """
+            일기에서 가장 핵심적인 키워드를 1~5개를 뽑아줘. 정확히 이 형식에 맞춰 뽑아줘 "keyword1, keyword2, keyword3, keyword4, keyword5"
+            """;
 }

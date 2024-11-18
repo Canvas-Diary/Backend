@@ -20,6 +20,7 @@ public class DiaryController implements DiaryApi {
     private final GetExploreDiaryUseCase getExploreDiaryUseCase;
     private final ModifyDiaryUseCase modifyDiaryUseCase;
     private final RemoveDiaryUseCase removeDiaryUseCase;
+    private final GetReminiscenceDiaryUseCase getReminiscenceDiaryUseCase;
 
     @Override
     public CreateDiaryResponse createDiary(String userId, CreateDiaryRequest request) {
@@ -158,6 +159,34 @@ public class DiaryController implements DiaryApi {
                 response.number(),
                 response.hasNext()
         );
+    }
+
+    @Override
+    public ReminiscenceResponse getReminiscenceDiary(String userId, ReminiscenceRequest request) {
+        GetReminiscenceDiaryUseCase.Response response = getReminiscenceDiaryUseCase.getReminiscenceDiary(
+                new GetReminiscenceDiaryUseCase.Query(
+                    userId,
+                    request.content(),
+                    request.date()
+        ));
+
+        return new ReminiscenceResponse(
+                response.diaryId(),
+                response.content(),
+                response.emotion(),
+                response.likedCount(),
+                response.isLiked(),
+                response.date(),
+                response.images().stream()
+                        .map(image -> new ReminiscenceResponse.ImageInfo(image.imageId(), image.isMain(), image.imageUrl()))
+                        .toList(),
+                response.keywords()
+        );
+    }
+
+    @Override
+    public void saveKeyword(String userId, String diaryId, SaveKeywordRequest request) {
+
     }
 
 }

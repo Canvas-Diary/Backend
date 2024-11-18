@@ -10,6 +10,7 @@ import com.canvas.domain.diary.enums.Emotion;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 public interface DiaryManagementPort {
     DiaryComplete save(DiaryComplete diary);
@@ -25,5 +26,7 @@ public interface DiaryManagementPort {
     Slice<DiaryComplete> getExploreByLatest(PageRequest pageRequest);
     Slice<DiaryComplete> getExploreByLike(PageRequest pageRequest);
     Slice<DiaryOverview> getLikedDiaries(PageRequest pageRequest, DomainId userId);
+    List<DiaryComplete> getByWriterIdAndKeywords(DomainId userId, List<String> keywords, LocalDate baseDate);
+    Optional<DiaryComplete> getByWriterIdAndDate(DomainId userId, LocalDate beforeYear, LocalDate beforeMonth);
     void deleteById(DomainId diaryId);
 }
