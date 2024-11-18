@@ -62,7 +62,7 @@ public interface DiaryJpaRepository extends JpaRepository<DiaryEntity, UUID> {
     @Query("""
         select d
         from DiaryEntity d
-        where d.id = :diaryId and (d.date = :beforeYear or d.date = :beforeMonth)
+        where d.writerId = :writerId and (d.date = :beforeYear or d.date = :beforeMonth)
         order by
           case
             when d.date = :beforeMonth then 0
