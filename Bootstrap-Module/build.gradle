@@ -8,6 +8,7 @@ dependencies {
     implementation(project(":Infrastructure-Module:AWS"))
     implementation(project(":Infrastructure-Module:Secret"))
     implementation(project(":Infrastructure-Module:Client"))
+    implementation(project(":Infrastructure-Module:OpenAI"))
 //    implementation(project(":Infrastructure-Module:ElasticSearch"))
 
     implementation "org.springframework.boot:spring-boot-starter-web"

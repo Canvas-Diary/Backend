@@ -63,12 +63,7 @@ public interface DiaryJpaRepository extends JpaRepository<DiaryEntity, UUID> {
         select d
         from DiaryEntity d
         where d.writerId = :writerId and (d.date = :beforeYear or d.date = :beforeMonth)
-        order by
-          case
-            when d.date = :beforeMonth then 0
-            when d.date = :beforeYear then 1
-            else 2
-          end
+        order by d.date asc
     """)
     Optional<DiaryEntity> findByWriterIdAndDate(UUID writerId, LocalDate beforeYear, LocalDate beforeMonth);
 

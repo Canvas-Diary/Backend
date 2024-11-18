@@ -59,4 +59,6 @@ public class DiaryEntity extends BaseEntity {
         likeEntities.add(likeEntity);
     }
 
+    public void addDiaryKeywordEntity(DiaryKeywordEntity diaryKeywordEntity) {diaryKeywordEntities.add(diaryKeywordEntity);}
+
 }

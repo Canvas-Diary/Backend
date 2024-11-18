@@ -171,11 +171,4 @@ public interface DiaryApi {
             @AccessUser String userId, @RequestBody ReminiscenceRequest request
     );
 
-    @Operation(summary = "키워드 저장")
-    @PostMapping("/{diaryId}/reminiscence")
-    void saveKeyword(
-            @AccessUser String userId,
-            @PathVariable String diaryId,
-            @RequestBody SaveKeywordRequest request
-    );
 }

@@ -23,4 +23,11 @@ public class KeywordEntity {
     @OneToMany(mappedBy = "keywordEntity", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<DiaryKeywordEntity> diaryKeywordEntities = new ArrayList<>();
 
+    public KeywordEntity(UUID id, String name, List<DiaryKeywordEntity> diaryKeywordEntities) {
+        this.id = id;
+        this.name = name;
+        this.diaryKeywordEntities = diaryKeywordEntities;
+    }
+
+    public void addDiaryKeywordEntity(DiaryKeywordEntity diaryKeywordEntity) {}
 }

@@ -1,4 +1,4 @@
-package com.canvas.bootstrap.diary.dto;
+package com.canvas.bootstrap.keyword.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 

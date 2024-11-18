@@ -1,6 +1,6 @@
-package com.canvas.google.gemini.service;
+package com.canvas.openai.gpt.service;
 
-public class GeminiPromptConsts {
+public class GptPromptConsts {
     public static final String IMAGE_GENERATOR = """
             Choose only one of the most important scenes in the following content, and make a sentence that specifically describes the main scene suitable for the prompt in the image Generative AI. If the content is inappropriate, change it to a very mild direction. Don't print the title, just print the contents of the prompt in English.
             
