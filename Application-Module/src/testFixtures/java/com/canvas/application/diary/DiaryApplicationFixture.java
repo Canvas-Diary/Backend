@@ -14,6 +14,7 @@ public class DiaryApplicationFixture {
                 user.getId().toString(),
                 diary.getDate(),
                 diary.getContent(),
+                diary.getWeightedContents(),
                 Style.PHOTOREALISTIC,
                 diary.getIsPublic()
         );
@@ -24,6 +25,7 @@ public class DiaryApplicationFixture {
                 user.getId().toString(),
                 diary.getId().toString(),
                 content,
+                diary.getWeightedContents(),
                 isPublic
         );
     }

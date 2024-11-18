@@ -34,7 +34,8 @@ public class DiaryCommandService
 
         DomainId diaryId = DomainId.generate();
         Emotion emotion = diaryEmotionExtractPort.emotionExtract(command.content());
-        Image image = createImage(diaryId, command.content(), command.style());
+        String JoinedWeightedContent = String.join(",", command.weightedContent());
+        Image image = createImage(diaryId, command.content(), JoinedWeightedContent, command.style());
 
         diaryManagementPort.save(
                 DiaryComplete.create(
@@ -64,13 +65,15 @@ public class DiaryCommandService
             diary.updateDiaryContent(command.content(), emotion);
         }
 
+        diary.updateWeightedContents(command.weightedContent());
         diary.updatePublic(command.isPublic());
 
         diaryManagementPort.save(diary);
     }
 
-    private Image createImage(DomainId diaryId, String content, Style style) {
-        String imageUrl = addImageUseCase.create(new AddImageUseCase.Command.Create(diaryId.toString(), content, style)).imageUrl();
+    private Image createImage(DomainId diaryId, String content, String joinedWeightedContents, Style style) {
+        String imageUrl = addImageUseCase.create(
+                new AddImageUseCase.Command.Create(diaryId.toString(), content, joinedWeightedContents, style)).imageUrl();
         return Image.create(DomainId.generate(), diaryId, true, imageUrl);
     }
 
