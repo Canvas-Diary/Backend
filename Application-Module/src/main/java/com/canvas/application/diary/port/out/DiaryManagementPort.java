@@ -18,7 +18,7 @@ public interface DiaryManagementPort {
     DiaryComplete getById(DomainId diaryId);
     DiaryComplete getByIdAndWriterId(DomainId diaryId, DomainId writerId);
     boolean existsByIdAndWriterId(DomainId diaryId, DomainId writerId);
-    List<DiaryBasic> getByUserIdAndMonth(DomainId userId, LocalDate date);
+    List<DiaryBasic> getByWriterIdAndDateBetween(DomainId userId, LocalDate start, LocalDate end);
     Slice<DiaryOverview> getAlbum(PageRequest pageRequest, DomainId userId);
     Slice<DiaryOverview> getAlbumByContent(PageRequest pageRequest, DomainId userId, String content);
     Slice<DiaryOverview> getAlbumByEmotion(PageRequest pageRequest, DomainId userId, Emotion emotion);
