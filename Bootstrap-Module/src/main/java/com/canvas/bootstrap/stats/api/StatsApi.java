@@ -2,6 +2,7 @@ package com.canvas.bootstrap.stats.api;
 
 import com.canvas.bootstrap.common.annotation.AccessUser;
 import com.canvas.bootstrap.stats.dto.EmotionStatsResponse;
+import com.canvas.bootstrap.stats.dto.KeywordStatsResponse;
 import com.canvas.bootstrap.stats.type.StatsType;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -26,7 +27,7 @@ public interface StatsApi {
     })
     EmotionStatsResponse getEmotionStats(@AccessUser String userId, @RequestParam StatsType type, @RequestParam LocalDate date);
 
-/*    @Operation(summary = "키워드 통계 조회")
+    @Operation(summary = "키워드 통계 조회")
     @GetMapping("/keywords")
     @ApiResponses(value = {
             @ApiResponse(
@@ -34,5 +35,9 @@ public interface StatsApi {
                     description = "키워드 통계 조회 성공"
             )
     })
-    KeywordStatsResponse getKeywordStats(@RequestParam StatsType type);*/
+    KeywordStatsResponse getKeywordStats(
+            @AccessUser String userId,
+            @RequestParam StatsType type,
+            @RequestParam LocalDate date
+    );
 }

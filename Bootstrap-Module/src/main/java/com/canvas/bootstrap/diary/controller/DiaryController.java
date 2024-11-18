@@ -184,9 +184,4 @@ public class DiaryController implements DiaryApi {
         );
     }
 
-    @Override
-    public void saveKeyword(String userId, String diaryId, SaveKeywordRequest request) {
-
-    }
-
 }
