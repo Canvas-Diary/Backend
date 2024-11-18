@@ -9,7 +9,7 @@ public record UpdateDiaryRequest(
         @Schema(description = "일기 내용")
         String content,
         @Schema(description = "강조할 일기 내용")
-        List<String> weightedContent,
+        List<String> weightedContents,
         @Schema(description = "일기 공개 여부")
         Boolean isPublic
 ) {

@@ -9,7 +9,7 @@ public interface ModifyDiaryUseCase {
             String userId,
             String diaryId,
             String content,
-            List<String> weightedContent,
+            List<String> weightedContents,
             Boolean isPublic
     ) {
     }

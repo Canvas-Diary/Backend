@@ -12,7 +12,7 @@ public interface AddDiaryUseCase {
             String userId,
             LocalDate date,
             String content,
-            List<String> weightedContent,
+            List<String> weightedContents,
             Style style,
             Boolean isPublic
     ) {
