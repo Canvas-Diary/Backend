@@ -79,7 +79,7 @@ class ImageCommandServiceTest {
         // given
         AddImageUseCase.Command.Create command = getCreateImageCommand();
 
-        given(imagePromptGeneratePort.generatePrompt(command.content())).willReturn("prompt");
+        given(imagePromptGeneratePort.generatePrompt(command.content(), command.joinedWeightedContents())).willReturn("prompt");
         given(imageGenerationPort.generate("prompt", command.style())).willReturn("generatedImageUrl");
         given(imageUploadPort.upload("generatedImageUrl")).willReturn("uploadedImageUrl");
 

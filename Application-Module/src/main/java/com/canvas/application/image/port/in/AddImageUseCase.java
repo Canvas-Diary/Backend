@@ -16,6 +16,7 @@ public interface AddImageUseCase {
         public record Create(
                 String diaryId,
                 String content,
+                String joinedWeightedContents,
                 Style style
         ) {
         }

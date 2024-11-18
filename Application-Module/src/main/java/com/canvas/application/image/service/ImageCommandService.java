@@ -37,7 +37,12 @@ public class ImageCommandService
         DiaryComplete diary = diaryManagementPort.getById(diaryId);
 
         Response.Create create = create(
-                new AddImageUseCase.Command.Create(command.diaryId(), diary.getContent(), command.style()));
+                new AddImageUseCase.Command.Create(
+                        command.diaryId(),
+                        diary.getContent(),
+                        diary.getJoinedWeightedContents(),
+                        command.style()
+                ));
 
         Image image = Image.create(DomainId.generate(),
                                    diaryId, false, create.imageUrl());
@@ -50,7 +55,7 @@ public class ImageCommandService
     // 이미지를 생성하기만 하면 create
     @Override
     public Response.Create create(AddImageUseCase.Command.Create command) {
-        String prompt = imagePromptGeneratePort.generatePrompt(command.content());
+        String prompt = imagePromptGeneratePort.generatePrompt(command.content(), command.joinedWeightedContents());
         String generatedImageUrl = imageGenerationPort.generate(prompt, command.style());
         String uploadedImageUrl = imageUploadPort.upload(generatedImageUrl);
 

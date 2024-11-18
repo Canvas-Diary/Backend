@@ -3,7 +3,8 @@ package com.canvas.google.gemini.service;
 public class GeminiPromptConsts {
     public static final String IMAGE_GENERATOR = """
             Choose only one of the most important scenes in the following content, and make a sentence that specifically describes the main scene suitable for the prompt in the image Generative AI. If the content is inappropriate, change it to a very mild direction. Don't print the title, just print the contents of the prompt in English.
-            
+            Content: %s ,
+            Contents that should be repeated to highlight: %s
             """;
 
     public static final String EMOTION_EXTRACT = """

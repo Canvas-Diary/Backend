@@ -28,8 +28,8 @@ public class DiaryContentConvertGeminiAdapter
     }
 
     @Override
-    public String generatePrompt(String content) {
-        return geminiService.generate(GeminiPromptConsts.IMAGE_GENERATOR + content);
+    public String generatePrompt(String content, String weightedContent) {
+        return geminiService.generate(String.format(GeminiPromptConsts.IMAGE_GENERATOR, content, weightedContent));
     }
 
     @Override
