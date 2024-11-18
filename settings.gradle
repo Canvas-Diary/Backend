@@ -13,4 +13,5 @@ include 'Infrastructure-Module:ElasticSearch'
 include 'Infrastructure-Module:Google'
 include 'Infrastructure-Module:Client'
 include 'Infrastructure-Module:Secret'
+include 'Infrastructure-Module:OpenAI'
 
