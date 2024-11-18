@@ -253,7 +253,7 @@ public class DiaryQueryService
 
         Map<Long, Map<Sentiment, Long>> barData = diaries.stream()
                 .collect(Collectors.groupingBy(
-                        diary -> -(ChronoUnit.DAYS.between(diary.getDate(), endDate) / 7),
+                        diary -> ChronoUnit.DAYS.between(diary.getDate(), endDate) / 7,
                         Collectors.groupingBy(
                                 diary -> diary.getEmotion().getSentiment(),
                                 Collectors.counting())
@@ -279,7 +279,7 @@ public class DiaryQueryService
 
         Map<Long, Map<Sentiment, Long>> barData = diaries.stream()
                 .collect(Collectors.groupingBy(
-                        diary -> -ChronoUnit.MONTHS.between(
+                        diary -> ChronoUnit.MONTHS.between(
                                 YearMonth.from(diary.getDate()),
                                 YearMonth.from(endDate)),
                         Collectors.groupingBy(
@@ -310,6 +310,7 @@ public class DiaryQueryService
                                entry.getValue().getOrDefault(Sentiment.POSITIVE, 0L),
                                entry.getValue().getOrDefault(Sentiment.NEUTRAL, 0L),
                                entry.getValue().getOrDefault(Sentiment.NEGATIVE, 0L)))
+                       .sorted(Comparator.comparing(GetEmotionStatsUseCase.Response.BarData::dataKey, Comparator.reverseOrder()))
                        .toList(),
                 pieData.entrySet()
                        .stream()
@@ -319,4 +320,5 @@ public class DiaryQueryService
                        .toList()
         );
     }
+
 }
