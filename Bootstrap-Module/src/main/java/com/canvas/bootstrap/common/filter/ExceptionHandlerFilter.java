@@ -31,21 +31,30 @@ public class ExceptionHandlerFilter extends OncePerRequestFilter {
         }
     }
 
-    private void handleException(HttpServletResponse response, Exception e) throws IOException {
-        int status = getStatus(e);
-        response.setStatus(status);
+    private void handleException(HttpServletResponse response, Exception exception) throws IOException {
+        int status = getStatus(exception);
 
-        ExceptionResponse errorResponse = new ExceptionResponse("000", e.getMessage());
+        response.setStatus(status);
+        response.setContentType("application/json;charset=UTF-8");
+        response.setCharacterEncoding("UTF-8");
+
+        if (exception instanceof BusinessException e) {
+            log.error("message={}, code={}", e.getMessage(), e.getErrorCode());
+            ExceptionResponse errorResponse = ExceptionResponse.of(e);
+            response.getWriter().write(objectMapper.writeValueAsString(errorResponse));
+            return;
+        }
+
+        ExceptionResponse errorResponse = new ExceptionResponse("000", exception.getMessage());
         response.getWriter().write(objectMapper.writeValueAsString(errorResponse));
     }
 
     private int getStatus(Exception e) {
-        if (e instanceof BusinessException) {
-            log.error(e.getMessage());
-            return HttpServletResponse.SC_UNAUTHORIZED;
+        if (e instanceof BusinessException exception) {
+            return exception.getHttpStatus().value();
         }
-        log.error("알 수 없는 서버 오류: {0}", e);
 
+        log.error("알 수 없는 서버 오류: {0}", e);
         return HttpServletResponse.SC_INTERNAL_SERVER_ERROR;
     }
 

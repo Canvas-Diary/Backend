@@ -2,6 +2,7 @@ package com.canvas.bootstrap.common.filter;
 
 import com.canvas.application.user.port.in.TokenResolveUserCase;
 import com.canvas.application.user.vo.UserClaim;
+import com.canvas.bootstrap.common.filter.exception.AuthenticationException;
 import com.canvas.common.security.UserAuthentication;
 import com.canvas.common.security.UserContextHolder;
 import jakarta.servlet.FilterChain;
@@ -22,7 +23,7 @@ import java.util.Set;
 @Order(2)
 @Component
 @RequiredArgsConstructor
-public class AuthorizationFilter extends OncePerRequestFilter {
+public class AuthenticationFilter extends OncePerRequestFilter {
 
     private static final String AUTHORIZATION_HEADER = "Authorization";
     private static final String BEARER_PREFIX = "Bearer ";
@@ -47,13 +48,15 @@ public class AuthorizationFilter extends OncePerRequestFilter {
         }
 
         String authorization = request.getHeader(AUTHORIZATION_HEADER);
-        if(authorization != null && authorization.startsWith(BEARER_PREFIX)) {
-            String accessToken = authorization.substring(BEARER_PREFIX.length());
-            // 토큰 검증
-            UserClaim userClaim = tokenResolveUserCase.resolveToken(accessToken);
-            // 에노테이션에 담기
-            UserContextHolder.setContext(new UserAuthentication(userClaim.userId()));
+        if (authorization == null || !authorization.startsWith(BEARER_PREFIX)) {
+            throw new AuthenticationException();
         }
+
+        String accessToken = authorization.substring(BEARER_PREFIX.length());
+        // 토큰 검증
+        UserClaim userClaim = tokenResolveUserCase.resolveToken(accessToken);
+        // 에노테이션에 담기
+        UserContextHolder.setContext(new UserAuthentication(userClaim.userId()));
 
         filterChain.doFilter(request, response);
 

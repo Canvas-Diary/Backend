@@ -7,6 +7,6 @@ public record ExceptionResponse(
         String message
 ) {
     public static ExceptionResponse of(BusinessException e) {
-        return new ExceptionResponse(e.getMessage(), e.getErrorCode());
+        return new ExceptionResponse(e.getErrorCode(), e.getMessage());
     }
 }
