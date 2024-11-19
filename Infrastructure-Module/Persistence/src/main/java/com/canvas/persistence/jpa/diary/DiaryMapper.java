@@ -7,8 +7,6 @@ import com.canvas.domain.diary.entity.DiaryOverview;
 import com.canvas.domain.diary.enums.Emotion;
 import com.canvas.persistence.jpa.diary.entity.DiaryEntity;
 
-import java.util.Arrays;
-
 public class DiaryMapper {
     public static DiaryEntity toEntity(DiaryComplete diary) {
         DiaryEntity diaryEntity = new DiaryEntity(
@@ -61,7 +59,7 @@ public class DiaryMapper {
                 DomainId.from(diaryEntity.getId()),
                 DomainId.from(diaryEntity.getWriterId()),
                 diaryEntity.getContent(),
-                Arrays.stream(diaryEntity.getJoinedWeightedContents().split(",")).toList(),
+                diaryEntity.getWeightedContents(),
                 Emotion.parse(diaryEntity.getEmotion()),
                 diaryEntity.getDate(),
                 diaryEntity.getCreatedAt(),

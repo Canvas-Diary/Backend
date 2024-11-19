@@ -64,4 +64,11 @@ public class DiaryEntity extends BaseEntity {
 
     public void addDiaryKeywordEntity(DiaryKeywordEntity diaryKeywordEntity) {diaryKeywordEntities.add(diaryKeywordEntity);}
 
+    public List<String> getWeightedContents() {
+        if (joinedWeightedContents == null) {
+            return List.of();
+        }
+        return List.of(joinedWeightedContents.split(","));
+    }
+
 }

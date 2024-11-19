@@ -114,6 +114,9 @@ public class DiaryComplete {
     }
 
     public String getJoinedWeightedContents() {
+        if (weightedContents.isEmpty()) {
+            return null;
+        }
         return String.join(",", weightedContents);
     }
 
