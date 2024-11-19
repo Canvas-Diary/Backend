@@ -16,6 +16,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+
 @Service
 @Transactional
 @RequiredArgsConstructor
@@ -28,6 +30,10 @@ public class DiaryCommandService
 
     @Override
     public Response add(AddDiaryUseCase.Command command) {
+        if (command.date().isAfter(LocalDate.now())) {
+            throw new DiaryException.DiaryBadRequestException();
+        }
+
         if (diaryManagementPort.existsByWriterIdAndDate(DomainId.from(command.userId()), command.date())) {
             throw new DiaryException.DiaryBadRequestException();
         }
