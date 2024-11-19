@@ -23,7 +23,8 @@ public class CorsFilter extends OncePerRequestFilter {
 
     static {
         allowedOrigins.add("http://localhost:5173");
-        allowedOrigins.add("http://www.canvas-diary.kro.kr");
+        allowedOrigins.add("https://canvas-diary.kro.kr");
+        allowedOrigins.add("https://www.canvas-diary.kro.kr");
     }
 
     @Override
