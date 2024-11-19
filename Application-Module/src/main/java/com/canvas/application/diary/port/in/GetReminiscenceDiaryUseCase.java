@@ -1,5 +1,6 @@
 package com.canvas.application.diary.port.in;
 
+import com.canvas.application.diary.enums.ReminiscenceType;
 import com.canvas.domain.diary.enums.Emotion;
 
 import java.time.LocalDate;
@@ -17,15 +18,20 @@ public interface GetReminiscenceDiaryUseCase {
     }
 
     record Response (
-        String diaryId,
-        String content,
-        Emotion emotion,
-        Integer likedCount,
-        Boolean isLiked,
-        LocalDate date,
-        List<ImageInfo> images,
-        List<String> keywords
+            DiaryInfo diaryInfo,
+            List<String> keywords
         ) {
+
+        public record DiaryInfo(
+                String diaryId,
+                String content,
+                Emotion emotion,
+                Integer likedCount,
+                Boolean isLiked,
+                LocalDate date,
+                List<ImageInfo> images,
+                ReminiscenceType reminiscenceType
+        ) {}
 
         public record ImageInfo(
                 String imageId,

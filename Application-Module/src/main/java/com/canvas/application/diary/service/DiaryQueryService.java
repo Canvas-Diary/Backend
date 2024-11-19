@@ -1,5 +1,6 @@
 package com.canvas.application.diary.service;
 
+import com.canvas.application.diary.enums.ReminiscenceType;
 import com.canvas.application.diary.exception.DiaryException;
 import com.canvas.application.diary.port.in.*;
 import com.canvas.application.diary.port.out.DiaryKeywordExtractPort;
@@ -206,10 +207,14 @@ public class DiaryQueryService
                 date.minusYears(1),
                 date.minusMonths(1)
         );
+        ReminiscenceType type = getReminiscenceType(targetDateDiary, query.date());
 
         DiaryComplete reminiscenceDiary = targetDateDiary.orElseGet(() -> findDiaryByKeywords(userId, keywords, date));
 
-        return ToReminiscenceDiaryResponse(reminiscenceDiary, keywords, userId);
+        GetReminiscenceDiaryUseCase.Response.DiaryInfo diaryInfo = reminiscenceDiary != null
+                ? ToResponseDiaryInfo(reminiscenceDiary, userId, type) : null;
+
+        return ToReminiscenceDiaryResponse(diaryInfo, keywords);
     }
 
     private DiaryComplete findDiaryByKeywords(DomainId userId, List<String> keywords, LocalDate date) {
@@ -219,11 +224,23 @@ public class DiaryQueryService
                         date.minusWeeks(1)
                 ).stream()
                 .findAny()
-                .orElseThrow(DiaryException.DiaryNotFoundException::new);
+                .orElse(null);
     }
 
-    private static GetReminiscenceDiaryUseCase.Response ToReminiscenceDiaryResponse(DiaryComplete diary, List<String> keywords, DomainId userId) {
-        return new GetReminiscenceDiaryUseCase.Response(
+    private ReminiscenceType getReminiscenceType(Optional<DiaryComplete> targetDateDiary, LocalDate date) {
+        if(targetDateDiary.isEmpty()) {
+            return ReminiscenceType.KEYWORD;
+        }
+
+        LocalDate targetDate = targetDateDiary.get().getDate();
+
+        return date.minusMonths(1).equals(targetDate)
+                ? ReminiscenceType.MONTH : ReminiscenceType.YEAR;
+    }
+
+    private static GetReminiscenceDiaryUseCase.Response.DiaryInfo ToResponseDiaryInfo(DiaryComplete diary, DomainId userId, ReminiscenceType type) {
+
+        return new GetReminiscenceDiaryUseCase.Response.DiaryInfo(
                 diary.getId().toString(),
                 diary.getContent(),
                 diary.getEmotion(),
@@ -231,11 +248,21 @@ public class DiaryQueryService
                 diary.isLiked(userId),
                 diary.getDate(),
                 diary.getImages().stream()
-                        .map(image -> new GetReminiscenceDiaryUseCase.Response.ImageInfo(
+                        .map(
+                            image -> new GetReminiscenceDiaryUseCase.Response.ImageInfo(
                                 image.getId().toString(),
                                 image.getIsMain(),
-                                image.getImageUrl()
-                        )).toList(),
+                                image.getImageUrl()))
+                        .toList(),
+                type
+        );
+    }
+
+    private static GetReminiscenceDiaryUseCase.Response ToReminiscenceDiaryResponse(
+            GetReminiscenceDiaryUseCase.Response.DiaryInfo diaryInfo,
+            List<String> keywords) {
+        return new GetReminiscenceDiaryUseCase.Response(
+                diaryInfo,
                 keywords
         );
     }

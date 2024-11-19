@@ -36,7 +36,7 @@ public class DiaryContentConvertGptAdapter
 
     @Override
     public List<String> keywordExtract(String content) {
-        String response = gptService.generate(PromptConsts.KEYWORD_EXTRACT + content);
+        String response = gptService.generate(String.format(PromptConsts.KEYWORD_EXTRACT, content));
         return Arrays.stream(response.split(", ")).toList();
     }
 }
