@@ -11,6 +11,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.annotation.Order;
+import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Component;
 import org.springframework.util.AntPathMatcher;
 import org.springframework.util.PathMatcher;
@@ -42,7 +43,7 @@ public class AuthenticationFilter extends OncePerRequestFilter {
         // 제외 되는 경로 검증
         String requestURI = request.getRequestURI();
 
-        if (isExcludedPath(requestURI)) {
+        if (isExcludedPath(requestURI) || request.getMethod().equals(HttpMethod.OPTIONS.name())) {
             filterChain.doFilter(request, response);
             return;
         }
