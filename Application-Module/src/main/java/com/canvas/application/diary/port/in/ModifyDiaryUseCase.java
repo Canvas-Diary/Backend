@@ -1,5 +1,7 @@
 package com.canvas.application.diary.port.in;
 
+import java.util.List;
+
 public interface ModifyDiaryUseCase {
     void modify(Command command);
 
@@ -7,6 +9,7 @@ public interface ModifyDiaryUseCase {
             String userId,
             String diaryId,
             String content,
+            List<String> weightedContents,
             Boolean isPublic
     ) {
     }

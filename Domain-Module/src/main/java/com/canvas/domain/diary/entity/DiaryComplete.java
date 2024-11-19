@@ -17,6 +17,7 @@ public class DiaryComplete {
     private DomainId id;
     private DomainId writerId;
     private String content;
+    private List<String> weightedContents;
     private Emotion emotion;
     private LocalDate date;     // 일기 날짜
     private LocalDateTime createdAt;    // 일기가 생성된 실제 시각
@@ -28,6 +29,7 @@ public class DiaryComplete {
             DomainId id,
             DomainId writerId,
             String content,
+            List<String> weightedContents,
             Emotion emotion,
             LocalDate date,
             LocalDateTime createdAt,
@@ -39,6 +41,7 @@ public class DiaryComplete {
                 id,
                 writerId,
                 content,
+                weightedContents,
                 emotion,
                 date,
                 createdAt,
@@ -52,6 +55,7 @@ public class DiaryComplete {
             DomainId id,
             DomainId writerId,
             String content,
+            List<String> weightedContents,
             Emotion emotion,
             LocalDate date,
             Boolean isPublic,
@@ -61,6 +65,7 @@ public class DiaryComplete {
                 id,
                 writerId,
                 content,
+                weightedContents,
                 emotion,
                 date,
                 null,
@@ -108,4 +113,11 @@ public class DiaryComplete {
                      .orElse(Image.DEFAULT_IMAGE_URL);
     }
 
+    public String getJoinedWeightedContents() {
+        return String.join(",", weightedContents);
+    }
+
+    public void updateWeightedContents(List<String> weightedContents) {
+        this.weightedContents = weightedContents;
+    }
 }

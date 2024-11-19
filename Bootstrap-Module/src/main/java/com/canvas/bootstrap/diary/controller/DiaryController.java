@@ -29,6 +29,7 @@ public class DiaryController implements DiaryApi {
                         userId,
                         request.date(),
                         request.content(),
+                        request.weightedContents(),
                         request.style(),
                         request.isPublic()
                 )
@@ -44,6 +45,7 @@ public class DiaryController implements DiaryApi {
         return new ReadDiaryResponse(
                 response.diaryId(),
                 response.content(),
+                response.weightedContents(),
                 response.emotion(),
                 response.likeCount(),
                 response.isLiked(),
@@ -75,7 +77,7 @@ public class DiaryController implements DiaryApi {
     @Override
     public void updateDiary(String userId, String diaryId, UpdateDiaryRequest request) {
         modifyDiaryUseCase.modify(new ModifyDiaryUseCase.Command(
-                userId, diaryId, request.content(), request.isPublic()
+                userId, diaryId, request.content(), request.weightedContents(), request.isPublic()
         ));
     }
 

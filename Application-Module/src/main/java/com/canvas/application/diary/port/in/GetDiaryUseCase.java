@@ -33,6 +33,7 @@ public interface GetDiaryUseCase {
         public record DiaryInfo(
                 String diaryId,
                 String content,
+                List<String> weightedContents,
                 Emotion emotion,
                 Integer likeCount,
                 Boolean isLiked,

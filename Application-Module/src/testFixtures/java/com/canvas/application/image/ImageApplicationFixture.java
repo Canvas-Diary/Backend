@@ -21,6 +21,7 @@ public class ImageApplicationFixture {
         return new AddImageUseCase.Command.Create(
                 DomainId.generate().toString(),
                 "content",
+                "joinedWeightedContents",
                 Style.PHOTOREALISTIC
         );
     }
