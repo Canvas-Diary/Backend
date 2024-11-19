@@ -10,7 +10,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.temporal.TemporalAdjusters;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -25,16 +27,16 @@ public class KeywordQueryService implements GetKeywordStatsUseCase {
 
     @Override
     public Response getWeekKeywordStats(Query.Week query) {
-        LocalDate startDate = query.date().minusWeeks(1);
-        LocalDate endDate = query.date();
+        LocalDate startDate = query.date().with(TemporalAdjusters.previousOrSame(DayOfWeek.SUNDAY));
+        LocalDate endDate = query.date().with(TemporalAdjusters.nextOrSame(DayOfWeek.SATURDAY));
 
         return getKeywordStats(query.userId(), startDate, endDate);
     }
 
     @Override
     public Response getMonthKeywordStats(Query.Month query) {
-        LocalDate startDate = query.date().minusMonths(4);
-        LocalDate endDate = query.date();
+        LocalDate startDate = query.date().with(TemporalAdjusters.firstDayOfMonth());
+        LocalDate endDate = query.date().with(TemporalAdjusters.lastDayOfMonth());
 
         return getKeywordStats(query.userId(), startDate, endDate);
     }
@@ -48,8 +50,8 @@ public class KeywordQueryService implements GetKeywordStatsUseCase {
 
         List<DomainId> keywordIds = diaryKeywords.stream()
                 .map(DiaryKeyword::getKeywordId)
-                .collect(Collectors.toSet())
-                .stream().toList();
+                .distinct()
+                .toList();
 
         List<Keyword> keywords = keywordManagementPort.findByKeywordsId(keywordIds);
 
@@ -63,9 +65,17 @@ public class KeywordQueryService implements GetKeywordStatsUseCase {
                         Collectors.counting()
                 ));
 
-        return new Response(
-                keywordNameCounts.entrySet().stream()
-                .map(entry -> new Response.StaticInfo(entry.getKey(), entry.getValue().intValue()))
-                .toList());
+        return toKeywordStatsResponse(keywordNameCounts);
     }
+
+    private static Response toKeywordStatsResponse(Map<String, Long> keywordNameCounts) {
+        return new Response(
+                keywordNameCounts.entrySet()
+                        .stream()
+                        .sorted(Map.Entry.<String, Long>comparingByValue().reversed())
+                        .map(entry -> new Response.StaticInfo(entry.getKey(), entry.getValue().intValue()))
+                        .toList()
+        );
+    }
+
 }
