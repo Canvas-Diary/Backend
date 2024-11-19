@@ -4,8 +4,11 @@ import com.canvas.domain.common.DomainId;
 import com.canvas.domain.diary.entity.DiaryBasic;
 import com.canvas.domain.diary.entity.DiaryComplete;
 import com.canvas.domain.diary.entity.DiaryOverview;
+import com.canvas.domain.diary.entity.Image;
 import com.canvas.domain.diary.enums.Emotion;
 import com.canvas.persistence.jpa.diary.entity.DiaryEntity;
+
+import java.util.Comparator;
 
 public class DiaryMapper {
     public static DiaryEntity toEntity(DiaryComplete diary) {
@@ -66,6 +69,7 @@ public class DiaryMapper {
                 diaryEntity.getIsPublic(),
                 diaryEntity.getImageEntities().stream()
                         .map(ImageMapper::toDomain)
+                        .sorted(Comparator.comparing(Image::isMain, Comparator.reverseOrder()))
                         .toList(),
                 diaryEntity.getLikeEntities().stream()
                         .map(LikeMapper::toDomain)
