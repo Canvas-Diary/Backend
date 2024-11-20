@@ -32,6 +32,8 @@ public class AuthenticationFilter extends OncePerRequestFilter {
 
     static {
         excludedAuthUrls.add("/api/v1/auth/**");
+        excludedAuthUrls.add("/swagger-ui/**");
+        excludedAuthUrls.add("/v3/api-docs/**");
     }
 
     private final PathMatcher pathMatcher = new AntPathMatcher();
