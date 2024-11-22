@@ -45,7 +45,7 @@ public class ImageCommandService
                 ));
 
         Image image = Image.create(DomainId.generate(),
-                                   diaryId, false, create.imageUrl());
+                                   diaryId, !diary.hasImage(), create.imageUrl());
 
         imageManagementPort.save(image);
 

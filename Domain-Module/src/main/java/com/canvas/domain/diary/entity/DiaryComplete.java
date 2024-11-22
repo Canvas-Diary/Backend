@@ -105,6 +105,10 @@ public class DiaryComplete {
         return writerId.value().equals(userId.value());
     }
 
+    public boolean hasImage() {
+        return !images.isEmpty();
+    }
+
     public String getMainImageOrDefault() {
         return images.stream()
                      .filter(Image::isMain)
