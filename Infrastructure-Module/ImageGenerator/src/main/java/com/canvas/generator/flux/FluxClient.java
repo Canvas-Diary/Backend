@@ -2,6 +2,8 @@ package com.canvas.generator.flux;
 
 import com.canvas.generator.flux.exception.FluxException;
 import com.canvas.generator.flux.exception.FluxResultStatus;
+import com.fasterxml.jackson.databind.PropertyNamingStrategy;
+import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -48,6 +50,7 @@ public class FluxClient {
     }
 
     public String getResult(String id) {
+        log.info("id={}", id);
         return Objects.requireNonNull(webClient.get()
                 .uri(uriBuilder -> uriBuilder.path("/get_result")
                         .queryParam("id", id)
@@ -65,6 +68,7 @@ public class FluxClient {
                 .getSample();
     }
 
+    @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
     public record GenerateRequest(
             String prompt,
             Integer width,
