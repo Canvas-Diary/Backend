@@ -18,21 +18,16 @@ public interface GetReminiscenceDiaryUseCase {
     }
 
     record Response (
-            DiaryInfo diaryInfo,
-            List<String> keywords
+            String diaryId,
+            String content,
+            Emotion emotion,
+            Integer likedCount,
+            Boolean isLiked,
+            LocalDate date,
+            List<ImageInfo> images,
+            ReminiscenceType reminiscenceType
+
         ) {
-
-        public record DiaryInfo(
-                String diaryId,
-                String content,
-                Emotion emotion,
-                Integer likedCount,
-                Boolean isLiked,
-                LocalDate date,
-                List<ImageInfo> images,
-                ReminiscenceType reminiscenceType
-        ) {}
-
         public record ImageInfo(
                 String imageId,
                 Boolean isMain,

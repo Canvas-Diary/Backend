@@ -202,19 +202,16 @@ public class DiaryQueryService
         LocalDate date = query.date();
         List<String> keywords = diaryKeywordExtractPort.keywordExtract(query.content());
 
-        Optional<DiaryComplete> targetDateDiary = diaryManagementPort.getByWriterIdAndDate(
+        DiaryComplete reminiscenceDiary = diaryManagementPort.getByWriterIdAndDate(
                 userId,
                 date.minusYears(1),
                 date.minusMonths(1)
-        );
-        ReminiscenceType type = getReminiscenceType(targetDateDiary, query.date());
+        ).orElseGet(() -> findDiaryByKeywords(userId, keywords, date));
 
-        DiaryComplete reminiscenceDiary = targetDateDiary.orElseGet(() -> findDiaryByKeywords(userId, keywords, date));
+        ReminiscenceType type = getReminiscenceType(reminiscenceDiary, query.date());
 
-        GetReminiscenceDiaryUseCase.Response.DiaryInfo diaryInfo = reminiscenceDiary != null
-                ? ToResponseDiaryInfo(reminiscenceDiary, userId, type) : null;
 
-        return ToReminiscenceDiaryResponse(diaryInfo, keywords);
+        return ToReminiscenceDiaryResponse(reminiscenceDiary, userId, type);
     }
 
     private DiaryComplete findDiaryByKeywords(DomainId userId, List<String> keywords, LocalDate date) {
@@ -224,23 +221,25 @@ public class DiaryQueryService
                         date.minusWeeks(1)
                 ).stream()
                 .findAny()
-                .orElse(null);
+                .orElseThrow(DiaryException.DiaryNotFoundException::new);
     }
 
-    private ReminiscenceType getReminiscenceType(Optional<DiaryComplete> targetDateDiary, LocalDate date) {
-        if(targetDateDiary.isEmpty()) {
-            return ReminiscenceType.KEYWORD;
+    private ReminiscenceType getReminiscenceType(DiaryComplete reminiscenceDiary, LocalDate date) {
+        LocalDate diaryDate = reminiscenceDiary.getDate();
+
+        if(date.minusMonths(1).equals(diaryDate)) {
+            return ReminiscenceType.MONTH;
+        }
+        if(date.minusYears(1).equals(diaryDate)) {
+            return ReminiscenceType.YEAR;
         }
 
-        LocalDate targetDate = targetDateDiary.get().getDate();
-
-        return date.minusMonths(1).equals(targetDate)
-                ? ReminiscenceType.MONTH : ReminiscenceType.YEAR;
+        return ReminiscenceType.KEYWORD;
     }
 
-    private static GetReminiscenceDiaryUseCase.Response.DiaryInfo ToResponseDiaryInfo(DiaryComplete diary, DomainId userId, ReminiscenceType type) {
+    private static GetReminiscenceDiaryUseCase.Response ToReminiscenceDiaryResponse(DiaryComplete diary, DomainId userId, ReminiscenceType type) {
 
-        return new GetReminiscenceDiaryUseCase.Response.DiaryInfo(
+        return new GetReminiscenceDiaryUseCase.Response(
                 diary.getId().toString(),
                 diary.getContent(),
                 diary.getEmotion(),
@@ -255,15 +254,6 @@ public class DiaryQueryService
                                 image.getImageUrl()))
                         .toList(),
                 type
-        );
-    }
-
-    private static GetReminiscenceDiaryUseCase.Response ToReminiscenceDiaryResponse(
-            GetReminiscenceDiaryUseCase.Response.DiaryInfo diaryInfo,
-            List<String> keywords) {
-        return new GetReminiscenceDiaryUseCase.Response(
-                diaryInfo,
-                keywords
         );
     }
 
