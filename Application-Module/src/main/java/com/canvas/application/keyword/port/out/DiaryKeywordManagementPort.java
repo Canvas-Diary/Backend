@@ -5,8 +5,9 @@ import com.canvas.domain.keyword.DiaryKeyword;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
 public interface DiaryKeywordManagementPort {
     void saveAllDiaryKeywords(List<DiaryKeyword> diaryKeywords);
-    List<DiaryKeyword> findByWriteIdAndBetween(DomainId userId, LocalDate start, LocalDate end);
+    Map<String, Long> findDiaryKeywordByWriterIdAndDateRange(DomainId userId, LocalDate start, LocalDate end);
 }

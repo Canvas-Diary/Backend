@@ -11,14 +11,13 @@ import java.util.UUID;
 public interface DiaryKeywordJpaRepository extends JpaRepository<DiaryKeywordEntity, UUID> {
 
     @Query("""
-        select dk
-        from DiaryKeywordEntity dk
-        where dk.diaryId in (
-                        select d.id
-                        from DiaryEntity d
-                        where d.writerId = :writerId and d.date between :startDate and :endDate
-                        )
-    """)
-    List<DiaryKeywordEntity> getByWriteIdAndBetween(UUID writerId, LocalDate startDate, LocalDate endDate);
+    select dk
+    from DiaryKeywordEntity dk
+    join fetch dk.keywordEntity k
+    where dk.diaryEntity.writerId = :writerId
+      and dk.diaryEntity.date between :startDate and :endDate
+""")
+    List<DiaryKeywordEntity> findByWriterIdAndDateRange(UUID writerId, LocalDate startDate, LocalDate endDate);
+
 
 }

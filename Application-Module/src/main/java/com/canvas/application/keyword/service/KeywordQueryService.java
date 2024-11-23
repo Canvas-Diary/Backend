@@ -42,28 +42,10 @@ public class KeywordQueryService implements GetKeywordStatsUseCase {
     }
 
     private Response getKeywordStats(String userId, LocalDate startDate, LocalDate endDate) {
-        List<DiaryKeyword> diaryKeywords = diaryKeywordManagementPort.findByWriteIdAndBetween(
-                DomainId.from(userId),
-                startDate,
-                endDate
-        );
 
-        List<DomainId> keywordIds = diaryKeywords.stream()
-                .map(DiaryKeyword::getKeywordId)
-                .distinct()
-                .toList();
 
-        List<Keyword> keywords = keywordManagementPort.findByKeywordsId(keywordIds);
-
-        Map<String, Long> keywordNameCounts = diaryKeywords.stream()
-                .flatMap(diaryKeyword -> keywords.stream()
-                        .filter(keyword -> keyword.getId().equals(diaryKeyword.getKeywordId()))
-                        .map(Keyword::getKeyword)
-                )
-                .collect(Collectors.groupingBy(
-                        keywordName -> keywordName,
-                        Collectors.counting()
-                ));
+        Map<String, Long> keywordNameCounts = diaryKeywordManagementPort.
+                findDiaryKeywordByWriterIdAndDateRange(DomainId.from(userId), startDate, endDate);
 
         return toKeywordStatsResponse(keywordNameCounts);
     }

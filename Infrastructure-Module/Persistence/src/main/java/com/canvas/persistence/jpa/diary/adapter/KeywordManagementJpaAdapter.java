@@ -16,7 +16,9 @@ import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Repository
 @RequiredArgsConstructor
@@ -31,14 +33,6 @@ public class KeywordManagementJpaAdapter implements KeywordManagementPort, Diary
         return keywordEntities.stream().map(KeywordMapper::toDomain).toList();
     }
 
-    @Override
-    public List<Keyword> findByKeywordsId(List<DomainId> keywordIdList) {
-        List<UUID> keywordIds = keywordIdList.stream().map(DomainId::value).toList();
-        return keywordJpaRepository.findByKeywordIds(keywordIds)
-                .stream()
-                .map(KeywordMapper::toDomain)
-                .toList();
-    }
 
     @Override
     public void saveAllKeywords(List<Keyword> keywords) {
@@ -52,12 +46,14 @@ public class KeywordManagementJpaAdapter implements KeywordManagementPort, Diary
         diaryKeywordJpaRepository.saveAll(diaryKeywordEntities);
     }
 
+
     @Override
-    public List<DiaryKeyword> findByWriteIdAndBetween(DomainId userId, LocalDate start, LocalDate end) {
-        List<DiaryKeywordEntity> diaryKeywordEntities =
-                diaryKeywordJpaRepository.getByWriteIdAndBetween(userId.value(), start, end);
+    public Map<String, Long> findDiaryKeywordByWriterIdAndDateRange(DomainId userId, LocalDate start, LocalDate end) {
+        List<DiaryKeywordEntity> diaryKeywordEntities = diaryKeywordJpaRepository.findByWriterIdAndDateRange(userId.value(), start, end);
         return diaryKeywordEntities.stream()
-                .map(DiaryKeywordMapper::toDomain)
-                .toList();
+                .map(diaryKeywordEntity -> diaryKeywordEntity.getKeywordEntity().getName())
+                .collect(Collectors.groupingBy(
+                        name -> name,
+                        Collectors.counting()));
     }
 }
