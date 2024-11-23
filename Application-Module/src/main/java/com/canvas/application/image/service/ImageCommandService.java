@@ -55,10 +55,10 @@ public class ImageCommandService
     // 이미지를 생성하기만 하면 create
     @Override
     public Response.Create create(AddImageUseCase.Command.Create command) {
-        String prompt = imagePromptGeneratePort.generatePrompt(command.content(), command.joinedWeightedContents());
-        String generatedImageUrl = imageGenerationPort.generate(prompt, command.style());
-        String uploadedImageUrl = imageUploadPort.upload(generatedImageUrl);
-
+//        String prompt = imagePromptGeneratePort.generatePrompt(command.content(), command.joinedWeightedContents());
+//        String generatedImageUrl = imageGenerationPort.generate(prompt, command.style());
+//        String uploadedImageUrl = imageUploadPort.upload(generatedImageUrl);
+        String uploadedImageUrl = Image.DEFAULT_IMAGE_URL;
         return new Response.Create(uploadedImageUrl);
     }
 
