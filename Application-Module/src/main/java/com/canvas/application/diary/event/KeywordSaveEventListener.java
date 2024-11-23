@@ -7,7 +7,6 @@ import com.canvas.domain.common.DomainId;
 import com.canvas.domain.keyword.DiaryKeyword;
 import com.canvas.domain.keyword.Keyword;
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
