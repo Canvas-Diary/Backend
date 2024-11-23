@@ -1,6 +1,7 @@
 package com.canvas.application.diary.service;
 
 import com.canvas.application.common.enums.Style;
+import com.canvas.application.diary.event.KeywordSavedEvent;
 import com.canvas.application.diary.exception.DiaryException;
 import com.canvas.application.diary.port.in.AddDiaryUseCase;
 import com.canvas.application.diary.port.in.ModifyDiaryUseCase;
@@ -13,6 +14,7 @@ import com.canvas.domain.diary.entity.DiaryComplete;
 import com.canvas.domain.diary.entity.Image;
 import com.canvas.domain.diary.enums.Emotion;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,6 +29,7 @@ public class DiaryCommandService
     private final DiaryManagementPort diaryManagementPort;
     private final DiaryEmotionExtractPort diaryEmotionExtractPort;
     private final AddImageUseCase addImageUseCase;
+    private final ApplicationEventPublisher eventPublisher;
 
     @Override
     public Response add(AddDiaryUseCase.Command command) {
@@ -55,6 +58,8 @@ public class DiaryCommandService
                         image
                 )
         );
+
+        eventPublisher.publishEvent(new KeywordSavedEvent(command.userId(), diaryId.toString(), command.content()));
 
         return new Response(diaryId.toString());
     }
