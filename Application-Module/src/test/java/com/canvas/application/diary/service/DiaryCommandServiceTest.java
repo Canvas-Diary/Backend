@@ -19,6 +19,7 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.context.ApplicationEventPublisher;
 
 import static com.canvas.application.diary.DiaryApplicationFixture.*;
 import static com.canvas.domain.fixture.DiaryFixture.PUBLIC_MY_DIARY;
@@ -39,6 +40,8 @@ class DiaryCommandServiceTest {
     private DiaryEmotionExtractPort diaryEmotionExtractPort;
     @Mock
     private AddImageUseCase addImageUseCase;
+    @Mock
+    private ApplicationEventPublisher applicationEventPublisher;
 
     @InjectMocks
     private DiaryCommandService diaryCommandService;
@@ -58,6 +61,7 @@ class DiaryCommandServiceTest {
                 .willReturn(diary.getEmotion());
         given(addImageUseCase.create(any(AddImageUseCase.Command.Create.class)))
                 .willReturn(new AddImageUseCase.Response.Create(generatedImageUrl));
+
 
         // when
         AddDiaryUseCase.Response response = diaryCommandService.add(command);

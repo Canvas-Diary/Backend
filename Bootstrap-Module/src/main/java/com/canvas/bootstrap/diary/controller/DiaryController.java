@@ -172,27 +172,22 @@ public class DiaryController implements DiaryApi {
                     request.date()
         ));
 
-        GetReminiscenceDiaryUseCase.Response.DiaryInfo diaryInfo = response.diaryInfo();
 
         return new ReminiscenceResponse(
-                diaryInfo == null ?
-                        null : new ReminiscenceResponse.DiaryInfo(
-                        diaryInfo.diaryId(),
-                        diaryInfo.content(),
-                        diaryInfo.emotion(),
-                        diaryInfo.likedCount(),
-                        diaryInfo.isLiked(),
-                        diaryInfo.date(),
-                        diaryInfo.images()
-                                .stream().map(
-                                        imageInfo -> new ReminiscenceResponse.ImageInfo(
-                                                imageInfo.imageId(),
-                                                imageInfo.isMain(),
-                                                imageInfo.imageUrl())
-                                ).toList(),
-                        diaryInfo.reminiscenceType()
-                ),
-                response.keywords()
+                response.diaryId(),
+                response.content(),
+                response.emotion(),
+                response.likedCount(),
+                response.isLiked(),
+                response.date(),
+                response.images()
+                    .stream().map(
+                        imageInfo -> new ReminiscenceResponse.ImageInfo(
+                            imageInfo.imageId(),
+                            imageInfo.isMain(),
+                            imageInfo.imageUrl())
+                    ).toList(),
+                response.reminiscenceType()
         );
     }
 
