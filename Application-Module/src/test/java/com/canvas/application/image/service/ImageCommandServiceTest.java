@@ -8,7 +8,7 @@ import com.canvas.application.image.port.in.SetMainImageUseCase;
 import com.canvas.application.image.port.out.ImageGenerationPort;
 import com.canvas.application.image.port.out.ImageManagementPort;
 import com.canvas.application.image.port.out.ImagePromptGeneratePort;
-import com.canvas.application.image.port.out.ImageUploadPort;
+import com.canvas.application.image.port.out.ImageStoragePort;
 import com.canvas.domain.diary.entity.DiaryComplete;
 import com.canvas.domain.diary.entity.DiaryOverview;
 import com.canvas.domain.diary.entity.Image;
@@ -45,7 +45,7 @@ class ImageCommandServiceTest {
     @Mock
     private ImagePromptGeneratePort imagePromptGeneratePort;
     @Mock
-    private ImageUploadPort imageUploadPort;
+    private ImageStoragePort imageStoragePort;
 
     @Spy
     @InjectMocks
@@ -81,7 +81,7 @@ class ImageCommandServiceTest {
 
         given(imagePromptGeneratePort.generatePrompt(command.content(), command.joinedWeightedContents())).willReturn("prompt");
         given(imageGenerationPort.generate("prompt", command.style())).willReturn("generatedImageUrl");
-        given(imageUploadPort.upload("generatedImageUrl")).willReturn("uploadedImageUrl");
+        given(imageStoragePort.upload("generatedImageUrl")).willReturn("uploadedImageUrl");
 
         // when
         AddImageUseCase.Response.Create response = imageCommandService.create(command);

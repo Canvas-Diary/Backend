@@ -1,6 +1,6 @@
 package com.canvas.aws.s3;
 
-import com.canvas.application.image.port.out.ImageUploadPort;
+import com.canvas.application.image.port.out.ImageStoragePort;
 import io.awspring.cloud.s3.ObjectMetadata;
 import io.awspring.cloud.s3.S3Resource;
 import io.awspring.cloud.s3.S3Template;
@@ -22,7 +22,7 @@ import java.util.UUID;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class ImageUploadS3Adaptor implements ImageUploadPort {
+public class ImageStorageS3Adapter implements ImageStoragePort {
 
     private final S3Template s3Template;
     private static final String BUCKET_NAME = "canvas-diary";
