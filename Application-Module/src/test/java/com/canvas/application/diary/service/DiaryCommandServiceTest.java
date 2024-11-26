@@ -116,7 +116,7 @@ class DiaryCommandServiceTest {
 
         // then
         verify(diaryEmotionExtractPort, never()).emotionExtract(command.content());
-        verify(diaryManagementPort).save(diary);
+        verify(diaryManagementPort).update(diary);
         assertThat(diary.getContent()).isEqualTo(command.content());
         assertThat(diary.getIsPublic()).isEqualTo(command.isPublic());
     }
@@ -141,7 +141,7 @@ class DiaryCommandServiceTest {
 
         // then
         verify(diaryEmotionExtractPort).emotionExtract(command.content());
-        verify(diaryManagementPort).save(diary);
+        verify(diaryManagementPort).update(diary);
         assertThat(diary.getContent()).isEqualTo(command.content());
         assertThat(diary.getIsPublic()).isEqualTo(command.isPublic());
     }

@@ -71,4 +71,11 @@ public class DiaryEntity extends BaseEntity {
         return List.of(joinedWeightedContents.split(","));
     }
 
+    public void update(DiaryEntity diaryEntity) {
+        this.content = diaryEntity.getContent();
+        this.joinedWeightedContents = diaryEntity.getJoinedWeightedContents();
+        this.emotion = diaryEntity.getEmotion();
+        this.isPublic = diaryEntity.getIsPublic();
+    }
+
 }

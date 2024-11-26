@@ -14,6 +14,7 @@ import java.util.Optional;
 
 public interface DiaryManagementPort {
     DiaryComplete save(DiaryComplete diary);
+    void update(DiaryComplete diary);
     boolean existsByWriterIdAndDate(DomainId userId, LocalDate date);
     DiaryComplete getById(DomainId diaryId);
     DiaryComplete getByIdAndWriterId(DomainId diaryId, DomainId writerId);

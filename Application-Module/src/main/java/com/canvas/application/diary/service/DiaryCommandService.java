@@ -79,7 +79,7 @@ public class DiaryCommandService
         diary.updateWeightedContents(command.weightedContents());
         diary.updatePublic(command.isPublic());
 
-        diaryManagementPort.save(diary);
+        diaryManagementPort.update(diary);
     }
 
     private Image createImage(DomainId diaryId, String content, String joinedWeightedContents, Style style) {
