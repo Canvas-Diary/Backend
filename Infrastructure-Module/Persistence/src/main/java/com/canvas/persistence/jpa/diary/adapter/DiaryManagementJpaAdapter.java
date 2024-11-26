@@ -33,6 +33,14 @@ public class DiaryManagementJpaAdapter implements DiaryManagementPort {
     }
 
     @Override
+    public void update(DiaryComplete diary) {
+        DiaryEntity diaryEntity = diaryJpaRepository.findById(diary.getId().value())
+                .orElseThrow(DiaryException.DiaryNotFoundException::new);
+
+        diaryEntity.update(DiaryMapper.toEntity(diary));
+    }
+
+    @Override
     public boolean existsByWriterIdAndDate(DomainId userId, LocalDate date) {
         return diaryJpaRepository.existsByWriterIdAndDate(userId.value(), date);
     }
