@@ -1,5 +1,6 @@
 package com.canvas.persistence.jpa.diary.adapter;
 
+import com.canvas.application.image.exception.ImageException;
 import com.canvas.application.image.port.out.ImageManagementPort;
 import com.canvas.domain.common.DomainId;
 import com.canvas.domain.diary.entity.Image;
@@ -36,8 +37,10 @@ public class ImageManagementJpaAdapter implements ImageManagementPort {
     }
 
     @Override
-    public boolean existsByIdAndUserId(DomainId imageId, DomainId userId) {
-        return imageJpaRepository.existsByIdAndWriterId(imageId.value(), userId.value());
+    public Image getByIdAndUserId(DomainId imageId, DomainId userId) {
+        return imageJpaRepository.findByIdAndWriterId(imageId.value(), userId.value())
+                .map(ImageMapper::toDomain)
+                .orElseThrow(ImageException.ImageNotFoundException::new);
     }
 
     @Override

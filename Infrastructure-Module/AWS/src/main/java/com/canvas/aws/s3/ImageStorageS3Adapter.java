@@ -1,6 +1,6 @@
 package com.canvas.aws.s3;
 
-import com.canvas.application.image.port.out.ImageUploadPort;
+import com.canvas.application.image.port.out.ImageStoragePort;
 import io.awspring.cloud.s3.ObjectMetadata;
 import io.awspring.cloud.s3.S3Resource;
 import io.awspring.cloud.s3.S3Template;
@@ -22,7 +22,7 @@ import java.util.UUID;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class ImageUploadS3Adaptor implements ImageUploadPort {
+public class ImageStorageS3Adapter implements ImageStoragePort {
 
     private final S3Template s3Template;
     private static final String BUCKET_NAME = "canvas-diary";
@@ -39,24 +39,29 @@ public class ImageUploadS3Adaptor implements ImageUploadPort {
 
         String storageUrl = createImageName() + EXTENSION;
 
-        try {
-            S3Resource resource = s3Template.upload(
-                    BUCKET_NAME,
-                    storageUrl,
-                    byteArrayInputStream,
-                    ObjectMetadata.builder()
-                            .contentType(CONTENT_TYPE)
-                            .build());
+        S3Resource resource = s3Template.upload(
+                BUCKET_NAME,
+                storageUrl,
+                byteArrayInputStream,
+                ObjectMetadata.builder()
+                        .contentType(CONTENT_TYPE)
+                        .build()
+        );
 
-            return resource.getURL().toString();
-
-        } catch (IOException e) {
-            log.error(e.toString());
-            throw new RuntimeException(e);
-        }
+        return getUrlString(resource);
     }
 
-    public ByteArrayOutputStream imageUrlToByteStream(String imageUrl) {
+    @Override
+    public void delete(String imageUrl) {
+        String[] split = imageUrl.split("/");
+        String key = split[split.length - 1];
+
+        log.info("key={}", key);
+
+        s3Template.deleteObject(BUCKET_NAME, key);
+    }
+
+    private ByteArrayOutputStream imageUrlToByteStream(String imageUrl) {
         UriComponents uriComponents = UriComponentsBuilder.fromUriString(imageUrl).build(true);
 
         Flux<DataBuffer> dataBufferFlux = webClient.get()
@@ -69,7 +74,7 @@ public class ImageUploadS3Adaptor implements ImageUploadPort {
         DataBufferUtils.write(dataBufferFlux, byteArrayOutputStream)
                 .doOnError((e) -> {
                     log.error(e.toString());
-                    throw new RuntimeException("해당 url에서 이미지를 읽어오는 도중 오류가 생겼습니다.");
+                    throw new S3Excpetion.S3UploadException();
                 })
                 .blockLast();
 
@@ -78,6 +83,14 @@ public class ImageUploadS3Adaptor implements ImageUploadPort {
 
     private String createImageName() {
         return UUID.randomUUID().toString();
+    }
+
+    private static String getUrlString(S3Resource resource) {
+        try {
+            return resource.getURL().toString();
+        } catch (IOException e) {
+            throw new S3Excpetion.S3UploadException();
+        }
     }
 
 }

@@ -60,11 +60,6 @@ public class DiaryManagementJpaAdapter implements DiaryManagementPort {
     }
 
     @Override
-    public boolean existsByIdAndWriterId(DomainId diaryId, DomainId writerId) {
-        return diaryJpaRepository.existsByIdAndWriterId(diaryId.value(), writerId.value());
-    }
-
-    @Override
     public List<DiaryBasic> getByWriterIdAndDateBetween(DomainId userId, LocalDate start, LocalDate end) {
         return diaryJpaRepository.findByWriterIdAndDateBetween(userId.value(), start, end).stream()
                                  .map(DiaryMapper::toBasicDomain)

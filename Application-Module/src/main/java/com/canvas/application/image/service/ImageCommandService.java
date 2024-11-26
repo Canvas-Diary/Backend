@@ -8,7 +8,7 @@ import com.canvas.application.image.port.in.SetMainImageUseCase;
 import com.canvas.application.image.port.out.ImageGenerationPort;
 import com.canvas.application.image.port.out.ImageManagementPort;
 import com.canvas.application.image.port.out.ImagePromptGeneratePort;
-import com.canvas.application.image.port.out.ImageUploadPort;
+import com.canvas.application.image.port.out.ImageStoragePort;
 import com.canvas.domain.common.DomainId;
 import com.canvas.domain.diary.entity.DiaryComplete;
 import com.canvas.domain.diary.entity.Image;
@@ -28,7 +28,7 @@ public class ImageCommandService
     private final ImageGenerationPort imageGenerationPort;
     private final ImageManagementPort imageManagementPort;
     private final ImagePromptGeneratePort imagePromptGeneratePort;
-    private final ImageUploadPort imageUploadPort;
+    private final ImageStoragePort imageStoragePort;
 
     // 이미지를 생성하고 저장하면 add
     @Override
@@ -57,19 +57,19 @@ public class ImageCommandService
     public Response.Create create(AddImageUseCase.Command.Create command) {
         String prompt = imagePromptGeneratePort.generatePrompt(command.content(), command.joinedWeightedContents());
         String generatedImageUrl = imageGenerationPort.generate(prompt, command.style());
-        String uploadedImageUrl = imageUploadPort.upload(generatedImageUrl);
+        String uploadedImageUrl = imageStoragePort.upload(generatedImageUrl);
         return new Response.Create(uploadedImageUrl);
     }
 
     @Override
     public void remove(RemoveImageUseCase.Command command) {
-        if (!imageManagementPort.existsByIdAndUserId(
-                DomainId.from(command.imageId()),
-                DomainId.from(command.userId()))) {
-            throw new ImageException.ImageNotFoundException();
-        }
+        DomainId imageId = DomainId.from(command.imageId());
+        DomainId userId = DomainId.from(command.userId());
 
-        imageManagementPort.deleteById(DomainId.from(command.imageId()));
+        Image image = imageManagementPort.getByIdAndUserId(imageId, userId);
+
+        imageManagementPort.deleteById(imageId);
+        imageStoragePort.delete(image.getImageUrl());
     }
 
     @Override

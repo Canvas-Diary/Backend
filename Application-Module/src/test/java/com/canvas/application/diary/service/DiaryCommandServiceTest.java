@@ -7,6 +7,7 @@ import com.canvas.application.diary.port.in.RemoveDiaryUseCase;
 import com.canvas.application.diary.port.out.DiaryEmotionExtractPort;
 import com.canvas.application.diary.port.out.DiaryManagementPort;
 import com.canvas.application.image.port.in.AddImageUseCase;
+import com.canvas.application.image.port.out.ImageStoragePort;
 import com.canvas.domain.common.DomainId;
 import com.canvas.domain.diary.entity.DiaryComplete;
 import com.canvas.domain.diary.entity.Image;
@@ -40,6 +41,8 @@ class DiaryCommandServiceTest {
     private DiaryEmotionExtractPort diaryEmotionExtractPort;
     @Mock
     private AddImageUseCase addImageUseCase;
+    @Mock
+    private ImageStoragePort imageStoragePort;
     @Mock
     private ApplicationEventPublisher applicationEventPublisher;
 
@@ -154,14 +157,15 @@ class DiaryCommandServiceTest {
         DiaryComplete diary = PUBLIC_MY_DIARY.getDiaryComplete();
         RemoveDiaryUseCase.Command command = getRemoveDiaryCommand(user, diary);
 
-        given(diaryManagementPort.existsByIdAndWriterId(diary.getId(), user.getId()))
-                .willReturn(true);
+        given(diaryManagementPort.getByIdAndWriterId(diary.getId(), user.getId()))
+                .willReturn(diary);
 
         // when
         diaryCommandService.remove(command);
 
         // then
         verify(diaryManagementPort).deleteById(diary.getId());
+        diary.getImageUrls().forEach(imageUrl -> verify(imageStoragePort).delete(imageUrl));
     }
 
     @Test
@@ -172,14 +176,15 @@ class DiaryCommandServiceTest {
         DiaryComplete diary = PUBLIC_MY_DIARY.getDiaryComplete();
         RemoveDiaryUseCase.Command command = getRemoveDiaryCommand(user, diary);
 
-        given(diaryManagementPort.existsByIdAndWriterId(diary.getId(), user.getId()))
-                .willReturn(false);
+        given(diaryManagementPort.getByIdAndWriterId(diary.getId(), user.getId()))
+                .willThrow(DiaryException.DiaryNotFoundException.class);
 
         // when
         // then
         assertThatThrownBy(() -> diaryCommandService.remove(command))
-                .isInstanceOf(DiaryException.DiaryForbiddenException.class);
+                .isInstanceOf(DiaryException.DiaryNotFoundException.class);
         verify(diaryManagementPort, never()).deleteById(diary.getId());
+        diary.getImageUrls().forEach(imageUrl -> verify(imageStoragePort, never()).delete(imageUrl));
     }
 
 }

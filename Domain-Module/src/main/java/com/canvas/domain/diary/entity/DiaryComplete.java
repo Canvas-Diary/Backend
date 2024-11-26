@@ -127,4 +127,10 @@ public class DiaryComplete {
     public void updateWeightedContents(List<String> weightedContents) {
         this.weightedContents = weightedContents;
     }
+
+    public List<String> getImageUrls() {
+        return images.stream()
+                     .map(Image::getImageUrl)
+                     .toList();
+    }
 }

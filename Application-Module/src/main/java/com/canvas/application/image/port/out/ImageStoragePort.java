@@ -1,5 +1,6 @@
 package com.canvas.application.image.port.out;
 
-public interface ImageUploadPort {
+public interface ImageStoragePort {
     String upload(String imageUrl);
+    void delete(String imageUrl);
 }
