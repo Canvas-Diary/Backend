@@ -39,24 +39,29 @@ public class ImageStorageS3Adapter implements ImageStoragePort {
 
         String storageUrl = createImageName() + EXTENSION;
 
-        try {
-            S3Resource resource = s3Template.upload(
-                    BUCKET_NAME,
-                    storageUrl,
-                    byteArrayInputStream,
-                    ObjectMetadata.builder()
-                            .contentType(CONTENT_TYPE)
-                            .build());
+        S3Resource resource = s3Template.upload(
+                BUCKET_NAME,
+                storageUrl,
+                byteArrayInputStream,
+                ObjectMetadata.builder()
+                        .contentType(CONTENT_TYPE)
+                        .build()
+        );
 
-            return resource.getURL().toString();
-
-        } catch (IOException e) {
-            log.error(e.toString());
-            throw new RuntimeException(e);
-        }
+        return getUrlString(resource);
     }
 
-    public ByteArrayOutputStream imageUrlToByteStream(String imageUrl) {
+    @Override
+    public void delete(String imageUrl) {
+        String[] split = imageUrl.split("/");
+        String key = split[split.length - 1];
+
+        log.info("key={}", key);
+
+        s3Template.deleteObject(BUCKET_NAME, key);
+    }
+
+    private ByteArrayOutputStream imageUrlToByteStream(String imageUrl) {
         UriComponents uriComponents = UriComponentsBuilder.fromUriString(imageUrl).build(true);
 
         Flux<DataBuffer> dataBufferFlux = webClient.get()
@@ -69,7 +74,7 @@ public class ImageStorageS3Adapter implements ImageStoragePort {
         DataBufferUtils.write(dataBufferFlux, byteArrayOutputStream)
                 .doOnError((e) -> {
                     log.error(e.toString());
-                    throw new RuntimeException("해당 url에서 이미지를 읽어오는 도중 오류가 생겼습니다.");
+                    throw new S3Excpetion.S3UploadException();
                 })
                 .blockLast();
 
@@ -78,6 +83,14 @@ public class ImageStorageS3Adapter implements ImageStoragePort {
 
     private String createImageName() {
         return UUID.randomUUID().toString();
+    }
+
+    private static String getUrlString(S3Resource resource) {
+        try {
+            return resource.getURL().toString();
+        } catch (IOException e) {
+            throw new S3Excpetion.S3UploadException();
+        }
     }
 
 }

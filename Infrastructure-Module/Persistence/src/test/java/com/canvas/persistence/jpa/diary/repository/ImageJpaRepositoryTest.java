@@ -16,6 +16,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import static com.canvas.persistence.jpa.fixture.ImageEntityFixture.PUBLIC_MY_DIARY_IMAGE1;
@@ -57,9 +58,13 @@ class ImageJpaRepositoryTest {
         UserEntity myself = MYSELF.getUserEntity();
 
         // when
+        Optional<ImageEntity> imageEntity = imageJpaRepository.findByIdAndWriterId(
+                publicMyDiaryImage1.getId(),
+                myself.getId()
+        );
+
         // then
-        assertThat(imageJpaRepository.existsByIdAndWriterId(publicMyDiaryImage1.getId(), myself.getId()))
-                .isTrue();
+        assertThat(imageEntity).isPresent();
     }
 
     @Test
@@ -70,9 +75,13 @@ class ImageJpaRepositoryTest {
         UserEntity other1 = OTHER1.getUserEntity();
 
         // when
+        Optional<ImageEntity> imageEntity = imageJpaRepository.findByIdAndWriterId(
+                publicMyDiaryImage1.getId(),
+                other1.getId()
+        );
+
         // then
-        assertThat(imageJpaRepository.existsByIdAndWriterId(publicMyDiaryImage1.getId(), other1.getId()))
-                .isFalse();
+        assertThat(imageEntity).isEmpty();
     }
 
     @Test

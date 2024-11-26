@@ -98,7 +98,7 @@ class ImageCommandServiceTest {
         Image image = PUBLIC_MY_DIARY_IMAGE2.getImage();
         RemoveImageUseCase.Command command = getRemoveImageCommand(user, image);
 
-        given(imageManagementPort.existsByIdAndUserId(image.getId(), user.getId())).willReturn(true);
+        given(imageManagementPort.getByIdAndUserId(image.getId(), user.getId())).willReturn(image);
 
         // when
         imageCommandService.remove(command);
@@ -115,7 +115,8 @@ class ImageCommandServiceTest {
         Image image = PUBLIC_MY_DIARY_IMAGE2.getImage();
         RemoveImageUseCase.Command command = getRemoveImageCommand(user, image);
 
-        given(imageManagementPort.existsByIdAndUserId(image.getId(), user.getId())).willReturn(false);
+        given(imageManagementPort.getByIdAndUserId(image.getId(), user.getId()))
+                .willThrow(ImageException.ImageNotFoundException.class);
 
         // when
         // then

@@ -5,16 +5,17 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 public interface ImageJpaRepository extends JpaRepository<ImageEntity, UUID> {
     @Query("""
-        select case when (count(i) > 0) then true else false end
+        select i
         from ImageEntity i
         join i.diaryEntity d
         where i.id = :imageId and d.writerId = :userId
     """)
-    boolean existsByIdAndWriterId(UUID imageId, UUID userId);
+    Optional<ImageEntity> findByIdAndWriterId(UUID imageId, UUID userId);
 
     @Query("""
         select i

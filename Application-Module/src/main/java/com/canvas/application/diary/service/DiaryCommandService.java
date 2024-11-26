@@ -9,6 +9,7 @@ import com.canvas.application.diary.port.in.RemoveDiaryUseCase;
 import com.canvas.application.diary.port.out.DiaryEmotionExtractPort;
 import com.canvas.application.diary.port.out.DiaryManagementPort;
 import com.canvas.application.image.port.in.AddImageUseCase;
+import com.canvas.application.image.port.out.ImageStoragePort;
 import com.canvas.domain.common.DomainId;
 import com.canvas.domain.diary.entity.DiaryComplete;
 import com.canvas.domain.diary.entity.Image;
@@ -29,6 +30,7 @@ public class DiaryCommandService
     private final DiaryManagementPort diaryManagementPort;
     private final DiaryEmotionExtractPort diaryEmotionExtractPort;
     private final AddImageUseCase addImageUseCase;
+    private final ImageStoragePort imageStoragePort;
     private final ApplicationEventPublisher eventPublisher;
 
     @Override
@@ -90,14 +92,13 @@ public class DiaryCommandService
 
     @Override
     public void remove(RemoveDiaryUseCase.Command command) {
-        if (!diaryManagementPort.existsByIdAndWriterId(
+        DiaryComplete diary = diaryManagementPort.getByIdAndWriterId(
                 DomainId.from(command.diaryId()),
                 DomainId.from(command.userId())
-        )) {
-            throw new DiaryException.DiaryForbiddenException();
-        }
+        );
 
         diaryManagementPort.deleteById(DomainId.from(command.diaryId()));
+        diary.getImageUrls().forEach(imageStoragePort::delete);
     }
 
 }

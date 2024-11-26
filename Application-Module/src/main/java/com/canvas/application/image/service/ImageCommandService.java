@@ -63,13 +63,13 @@ public class ImageCommandService
 
     @Override
     public void remove(RemoveImageUseCase.Command command) {
-        if (!imageManagementPort.existsByIdAndUserId(
-                DomainId.from(command.imageId()),
-                DomainId.from(command.userId()))) {
-            throw new ImageException.ImageNotFoundException();
-        }
+        DomainId imageId = DomainId.from(command.imageId());
+        DomainId userId = DomainId.from(command.userId());
 
-        imageManagementPort.deleteById(DomainId.from(command.imageId()));
+        Image image = imageManagementPort.getByIdAndUserId(imageId, userId);
+
+        imageManagementPort.deleteById(imageId);
+        imageStoragePort.delete(image.getImageUrl());
     }
 
     @Override
