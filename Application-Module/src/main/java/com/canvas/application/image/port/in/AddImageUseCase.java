@@ -8,13 +8,14 @@ public interface AddImageUseCase {
 
     class Command {
         public record Add(
+                String userId,
                 String diaryId,
                 Style style
         ) {
         }
 
         public record Create(
-                String diaryId,
+                String userId,
                 String content,
                 String joinedWeightedContents,
                 Style style

@@ -19,8 +19,13 @@ public class ImageException extends BusinessException {
 
     public static class ImageNotFoundException extends ImageException {
         public ImageNotFoundException() {
-            super(1, org.springframework.http.HttpStatus.NOT_FOUND, "존재하지 않는 이미지입니다.");
+            super(1, HttpStatus.NOT_FOUND, "존재하지 않는 이미지입니다.");
         }
     }
 
+    public static class ImageDailyLimitExceededException extends ImageException {
+        public ImageDailyLimitExceededException() {
+            super(2, HttpStatus.TOO_MANY_REQUESTS, "이미지 생성 제한을 초과했습니다.");
+        }
+    }
 }

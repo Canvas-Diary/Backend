@@ -4,7 +4,6 @@ import com.canvas.application.common.enums.Style;
 import com.canvas.application.image.port.in.AddImageUseCase;
 import com.canvas.application.image.port.in.RemoveImageUseCase;
 import com.canvas.application.image.port.in.SetMainImageUseCase;
-import com.canvas.domain.common.DomainId;
 import com.canvas.domain.diary.entity.DiaryComplete;
 import com.canvas.domain.diary.entity.Image;
 import com.canvas.domain.user.entity.User;
@@ -12,14 +11,15 @@ import com.canvas.domain.user.entity.User;
 public class ImageApplicationFixture {
     public static AddImageUseCase.Command.Add getAddImageCommand(DiaryComplete diary) {
         return new AddImageUseCase.Command.Add(
+                diary.getWriterId().toString(),
                 diary.getId().toString(),
                 Style.PHOTOREALISTIC
         );
     }
 
-    public static AddImageUseCase.Command.Create getCreateImageCommand() {
+    public static AddImageUseCase.Command.Create getCreateImageCommand(User user) {
         return new AddImageUseCase.Command.Create(
-                DomainId.generate().toString(),
+                user.getId().toString(),
                 "content",
                 "joinedWeightedContents",
                 Style.PHOTOREALISTIC

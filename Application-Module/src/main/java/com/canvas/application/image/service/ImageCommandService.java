@@ -5,10 +5,7 @@ import com.canvas.application.image.exception.ImageException;
 import com.canvas.application.image.port.in.AddImageUseCase;
 import com.canvas.application.image.port.in.RemoveImageUseCase;
 import com.canvas.application.image.port.in.SetMainImageUseCase;
-import com.canvas.application.image.port.out.ImageGenerationPort;
-import com.canvas.application.image.port.out.ImageManagementPort;
-import com.canvas.application.image.port.out.ImagePromptGeneratePort;
-import com.canvas.application.image.port.out.ImageStoragePort;
+import com.canvas.application.image.port.out.*;
 import com.canvas.domain.common.DomainId;
 import com.canvas.domain.diary.entity.DiaryComplete;
 import com.canvas.domain.diary.entity.Image;
@@ -29,6 +26,7 @@ public class ImageCommandService
     private final ImageManagementPort imageManagementPort;
     private final ImagePromptGeneratePort imagePromptGeneratePort;
     private final ImageStoragePort imageStoragePort;
+    private final ImageDailyLimitPort imageDailyLimitPort;
 
     // 이미지를 생성하고 저장하면 add
     @Override
@@ -38,7 +36,7 @@ public class ImageCommandService
 
         Response.Create create = create(
                 new AddImageUseCase.Command.Create(
-                        command.diaryId(),
+                        command.userId(),
                         diary.getContent(),
                         diary.getJoinedWeightedContents(),
                         command.style()
@@ -55,9 +53,16 @@ public class ImageCommandService
     // 이미지를 생성하기만 하면 create
     @Override
     public Response.Create create(AddImageUseCase.Command.Create command) {
+        if (imageDailyLimitPort.isExceed(DomainId.from(command.userId()))) {
+            throw new ImageException.ImageDailyLimitExceededException();
+        }
+
+        imageDailyLimitPort.decrease(DomainId.from(command.userId()));
+
         String prompt = imagePromptGeneratePort.generatePrompt(command.content(), command.joinedWeightedContents());
         String generatedImageUrl = imageGenerationPort.generate(prompt, command.style());
         String uploadedImageUrl = imageStoragePort.upload(generatedImageUrl);
+
         return new Response.Create(uploadedImageUrl);
     }
 
