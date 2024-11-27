@@ -5,10 +5,7 @@ import com.canvas.application.image.exception.ImageException;
 import com.canvas.application.image.port.in.AddImageUseCase;
 import com.canvas.application.image.port.in.RemoveImageUseCase;
 import com.canvas.application.image.port.in.SetMainImageUseCase;
-import com.canvas.application.image.port.out.ImageGenerationPort;
-import com.canvas.application.image.port.out.ImageManagementPort;
-import com.canvas.application.image.port.out.ImagePromptGeneratePort;
-import com.canvas.application.image.port.out.ImageStoragePort;
+import com.canvas.application.image.port.out.*;
 import com.canvas.domain.diary.entity.DiaryComplete;
 import com.canvas.domain.diary.entity.DiaryOverview;
 import com.canvas.domain.diary.entity.Image;
@@ -46,6 +43,8 @@ class ImageCommandServiceTest {
     private ImagePromptGeneratePort imagePromptGeneratePort;
     @Mock
     private ImageStoragePort imageStoragePort;
+    @Mock
+    private ImageDailyLimitPort imageDailyLimitPort;
 
     @Spy
     @InjectMocks
@@ -74,11 +73,13 @@ class ImageCommandServiceTest {
     }
 
     @Test
-    @DisplayName("이미지 생성")
-    void createTest() {
+    @DisplayName("이미지 생성 성공")
+    void createSuccessTest() {
         // given
-        AddImageUseCase.Command.Create command = getCreateImageCommand();
+        User myself = MYSELF.getUser();
+        AddImageUseCase.Command.Create command = getCreateImageCommand(myself);
 
+        given(imageDailyLimitPort.isExceed(myself.getId())).willReturn(false);
         given(imagePromptGeneratePort.generatePrompt(command.content(), command.joinedWeightedContents())).willReturn("prompt");
         given(imageGenerationPort.generate("prompt", command.style())).willReturn("generatedImageUrl");
         given(imageStoragePort.upload("generatedImageUrl")).willReturn("uploadedImageUrl");
@@ -88,6 +89,26 @@ class ImageCommandServiceTest {
 
         // then
         assertThat(response.imageUrl()).isEqualTo("uploadedImageUrl");
+        verify(imageDailyLimitPort).decrease(myself.getId());
+    }
+
+    @Test
+    @DisplayName("이미지 생성 실패")
+    void createFailureTest() {
+        // given
+        User myself = MYSELF.getUser();
+        AddImageUseCase.Command.Create command = getCreateImageCommand(myself);
+
+        given(imageDailyLimitPort.isExceed(myself.getId())).willReturn(true);
+
+        // when
+        // then
+        assertThatThrownBy(() -> imageCommandService.create(command))
+                .isInstanceOf(ImageException.ImageDailyLimitExceededException.class);
+        verify(imagePromptGeneratePort, never()).generatePrompt(command.content(), command.joinedWeightedContents());
+        verify(imageGenerationPort, never()).generate(any(), any());
+        verify(imageStoragePort, never()).upload(any());
+        verify(imageDailyLimitPort, never()).decrease(myself.getId());
     }
 
     @Test

@@ -19,7 +19,7 @@ public class ImageController implements ImageApi {
     @Override
     public void createImage(String userId, String diaryId, CreateImageRequest createImageRequest) {
         addImageUseCase.add(
-                new AddImageUseCase.Command.Add(diaryId, createImageRequest.style()));
+                new AddImageUseCase.Command.Add(userId, diaryId, createImageRequest.style()));
     }
 
     @Override

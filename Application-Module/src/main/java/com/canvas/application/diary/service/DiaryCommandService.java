@@ -39,19 +39,21 @@ public class DiaryCommandService
             throw new DiaryException.DiaryBadRequestException();
         }
 
-        if (diaryManagementPort.existsByWriterIdAndDate(DomainId.from(command.userId()), command.date())) {
+        DomainId userId = DomainId.from(command.userId());
+        if (diaryManagementPort.existsByWriterIdAndDate(userId, command.date())) {
             throw new DiaryException.DiaryBadRequestException();
         }
 
         DomainId diaryId = DomainId.generate();
+
         Emotion emotion = diaryEmotionExtractPort.emotionExtract(command.content());
         String joinedWeightedContents = String.join(",", command.weightedContents());
-        Image image = createImage(diaryId, command.content(), joinedWeightedContents, command.style());
+        Image image = createImage(userId, diaryId, command.content(), joinedWeightedContents, command.style());
 
         diaryManagementPort.save(
                 DiaryComplete.create(
                         diaryId,
-                        DomainId.from(command.userId()),
+                        userId,
                         command.content(),
                         command.weightedContents(),
                         emotion,
@@ -84,9 +86,9 @@ public class DiaryCommandService
         diaryManagementPort.update(diary);
     }
 
-    private Image createImage(DomainId diaryId, String content, String joinedWeightedContents, Style style) {
+    private Image createImage(DomainId userId, DomainId diaryId, String content, String joinedWeightedContents, Style style) {
         String imageUrl = addImageUseCase.create(
-                new AddImageUseCase.Command.Create(diaryId.toString(), content, joinedWeightedContents, style)).imageUrl();
+                new AddImageUseCase.Command.Create(userId.toString(), content, joinedWeightedContents, style)).imageUrl();
         return Image.create(DomainId.generate(), diaryId, true, imageUrl);
     }
 
