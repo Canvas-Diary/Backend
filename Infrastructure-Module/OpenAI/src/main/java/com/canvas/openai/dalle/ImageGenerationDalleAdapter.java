@@ -15,7 +15,7 @@ public class ImageGenerationDalleAdapter implements ImageGenerationPort {
 
     @Override
     public String generate(String prompt, Style style) {
-        return dalleClient.generateImage(style.getValue() + ", " + prompt + ", Vertical image");
+        return dalleClient.generateImage(style.getValue() + ", " + prompt + ", The image dimension is a tall portrait aspect ratio, for full body-length images");
     }
 
 }
